@@ -1,0 +1,9 @@
+node_modules
+/yarn-error.log
+/yarn.lock
+/package-lock.json
+/dist
+.dumi/tmp
+.dumi/tmp-test
+.dumi/tmp-production
+.DS_Store

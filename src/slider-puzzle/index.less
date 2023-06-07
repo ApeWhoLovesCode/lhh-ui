@@ -1,0 +1,38 @@
+@class-prefix: ~'lhhui-sliderPuzzle';
+@class-prefix-item: ~'lhhui-sliderPuzzleItem';
+@class-prefix-canvas: ~'lhhui-sliderPuzzle-canvas';
+.@{class-prefix} {
+  box-sizing: border-box;
+  background-color: #262626;
+  width: 100%;
+  height: 100%;
+  &-area {
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+}
+
+.@{class-prefix-item} {
+  position: absolute;
+  transition: transform ease .4s;
+  -webkit-tap-highlight-color: transparent;
+  &-hover:hover {
+    filter: drop-shadow(1px 1px 3px rgba(37, 37, 37, 0.5));
+  }
+}
+
+.@{class-prefix-canvas} {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-drag: none;
+  &-full {
+    width: auto;
+    height: auto;
+  }
+}
