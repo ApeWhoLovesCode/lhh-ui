@@ -105,7 +105,8 @@ const SliderPuzzleItem = (comProps: SliderPuzzleItemProps) => {
     },
     isDisable: {
       all: !moveDirection
-    }
+    },
+    isStopPropagation: true
   })
 
   const cardPosition = useMemo(() => {

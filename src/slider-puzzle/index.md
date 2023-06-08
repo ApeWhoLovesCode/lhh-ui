@@ -13,10 +13,17 @@ group:
 
 一种拼图滑块，类似华容道那样。
 
+## 演示
 
-## 代码演示
+### 常规使用
 
-<code src="./demo/index.tsx"></code>
+<code src="./demo/demo1.tsx"></code>
 
-<API src="./index.tsx"></API>
+### 调整拼图块
+
+<code src="./demo/demo2.tsx"></code>
+
+## API
+
+<API src="./type.ts"></API>
 
