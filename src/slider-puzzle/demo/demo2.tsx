@@ -11,6 +11,7 @@ export default () => {
       style={{width: '300px', height: '300px'}}
       size={4}
       gap={10}
+      puzzleColor='#1677ff'
       onComplete={() => {
         alert('恭喜你完成了拼图')
       }}

@@ -123,6 +123,7 @@ export default (comProps: SliderPuzzleCanvasProps) => {
         width={grid.w * ratio}
         height={grid.h * ratio}
         style={{
+          display: 'block',
           width: grid.w + 'px',
           height: grid.h + 'px',
         }}

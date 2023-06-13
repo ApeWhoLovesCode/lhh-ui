@@ -1,6 +1,10 @@
 import { NativeProps } from "../utils/native-props";
 
 export type SliderPuzzleProps = { 
+  /** 
+   * 遍历item的数组的长度，建议是size * size - 1
+   * @default 0
+   */
   listLength?: number
   /** 
    * n*n的拼图
@@ -53,7 +57,7 @@ export type SliderPuzzleCanvasProps = {
   /** 当前item的索引，不传则代表的是全图 */
   index?: number
   /** 
-   * 设置拼图的不透明度
+   * 设置拼图的不透明度 0-1
    * @default 0.5
    */
   globalAlpha?: number

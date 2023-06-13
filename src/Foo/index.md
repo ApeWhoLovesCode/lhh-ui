@@ -7,3 +7,7 @@ import { Foo } from 'lhh-ui';
 
 export default () => <Foo title="Hello dumi!" />
 ```
+
+## API
+
+<API id="Foo"></API>

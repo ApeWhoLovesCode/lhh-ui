@@ -7,7 +7,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "start": "npm run dev",
-    "dev": "dumi dev",
+    "dev": "PORT=8811 dumi dev",
     "build": "father build",
     "build:watch": "father dev",
     "docs:build": "dumi build",
