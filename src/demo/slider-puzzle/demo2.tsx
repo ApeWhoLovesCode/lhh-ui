@@ -1,5 +1,5 @@
 import React from "react"
-import SliderPuzzle from ".."
+import { SliderPuzzle, isMobile } from "lhh-ui"
 
 export default () => {
   const arr = Array.from({length: 15}, (_, i) => ({id: `id-${i}`}))

@@ -1,6 +1,5 @@
 import React from "react"
-import SliderPuzzle from ".."
-import TomIcon from "../../assets/tom.jpeg";
+import { SliderPuzzle, isMobile } from "lhh-ui"
 
 export default () => {
   return (
@@ -12,11 +11,19 @@ export default () => {
       size={5}
       gap={0}
       globalAlpha={1}
-      puzzleImg={TomIcon}
+      puzzleImg='http://lhh.codeape.site/img/tom.jpeg'
       onComplete={() => {
         alert('恭喜你完成了拼图')
       }}
     >
+      {/* 这里是完整的拼图 */}
+      <SliderPuzzle.Canvas 
+        style={{
+          position: 'absolute',
+          top: isMobile ? -100 : 0,
+          left: isMobile ? 0 : 320, 
+        }} 
+      />
     </SliderPuzzle>
   )
 }

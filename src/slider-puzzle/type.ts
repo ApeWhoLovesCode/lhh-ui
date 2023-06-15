@@ -21,16 +21,19 @@ export type SliderPuzzleProps = {
    * @default #1f1f1f
    */
   background?: string
-  /** 是否开启游戏模式 */
+  /**
+   * 是否开启游戏模式
+   * @default false
+   */
   isGameMode?: boolean
   /**
    * 数量不够作为补充的卡片的背景颜色
    * @default #3e3e3e
    */
   fillPuzzleItemBackground?: string
-  /** 拼图完成了 */
+  /** 拼图完成了的回调 */
   onComplete?: () => void
-  /** 拼图整体大小发生了变化 */
+  /** 拼图整体大小发生了变化的回调 */
   onResize?: (grid: {w: number, h: number}) => void
 } & NativeProps & Omit<SliderPuzzleCanvasProps, 'index'>
 

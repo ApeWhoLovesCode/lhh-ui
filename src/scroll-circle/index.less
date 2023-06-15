@@ -1,0 +1,53 @@
+@class-prefix: ~'retaroct-scroll-circle';
+.@{class-prefix} {
+  position: relative;
+  overflow: hidden;
+  &-area {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform-origin: center center;
+    transition: transform 0.6s ease-out;
+  }
+  &-cardWrap {
+    position: absolute;
+    transform-origin: center center;
+  }
+  &-arrow {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    &-right {
+      right: 0;
+    }
+    &-left {
+      left: 0;
+    }
+    &-disable {
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+    &-area {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      padding: 0 20px;
+      color: #fff;
+      font-size: 24px;
+      &-left {
+        background: linear-gradient(to left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.4));
+        &:hover {
+          background: linear-gradient(to left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.45));
+        }
+      }
+      &-right {
+        background: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.4));
+        &:hover {
+          background: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.45));
+        }
+      }
+    }
+  }
+}

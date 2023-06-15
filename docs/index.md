@@ -1,7 +1,7 @@
 ---
 hero:
-  title: library
-  description: A react library developed with dumi
+  title: lhh-ui
+  description: lhh个人开发的react组件库
   actions:
     - text: Hello
       link: /
@@ -19,4 +19,12 @@ features:
     description: Put ! description here
 ---
 
-lhh-ui
+#### 使用
+
+```
+npm i lhh-ui
+```
+
+#### 相关技术
+
+`react` , `hooks` , `ts`

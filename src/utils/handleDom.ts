@@ -44,11 +44,9 @@ export const classMergeBem = (classnames: string, arr?: string[]) => {
 };
 
 /** 判断是移动端还是pc端 */
-export const isMobile = () => {
-  return navigator.userAgent.match(
-    /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i,
-  );
-};
+export const isMobile = navigator.userAgent.match(
+  /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i,
+)
 
 /** 鼠标事件 */
 // export type MouseEventType = React.MouseEvent<HTMLDivElement, MouseEvent>;
@@ -59,7 +57,7 @@ export type TouchEventType = React.TouchEvent<HTMLDivElement>;
 export type MouseTouchEvent = MouseEventType | TouchEventType;
 /** 处理鼠标或手指的事件 */
 export const handleMouseOfTouch = (e: MouseTouchEvent) => {
-  const target = !isMobile()
+  const target = !isMobile
     ? (e as MouseEventType)
     : (e as TouchEventType).touches[0] || (e as TouchEventType).changedTouches[0];
   return {
@@ -79,4 +77,13 @@ export type MouseTouchE = {
   clientY: number;
   screenX: number;
   screenY: number;
+};
+
+export const changeEvent = (event: MouseEvent | TouchEvent) => {
+  // changedTouches 是 touchEnd 的值
+  return (
+    (event as TouchEvent)?.touches?.[0] ??
+    (event as TouchEvent)?.changedTouches?.[0] ??
+    (event as MouseEvent)
+  );
 };

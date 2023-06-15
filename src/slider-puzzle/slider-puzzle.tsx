@@ -57,9 +57,9 @@ const SliderPuzzle = forwardRef<SliderPuzzleInstance, SliderPuzzleProps>((comPro
 
   useEffect(() => {
     init()
-    if(!isMobile()) window.addEventListener('resize', getCardInfo)
+    if(!isMobile) window.addEventListener('resize', getCardInfo)
     return () => {
-      if(!isMobile()) window.removeEventListener('resize', getCardInfo)
+      if(!isMobile) window.removeEventListener('resize', getCardInfo)
     }
   }, [listLength, size, gap])
 

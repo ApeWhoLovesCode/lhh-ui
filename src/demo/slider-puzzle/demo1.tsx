@@ -1,8 +1,5 @@
 import React, { useState } from "react"
-import SliderPuzzle from ".."
-import { isMobile } from "../../utils/handleDom";
-
-const isPhone = isMobile()
+import { SliderPuzzle, isMobile } from "lhh-ui"
 
 export default () => {
   const [isGameMode, setIsGameMode] = useState(false);
@@ -30,9 +27,8 @@ export default () => {
           <SliderPuzzle.Canvas 
             style={{
               position: 'absolute',
-              top: isPhone ? -100 : 0,
-              left: isPhone ? 0 : 320, 
-              width: '100px',
+              top: isMobile ? -100 : 0,
+              left: isMobile ? 0 : 320, 
               background: '#666'
             }} 
           />
