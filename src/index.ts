@@ -1,6 +1,7 @@
 // components
-export { default as SliderPuzzle } from './slider-puzzle';
 export { default as FloatingBall } from './floating-ball';
+export { default as ScrollCircle } from './scroll-circle';
+export { default as SliderPuzzle } from './slider-puzzle';
 
 // hooks
 export * from './hooks/use-latest';

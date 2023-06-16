@@ -9,7 +9,7 @@ group:
   order: 1
 ---
 
-## 组件介绍
+## 悬浮球组件
 
 可在页面悬浮的一个悬浮球组件
 
@@ -17,98 +17,15 @@ group:
 
 ### 常规使用
 
-```jsx
-import React from "react";
-import { FloatingBall } from 'lhh-ui';
-
-export default () => {
-  return (
-    <FloatingBall
-      style={{
-        '--initial-position-top': '400px',
-        '--initial-position-right': '20px',
-        '--z-index': '1000',
-      }}
-    >
-      <div 
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          width: 50,
-          height: 50,
-          background: '#4285fb',
-          userSelect: 'none',
-        }}
-      >自由</div>
-    </FloatingBall>
-  );
-};
-```
+<code src="../demo/floating-ball/demo1.tsx"></code>
 
 ### 吸附 X 边
 
-```jsx
-import React from "react";
-import { FloatingBall } from 'lhh-ui';
-
-export default () => {
-  return (
-    <FloatingBall
-      magnetic="x"
-      style={{
-        '--initial-position-top': '600px',
-        '--initial-position-right': '20px',
-        '--z-index': '1000',
-      }}
-    >
-      <div 
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          width: 50,
-          height: 50,
-          background: '#4285fb',
-          userSelect: 'none',
-        }}
-      >吸边x</div>
-    </FloatingBall>
-  );
-};
-```
+<code src="../demo/floating-ball/demo2.tsx"></code>
 
 ### 仅 Y 轴方向可移动
 
-```jsx
-import React from "react";
-import { FloatingBall } from 'lhh-ui';
-
-export default () => {
-  return (
-    <FloatingBall
-      axis="y"
-      style={{
-        '--initial-position-bottom': '100px',
-        '--initial-position-right': '20px',
-        '--z-index': '1000',
-      }}
-    >
-      <div 
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          width: 50,
-          height: 50,
-          background: '#4285fb',
-          userSelect: 'none',
-        }}
-      >仅y动</div>
-    </FloatingBall>
-  );
-};
-```
+<code src="../demo/floating-ball/demo3.tsx"></code>
 
 ## API
 

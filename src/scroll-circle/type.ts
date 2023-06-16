@@ -34,6 +34,11 @@ export type ScrollCircleProps = {
    * @default true
    */
   isClockwise?: boolean;
+  /**
+   * 是否分页
+   * @default true
+   */
+  isPagination?: boolean
   /** 左边分页箭头的内容区域 */
   leftArrow?: ReactNode;
   /** 右边分页箭头的内容区域 */
@@ -48,7 +53,7 @@ export type ScrollCircleProps = {
   onPageChange?: (page: { pageNum: number; pageSize: number }) => void;
 } & NativeProps
 
-export type ScrollRotateItemType = {
+export type ScrollCircleItemType = {
   /** 当前item的索引 */
   index: number;
   /** 点击了卡片(触摸时间小于150ms) */

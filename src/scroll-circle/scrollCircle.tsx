@@ -1,19 +1,12 @@
-import React, { useState, useEffect, useRef, useMemo, useContext } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { getLineAngle } from './utils';
 import { randomStr } from '../utils/random';
 import { classBem, isMobile } from '../utils/handleDom';
 import useTouchEvent from '../hooks/use-touch-event';
-import { CircleInfoType, CircleTouchType, ScrollCircleProps, ScrollRotateItemType } from './type';
+import { CircleInfoType, CircleTouchType, ScrollCircleProps } from './type';
+import { ScrollCircleCtx } from './context';
 
 const classPrefix = 'lhhui-scroll-circle';
-
-const ScrollCircleCtx = React.createContext({
-  circleR: 0,
-  cardDeg: 0,
-  isVertical: false,
-  isClockwise: false,
-  isClick: false,
-});
 
 export const ScrollCircle: React.FC<ScrollCircleProps> = ({
   list,
@@ -23,6 +16,7 @@ export const ScrollCircle: React.FC<ScrollCircleProps> = ({
   initCartNum = 0,
   isAverage = true,
   isClockwise = true,
+  isPagination = true,
   leftArrow,
   rightArrow,
   children,
@@ -91,7 +85,7 @@ export const ScrollCircle: React.FC<ScrollCircleProps> = ({
     }
     onPageChange?.({ pageNum, pageSize });
     if(isInit) {
-      setRotateDeg(cardDeg.current * initCartNum);
+      setRotateDeg(cardDeg.current * initCartNum * (isVertical.current ? 1 : -1));
     }
   };
 
@@ -211,55 +205,27 @@ export const ScrollCircle: React.FC<ScrollCircleProps> = ({
           className={`${classBem(`${classPrefix}-arrow`, { left: true, disable: disableLeft })}`}
           onClick={() => onPageChangeFn()}
         >
-          {leftArrow ?? (
-            <div className={`${classBem(`${classPrefix}-arrow-area`, { left: true })}`}>
-              {'<'}
-            </div>
-          )}
+          {isPagination ? (
+            leftArrow ?? (
+              <div className={`${classBem(`${classPrefix}-arrow-area`, { left: true })}`}>
+                {'<'}
+              </div>
+            )
+          ) : null}
         </div>
         <div
           className={`${classBem(`${classPrefix}-arrow`, { right: true, disable: disableRight })}`}
           onClick={() => onPageChangeFn(true)}
         >
-          {rightArrow ?? (
-            <div className={`${classBem(`${classPrefix}-arrow-area`, { right: true })}`}>
-              {'>'}
-            </div>
-          )}
+          {isPagination ? (
+            rightArrow ?? (
+              <div className={`${classBem(`${classPrefix}-arrow-area`, { right: true })}`}>
+                {'>'}
+              </div>
+            )
+          ) : null}
         </div>
       </div>
     </ScrollCircleCtx.Provider>
-  );
-};
-
-/** item */
-export const ScrollRotateItem: React.FC<ScrollRotateItemType> = ({ index, onClick, children }) => {
-  const { circleR, cardDeg, isVertical, isClockwise, isClick } = useContext(ScrollCircleCtx);
-
-  const cardStyle = useMemo(() => {
-    const initDeg = isVertical ? 90 : 0;
-    const deg = initDeg + cardDeg * index;
-    let n = isClockwise ? -1 : 1;
-    n *= isVertical ? -1 : 1;
-    const top = circleR * (1 - Math.cos((deg * Math.PI) / 180));
-    const left = circleR * (1 - n * Math.sin((deg * Math.PI) / 180));
-    const rotate = initDeg - n * deg;
-    return {
-      top: `${top}px`,
-      left: `${left}px`,
-      transform: `translate(-50%, -50%) rotate(${rotate}deg)`,
-    };
-  }, [circleR, cardDeg, isVertical, isClockwise]);
-
-  return (
-    <div
-      className={`${classPrefix}-cardWrap`}
-      style={cardStyle}
-      onClick={() => {
-        isClick && onClick?.(index);
-      }}
-    >
-      {children}
-    </div>
   );
 };
