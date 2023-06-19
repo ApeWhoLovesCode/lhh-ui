@@ -1,5 +1,5 @@
 ---
-title: slider-puzzle 滑块拼图
+title: SliderPuzzle 滑块拼图
 nav:
   title: 组件
   path: /components
@@ -19,7 +19,7 @@ group:
 
 <code src="../demo/slider-puzzle/demo1.tsx"></code>
 
-### 4*4拼图块 以及间距等调整
+### 4\*4 拼图块 以及间距等调整
 
 <code src="../demo/slider-puzzle/demo2.tsx"></code>
 
@@ -29,5 +29,14 @@ group:
 
 ## API
 
+### SliderPuzzle
+
 <API id="SliderPuzzle"></API>
 
+### SliderPuzzle.Item
+
+<API id="SliderPuzzleItem"></API>
+
+### SliderPuzzle.Canvas
+
+<API id="SliderPuzzleCanvas"></API>

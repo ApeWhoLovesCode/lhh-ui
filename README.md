@@ -3,15 +3,19 @@
 [![NPM version](https://img.shields.io/npm/v/lhh-ui.svg?style=flat)](https://npmjs.org/package/lhh-ui)
 [![NPM downloads](http://img.shields.io/npm/dm/lhh-ui.svg?style=flat)](https://npmjs.org/package/lhh-ui)
 
-A react library developed with dumi
+### 线上地址
 
-## Usage
+http://lhhui.codeape.site
 
-TODO
+### 使用技术
 
-## Options
+`react`, `ts`
 
-TODO
+## Install
+
+```bash
+npm i lhh-ui
+```
 
 ## Development
 

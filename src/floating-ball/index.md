@@ -1,5 +1,5 @@
 ---
-title: floating-ball 悬浮球
+title: FloatingBall 悬浮球
 nav:
   title: 组件
   path: /components
@@ -30,4 +30,3 @@ group:
 ## API
 
 <API id="FloatingBall"></API>
-

@@ -1,5 +1,5 @@
 ---
-title: scrollCircle 圆形滚动
+title: ScrollCircle 圆形滚动
 nav:
   title: 组件
   path: /components
@@ -11,7 +11,7 @@ group:
 
 # 圆形滚动组件
 
-将每一个卡片绕圆形旋转放置，并支持圆形滚动的方式 
+将每一个卡片绕圆形旋转放置，并支持圆形滚动的方式
 
 ## 演示
 
@@ -33,5 +33,10 @@ group:
 
 ## API
 
+### ScrollCircle
+
 <API id="ScrollCircle"></API>
 
+### ScrollCircle.Item
+
+<API id="ScrollCircleItem"></API>
