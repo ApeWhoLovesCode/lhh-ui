@@ -21,7 +21,7 @@ hero:
 
 #### 使用
 
-```
+```bash
 npm i lhh-ui
 ```
 

@@ -9,5 +9,9 @@ export default defineConfig({
   outputPath: 'docs-dist',
   themeConfig: {
     name: 'lhh-ui',
+    nav: [
+      { title: '文档', link: '/guide' },
+      { title: '组件', link: '/components/slider-puzzle' },
+    ],
   },
 });
