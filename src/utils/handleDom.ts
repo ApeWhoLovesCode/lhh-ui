@@ -1,5 +1,5 @@
-import type { MouseEvent } from 'react';
 import classNames from 'classnames';
+import type { MouseEvent } from 'react';
 
 /** 处理style的px */
 export const handleStylePx = (v: number | string) => {
@@ -7,7 +7,10 @@ export const handleStylePx = (v: number | string) => {
 };
 
 /** 处理类名与需要判断的类名 */
-export const classBem = (classnames: string, obj?: { [key in string]?: boolean }) => {
+export const classBem = (
+  classnames: string,
+  obj?: { [key in string]?: boolean },
+) => {
   let str = classnames;
   if (obj) {
     Object.keys(obj).forEach((key) => {
@@ -44,9 +47,9 @@ export const classMergeBem = (classnames: string, arr?: string[]) => {
 };
 
 /** 判断是移动端还是pc端 */
-export const isMobile = navigator.userAgent.match(
+export const isMobile = !!navigator.userAgent.match(
   /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i,
-)
+);
 
 /** 鼠标事件 */
 // export type MouseEventType = React.MouseEvent<HTMLDivElement, MouseEvent>;
@@ -59,7 +62,8 @@ export type MouseTouchEvent = MouseEventType | TouchEventType;
 export const handleMouseOfTouch = (e: MouseTouchEvent) => {
   const target = !isMobile
     ? (e as MouseEventType)
-    : (e as TouchEventType).touches[0] || (e as TouchEventType).changedTouches[0];
+    : (e as TouchEventType).touches[0] ||
+      (e as TouchEventType).changedTouches[0];
   return {
     pageX: target.pageX,
     pageY: target.pageY,
