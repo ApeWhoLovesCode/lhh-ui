@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './index.less';
 import { useKeepInterval } from 'lhh-ui';
 
-const interval = 5000
+const interval = 1000
 export default function CountDown() {
   const [num, setNum] = useState(0)
   const [remain, setRemain] = useState(0)
@@ -15,14 +15,14 @@ export default function CountDown() {
       setKeepInterval()
     } else {
       const v = pauseKeepInterval()
-      setRemain(interval - v)
+      setRemain(v)
     }
   }
 
   useEffect(() => {
     setKeepInterval(() => {
       setNum(n => ++n)
-    }, interval, {isInit: true, isTimeOut: true})
+    }, interval, {isInit: true})
   }, [])
 
   return (
