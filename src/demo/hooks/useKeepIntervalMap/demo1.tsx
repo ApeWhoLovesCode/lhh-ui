@@ -1,26 +1,27 @@
 import React, { useEffect, useState } from 'react';
-import './index.less';
-import { useKeepInterval } from 'lhh-ui';
+import { useKeepIntervalMap } from 'lhh-ui';
 
 const interval = 5000
+const id = 'lhh'
 export default function CountDown() {
   const [num, setNum] = useState(0)
   const [remain, setRemain] = useState(0)
   const [isPause, setIsPause] = useState<boolean>(true)
-  const { setKeepInterval, pauseKeepInterval } = useKeepInterval()
+  const keepInterval = useKeepIntervalMap()
 
   const onClick = () => {
     setIsPause(v => !v)
     if(isPause) {
-      setKeepInterval()
+      keepInterval.set(id)
     } else {
-      const v = pauseKeepInterval()
-      setRemain(interval - v)
+      const v = keepInterval.pause(id)
+      console.log('v: ', v);
+      setRemain(interval - (v ?? 0))
     }
   }
 
   useEffect(() => {
-    setKeepInterval(() => {
+    keepInterval.set(id, () => {
       setNum(n => ++n)
     }, interval, {isInit: true, isTimeOut: true})
   }, [])

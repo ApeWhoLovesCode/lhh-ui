@@ -1,31 +1,16 @@
 import { useCallback, useEffect, useRef } from 'react';
-
-interface TimerType {
-  // 第一层的setTimeout
-  timeout: NodeJS.Timeout | null
-  // 第二层的setInterval
-  interval: NodeJS.Timeout | null
-  // 当前时间
-  cur: number
-  // 暂停时间
-  end: number
-  // 传入的执行函数
-  fn?: () => void
-  // 固定的时间间隔
-  intervalTime: number
-  // 用于setTimeout的剩余时间间隔
-  remainTime: number
-}
+import { KeepIntervalSetParams, UseKeepIntervalItem } from '../useKeepIntervalMap';
 
 function useKeepInterval() {
-const timerRef = useRef<TimerType>({ 
+const timerRef = useRef<UseKeepIntervalItem>({ 
   timeout: null,
   interval: null,
   cur: 0,
   end: 0,
-  fn: undefined,
+  fn: () => {},
   intervalTime: 0,
-  remainTime: 0
+  remainTime: 0,
+  isTimeOut: false,
 })
 
   /**
@@ -33,9 +18,17 @@ const timerRef = useRef<TimerType>({
    * @param fn 执行函数
    * @param intervalTime 间隔时间 
    * @param isInit 是否是初始化设置计时器
+   * @param p 
    */
-  const set = (fn?: () => void, intervalTime?: number, isInit = false) => {
+  const set = (
+    fn?: () => void, 
+    intervalTime?: number, 
+    {isInit, isTimeOut = false} : KeepIntervalSetParams = {}
+  ) => {
     const timeItem = timerRef.current
+    if(isTimeOut !== timeItem.isTimeOut) {
+      timeItem.isTimeOut = isTimeOut
+    }
     if(fn) {
       timeItem.fn = fn
     }
@@ -52,12 +45,17 @@ const timerRef = useRef<TimerType>({
       timeItem.cur = Date.now()
       timeItem.end = timeItem.cur
       timeItem.remainTime = timeItem.intervalTime
-      timeItem.interval = setInterval(() => { 
-        timeItem.cur = Date.now()
-        timeItem.end = timeItem.cur
-        timeItem.fn!() 
-      }, timeItem.intervalTime)
-      timeItem.fn!()
+      if(!timeItem.isTimeOut) {
+        timeItem.interval = setInterval(() => { 
+          timeItem.cur = Date.now()
+          timeItem.end = timeItem.cur
+          timeItem.fn() 
+        }, timeItem.intervalTime)
+      }
+      timeItem.fn()
+      if(timeItem.isTimeOut) {
+        stopTime()
+      }
     }, timeItem.remainTime)
   }
   /** 关闭计时器 */

@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef } from 'react';
  * 可（暂停 / 继续）并保留剩余时间的计时器集合
  */
 function useKeepIntervalMap() {
-  const timerMap = useRef<Map<string, TimerMap>>(new Map())
+  const timerMap = useRef<Map<string, UseKeepIntervalItem>>(new Map())
 
   /**
    * 设置/开启计时器
@@ -17,7 +17,7 @@ function useKeepIntervalMap() {
     key: string,
     fn?: () => void, 
     intervalTime = 1000, 
-    {isTimeOut = false, isCover}: KeepIntervalSetParams = {}
+    {isTimeOut = false, isCover, isInit}: KeepIntervalSetParams = {}
   ) => {
     stopTime(key)
     if((!timerMap.current.has(key) || isCover) && fn) {
@@ -32,11 +32,13 @@ function useKeepIntervalMap() {
         isTimeOut,
       })
     }
-    const timeItem = timerMap.current.get(key)!
-    if(intervalTime && timeItem.intervalTime !== intervalTime) {
-      timeItem.intervalTime = intervalTime
-      timeItem.remainTime = intervalTime
-    }
+    if(isInit) return
+    const timeItem = timerMap.current.get(key)
+    if(!timeItem) return
+    // if(intervalTime && timeItem.intervalTime !== intervalTime) {
+    //   timeItem.intervalTime = intervalTime
+    //   timeItem.remainTime = intervalTime
+    // }
     timeItem.remainTime -= timeItem.end - timeItem.cur
     timeItem.cur = Date.now()
     timeItem.end = timeItem.cur
@@ -120,9 +122,11 @@ export type KeepIntervalSetParams = {
   isTimeOut?: boolean
   /** 是否覆盖之前的内容 */
   isCover?: boolean
+  /** 是否只是初始化 */
+  isInit?: boolean
 }
 
-export type TimerMap = {
+export type UseKeepIntervalItem = {
   // 第一层的setTimeout
   timeout: NodeJS.Timeout | null
   // 第二层的setInterval

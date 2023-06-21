@@ -81,7 +81,7 @@ const CountDownItem = forwardRef<CountDownItemInstance, CountDownItemProps>((pro
   useEffect(() => {
     setKeepInterval(() => {
       setCount(c => ++c)
-    }, interval, true)
+    }, interval, {isInit: true})
   }, [setKeepInterval])
 
   useEffect(() => {
