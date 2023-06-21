@@ -1,5 +1,5 @@
 ---
-title: SliderPuzzle 滑块拼图
+title: SliderPuzzle
 nav:
   title: 组件
   path: /components

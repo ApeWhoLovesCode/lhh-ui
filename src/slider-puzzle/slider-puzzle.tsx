@@ -1,6 +1,6 @@
 import { useEffect, useRef, forwardRef, useImperativeHandle, useMemo, useState } from 'react';
 import { withNativeProps } from '../utils/native-props';
-import useMergeProps from '../hooks/use-merge-props';
+import useMergeProps from '../hooks/useMergeProps';
 import { GridPosition, SliderPuzzleInstance, SliderPuzzleProps } from './type';
 import { SliderPuzzleCtx } from './context';
 import { randomLetter, randomStr } from '../utils/random';

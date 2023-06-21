@@ -110,3 +110,4 @@ const useTouch = () => {
 };
 
 export default useTouch;
+export { useTouch }

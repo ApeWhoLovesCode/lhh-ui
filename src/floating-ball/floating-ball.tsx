@@ -1,6 +1,6 @@
 import React, { useState, useEffect, FC, useRef } from 'react';
 import { randomStr } from '../utils/random';
-import useTouchEvent from '../hooks/use-touch-event';
+import useTouchEvent from '../hooks/useTouchEvent';
 import { FloatingBallProps } from './type';
 
 const classPrefix = `lhhui-floating-ball`;

@@ -1,5 +1,5 @@
 ---
-title: FloatingBall 悬浮球
+title: FloatingBall
 nav:
   title: 组件
   path: /components

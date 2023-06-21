@@ -1,9 +1,9 @@
 import { useContext, useEffect, useMemo } from 'react';
 import { withNativeProps } from '../utils/native-props';
-import useMergeProps from '../hooks/use-merge-props';
+import useMergeProps from '../hooks/useMergeProps';
 import { SliderPuzzleItemProps } from './type';
 import { SliderPuzzleCtx } from './context';
-import useTouchEvent from '../hooks/use-touch-event';
+import useTouchEvent from '../hooks/useTouchEvent';
 import { useSetState } from 'ahooks';
 import { classPrefixItem } from './config';
 import { checkDirectionVal, checkDirectionXY, range } from '../utils/compute';
@@ -66,7 +66,7 @@ const SliderPuzzleItem = (comProps: SliderPuzzleItemProps) => {
         setInfo({y: range(_info.deltaY, -grid.h - gap, grid.h + gap) + info.startY})
       }
     },
-    onTouchEnd(e) {
+    onTouchEnd() {
       let isVertical = false
       let diff = info.x - info.startX
       if(!diff) {

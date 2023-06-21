@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { getLineAngle } from './utils';
 import { randomStr } from '../utils/random';
 import { classBem, isMobile } from '../utils/handleDom';
-import useTouchEvent from '../hooks/use-touch-event';
+import useTouchEvent from '../hooks/useTouchEvent';
 import { CircleInfoType, CircleTouchType, ScrollCircleProps } from './type';
 import { ScrollCircleCtx } from './context';
 

@@ -1,5 +1,5 @@
 ---
-title: circle 环形进度条
+title: Circle
 nav:
   title: 组件
   path: /components

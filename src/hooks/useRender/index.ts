@@ -11,4 +11,5 @@ const useRender = () => {
   };
 };
 
+export { useRender };
 export default useRender;

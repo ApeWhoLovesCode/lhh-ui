@@ -3,10 +3,10 @@ hero:
   title: lhh-ui
   description: lhh个人开发的react组件库
   actions:
+    - text: 开始
+      link: /components/slider-puzzle
     - text: Blog
       link: http://blog.codeape.site
-    - text: GitHub
-      link: https://github.com/ApeWhoLovesCode
 # features:
 #   - title: Hello
 #     emoji: 💎

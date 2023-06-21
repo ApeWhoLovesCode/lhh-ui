@@ -1,5 +1,5 @@
 ---
-title: ScrollCircle 圆形滚动
+title: ScrollCircle
 nav:
   title: 组件
   path: /components
@@ -9,7 +9,7 @@ group:
   order: 1
 ---
 
-# 圆形滚动组件
+## 圆形滚动组件
 
 将每一个卡片绕圆形旋转放置，并支持圆形滚动的方式
 

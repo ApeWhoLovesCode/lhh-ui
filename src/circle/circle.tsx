@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import useMergeProps from '../hooks/use-merge-props';
+import useMergeProps from '../hooks/useMergeProps';
 import colorVar from '../style/var';
 import { isObj, randomStr, range, withNativeProps } from '../utils';
 import { CirclePropsType } from './type';

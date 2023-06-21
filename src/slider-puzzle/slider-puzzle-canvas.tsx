@@ -3,7 +3,7 @@ import { classPrefixPuzzleCanvas } from "./config";
 import { useSetState } from "ahooks";
 import { SliderPuzzleCanvasProps } from "./type";
 import { SliderPuzzleCtx } from "./context";
-import useMergeProps from "../hooks/use-merge-props";
+import useMergeProps from "../hooks/useMergeProps";
 import { withNativeProps } from "../utils/native-props";
 import { classBem } from "../utils/handleDom";
 import React from "react";
