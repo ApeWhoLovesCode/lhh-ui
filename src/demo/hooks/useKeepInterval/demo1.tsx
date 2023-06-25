@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import './index.less';
 import { useKeepInterval } from 'lhh-ui';
 
-const interval = 1000
 export default function CountDown() {
   const [num, setNum] = useState(0)
+  const [interval, setInterval] = useState(1000)
   const [remain, setRemain] = useState(0)
-  const [isPause, setIsPause] = useState<boolean>(true)
+  const [isPause, setIsPause] = useState<boolean>(false)
   const { setKeepInterval, pauseKeepInterval } = useKeepInterval()
 
   const onClick = () => {
@@ -22,12 +21,28 @@ export default function CountDown() {
   useEffect(() => {
     setKeepInterval(() => {
       setNum(n => ++n)
-    }, interval, {isInit: true})
-  }, [])
+    }, interval)
+  }, [interval])
 
   return (
     <div>
-      <h2>num: {num}</h2>
+      <h2>
+        每
+        <input 
+          type="number" 
+          max={10000}
+          min={100}
+          value={interval} 
+          onChange={e => {
+            let v = +e.target.value
+            if(v < 100) v = 100;
+            if(v > 10000) v = 10000
+            setInterval(v)
+          }} 
+          style={{width: 60}}
+        /> 
+        ms加一 : {num}
+      </h2>
       <h4 style={{color: '#3d74ff'}}>剩余时间: {remain}ms</h4>
       <div>
         <button type='button' onClick={onClick}>{isPause ? '开始' : '暂停'}</button>

@@ -1,6 +1,6 @@
 {
   "name": "lhh-ui",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "LHH's react Component Library",
   "license": "MIT",
   "author": "林桓恒 <970519495@qq.com>",
@@ -13,7 +13,8 @@
   "scripts": {
     "build": "father build",
     "build:watch": "father dev",
-    "dev": "dumi dev",
+    "dev": "PORT=8811 dumi dev",
+    "devWin": "set PORT=8811&&umi dev",
     "docs:build": "dumi build",
     "doctor": "father doctor",
     "prepublishOnly": "father doctor && npm run build",

@@ -1,17 +1,18 @@
 import { useCallback, useEffect, useRef } from 'react';
-import { KeepIntervalSetParams, UseKeepIntervalItem } from '../useKeepIntervalMap';
+import { KeepIntervalSetOthParams, UseKeepIntervalItem } from '../useKeepIntervalMap';
+import { KeepIntervalMd, KeepIntervalSetFunMd, KeepIntervalSetOthParamsMd } from './doc';
 
 function useKeepInterval() {
-const timerRef = useRef<UseKeepIntervalItem>({ 
-  timeout: null,
-  interval: null,
-  cur: 0,
-  end: 0,
-  fn: () => {},
-  intervalTime: 0,
-  remainTime: 0,
-  isTimeOut: false,
-})
+  const timerRef = useRef<UseKeepIntervalItem>({ 
+    timeout: null,
+    interval: null,
+    cur: 0,
+    end: 0,
+    fn: () => {},
+    intervalTime: 0,
+    remainTime: 0,
+    isTimeOut: false,
+  })
 
   /**
    * 设置/开启计时器
@@ -23,16 +24,17 @@ const timerRef = useRef<UseKeepIntervalItem>({
   const set = (
     fn?: () => void, 
     intervalTime?: number, 
-    {isInit, isTimeOut = false} : KeepIntervalSetParams = {}
+    {isInit, isTimeOut = false, isCover} : KeepIntervalSetOthParams = {}
   ) => {
     const timeItem = timerRef.current
     if(isTimeOut !== timeItem.isTimeOut) {
       timeItem.isTimeOut = isTimeOut
     }
-    if(fn) {
+    if(((!timeItem.interval && !timeItem.timeout) || isCover) && fn) {
       timeItem.fn = fn
     }
-    if(intervalTime) {
+    // 覆盖倒计时的持续时间
+    if(intervalTime && timeItem.intervalTime !== intervalTime) {
       timeItem.intervalTime = intervalTime
       timeItem.remainTime = intervalTime
     }
@@ -80,5 +82,12 @@ const timerRef = useRef<UseKeepIntervalItem>({
   }
 }
 
+export type KeepInterval = {
+  /** 设置/开启计时器，othParams 参数请看下面的介绍 */
+  setKeepInterval: (fn?: () => void, intervalTime?: number, othParams?: any) => void;
+  /** 暂停某一个计时器 */
+  pauseKeepInterval: (key: string) => number;
+}
+
 export default useKeepInterval
-export { useKeepInterval }
+export { useKeepInterval, KeepIntervalMd, KeepIntervalSetFunMd, KeepIntervalSetOthParamsMd }

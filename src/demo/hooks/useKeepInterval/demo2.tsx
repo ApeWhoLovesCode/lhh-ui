@@ -22,7 +22,7 @@ export default function CountDown() {
   }
 
   return (
-    <div className="pageCountDown">
+    <div className="demoUseKeepInterval">
       <div className="title">倒计时</div>
       <div className="wrap">
         <div className="info-wrap">
@@ -95,11 +95,11 @@ const CountDownItem = forwardRef<CountDownItemInstance, CountDownItemProps>((pro
     handleDelete,
   }))
   return (
-    <div className="comCountDownItem">
+    <div className="demoUseKeepIntervalItem">
       <div className="count row">
         {total}<span className="small">{count} s</span>
       </div>
-      <div className="remain row">{remain ? interval - remain + 'ms' : ''}</div>
+      <div className="remain row">{remain ? remain + 'ms' : ''}</div>
       <div className="row">
         <button type='button' className='btn' onClick={() => {handlePause(isPause)}}>{isPause ? '开始' : '暂停'}</button>
         <button type='button' className='btn' onClick={handleDelete}>销毁</button>

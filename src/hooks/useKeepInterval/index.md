@@ -25,4 +25,14 @@ group:
 
 ## API
 
-<API id="useKeepInterval"></API>
+### KeepInterval
+
+<API id="KeepIntervalMd"></API>
+
+### set 函数的参数的类型
+
+<API id="KeepIntervalSetFunMd"></API>
+
+### othParams 其他参数
+
+<API id="KeepIntervalSetOthParamsMd"></API>
