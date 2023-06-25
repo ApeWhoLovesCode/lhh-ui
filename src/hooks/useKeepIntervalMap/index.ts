@@ -64,7 +64,7 @@ function useKeepIntervalMap() {
   /** 暂停计时器 */
   const pause = useCallback((key: string) => {
     const timeItem = timerMap.current.get(key)
-    if(timeItem) {
+    if(timeItem && (timeItem.timeout || timeItem.interval)) {
       timeItem.end = Date.now()
       stopTime(key)
       return timeItem.remainTime - (timeItem.end - timeItem.cur)

@@ -1,9 +1,3 @@
-/** 格式化金钱 isLocale: 钱的整数每三位一个逗号分隔 */
-export function priceFormat(_price: number = 0, isLocale = true) {
-  const price = _price / 100;
-  return `￥${isLocale ? price.toLocaleString() : price.toFixed(2)}`;
-}
-
 type OptKey = 'y+' | 'm+' | 'd+' | 'H+' | 'M+' | 'S+';
 /** 格式化日期 yy-mm-dd HH:MM:SS */
 export function dateFormat(_date?: Date | number, _fmt = 'yy-mm-dd HH:MM:SS') {
@@ -81,19 +75,6 @@ export function formatRemainTime(time?: number, format = 'D天HH时mm分ss秒') 
     _format = _format.replace(k, keyObj[k]);
   });
   return _format;
-}
-
-/**
- * 处理富文本里的图片宽度自适应
- * @param html
- * @returns {string}
- */
-export function formatRichText(html: string = '') {
-  let newHtml = html.replace(/<img[^>]*>/gi, (match) => {
-    const _match = match.replace(/width: auto/, 'width:100%');
-    return _match;
-  });
-  return newHtml;
 }
 
 /** 字母大写转-加小写 (helloWorld => hello-world) */

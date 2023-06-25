@@ -62,9 +62,11 @@ function useKeepInterval() {
   }
   /** 关闭计时器 */
   const pause = () => {
-    timerRef.current.end = Date.now()
-    stopTime()
-    return timerRef.current.remainTime - (timerRef.current.end - timerRef.current.cur)
+    if(timerRef.current.timeout || timerRef.current.interval) {
+      timerRef.current.end = Date.now()
+      stopTime()
+      return timerRef.current.remainTime - (timerRef.current.end - timerRef.current.cur)
+    }
   }
   /** 停止定时器 */
   const stopTime = () => {

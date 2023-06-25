@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { MouseTouchE, TouchEventType } from '../../utils/handleDom';
+import { TouchEventType } from '../../utils/handleDom';
 const MIN_DISTANCE = 10;
 
 export type TouchDirection = '' | 'vertical' | 'horizontal';
@@ -21,6 +21,17 @@ export type TouchState = {
   /** 触摸开始到结束的时间 */
   time: number;
 };
+
+/** 返回的类型 */
+export type MouseTouchE = {
+  pageX: number;
+  pageY: number;
+  clientX: number;
+  clientY: number;
+  screenX: number;
+  screenY: number;
+};
+
 
 function getDirection(x: number, y: number) {
   if (x > y && x > MIN_DISTANCE) {

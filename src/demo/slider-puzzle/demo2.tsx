@@ -1,8 +1,8 @@
-import { SliderPuzzle } from 'lhh-ui';
+import { SliderPuzzle, isMobile } from 'lhh-ui';
 import React from 'react';
 
 export default () => {
-  const arr = Array.from({ length: 15 }, (_, i) => ({ id: `id-${i}` }));
+  const arr = Array.from({ length: 15 }, (_, i) => ({ id: `${i}` }));
   return (
     <SliderPuzzle
       // 数组的长度需要设置
@@ -22,10 +22,18 @@ export default () => {
           index={index}
           style={{ background: '#fff' }}
         >
-          <h4>{item.id}</h4>
+          <h6>{item.id}</h6>
           <SliderPuzzle.Canvas index={index} />
         </SliderPuzzle.Item>
       ))}
+      {/* 这里是完整的拼图 */}
+      <SliderPuzzle.Canvas
+        style={{
+          position: 'absolute',
+          top: isMobile ? -80 : 0,
+          left: isMobile ? 0 : 320,
+        }}
+      />
     </SliderPuzzle>
   );
 };

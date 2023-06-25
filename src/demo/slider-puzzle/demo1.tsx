@@ -19,7 +19,7 @@ export default () => {
         }}
       >
         {arr.map((item, index) => (
-          <SliderPuzzle.Item key={item.id} index={index}>
+          <SliderPuzzle.Item key={item.id} index={index} style={{ background: '#222' }}>
             <h4 style={{ color: '#fff' }}>{item.id}</h4>
             <SliderPuzzle.Canvas index={index} />
           </SliderPuzzle.Item>

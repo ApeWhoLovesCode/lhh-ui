@@ -73,21 +73,3 @@ export const handleMouseOfTouch = (e: MouseTouchEvent) => {
     screenY: target.screenY,
   };
 };
-/** 返回的类型 */
-export type MouseTouchE = {
-  pageX: number;
-  pageY: number;
-  clientX: number;
-  clientY: number;
-  screenX: number;
-  screenY: number;
-};
-
-export const changeEvent = (event: MouseEvent | TouchEvent) => {
-  // changedTouches 是 touchEnd 的值
-  return (
-    (event as TouchEvent)?.touches?.[0] ??
-    (event as TouchEvent)?.changedTouches?.[0] ??
-    (event as MouseEvent)
-  );
-};
