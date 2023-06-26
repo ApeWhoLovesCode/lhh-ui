@@ -14,7 +14,7 @@ export default function CountDown() {
       setKeepInterval()
     } else {
       const v = pauseKeepInterval()
-      setRemain(v)
+      setRemain(v ?? 0)
     }
   }
 

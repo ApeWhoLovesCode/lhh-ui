@@ -1,6 +1,6 @@
 {
   "name": "lhh-ui",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "LHH's react Component Library",
   "license": "MIT",
   "author": "林桓恒 <970519495@qq.com>",
@@ -22,7 +22,8 @@
   },
   "dependencies": {
     "ahooks": "^3.7.7",
-    "classnames": "^2.3.2"
+    "classnames": "^2.3.2",
+    "react-router-dom": "^6.14.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.0",

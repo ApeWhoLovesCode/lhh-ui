@@ -20,7 +20,7 @@ export default defineConfig({
       { title: 'Hooks', link: '/hooks/use-keep-interval' },
     ],
     socialLinks: {
-      github: 'https://github.com/ApeWhoLovesCode'
+      github: 'https://github.com/ApeWhoLovesCode/lhh-ui'
     }
   },
 });

@@ -3,5 +3,7 @@ export * from './useKeepIntervalMap';
 export * from './useLatest';
 export * from './useMergeProps';
 export * from './useRender';
+export * from './useSearchParamsFilter';
+export * from './useSearchState';
 export * from './useTouch';
 export * from './useTouchEvent';
