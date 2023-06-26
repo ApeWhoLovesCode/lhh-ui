@@ -1,0 +1,100 @@
+@import '@/style/index.less';
+@class-prefix: ~'lhhcom-tabs';
+.@{class-prefix} {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 37px;
+  background-color: #fff;
+  &-scrollView {
+    width: 100%;
+    height: 100%;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    &::-webkit-scrollbar {
+      display: none;
+      width: 0;
+      height: 0;
+    }
+  }
+  &-content {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    height: 100%;
+  }
+  &-tabWrap {
+    height: 100%;
+    padding: 0 13px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  &-tab {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+  &-tab-active {
+    font-weight: bold;
+  }
+  &-line {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    // 在h5页面会有默认行高，导致高度异常不能由icon撑开
+    line-height: 16px;
+    &-animate {
+      transition: transform 0.3s ease;
+    }
+    &-hide {
+      opacity: 0;
+    }
+    &-show {
+      opacity: 1;
+    }
+    &-line {
+      width: 30px;
+      height: 6px;
+      background-color: @blue;
+      border-radius: 3px;
+    }
+  }
+  &-left-placeholder {
+    flex-shrink: 0;
+    width: 17px;
+    height: 100%;
+  }
+  &-right-placeholder {
+    flex-shrink: 0;
+    width: 17px;
+    height: 100%;
+  }
+  &-header {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 1;
+    display: flex;
+    height: 100%;
+  }
+  &-header-left {
+    left: 0;
+  }
+  &-header-right {
+    right: 0;
+  }
+  &-mask {
+    width: 30px;
+    height: 100%;
+    pointer-events: none;
+  }
+  &-mask-left {
+    background: linear-gradient(to right, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+  }
+  &-mask-right {
+    background: linear-gradient(to left, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+  }
+}

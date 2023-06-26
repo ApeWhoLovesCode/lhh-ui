@@ -28,6 +28,7 @@
   "devDependencies": {
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
+    "@types/react-is": "^18.2.1",
     "@umijs/lint": "^4.0.0",
     "dumi": "^2.2.0",
     "eslint": "^8.23.0",

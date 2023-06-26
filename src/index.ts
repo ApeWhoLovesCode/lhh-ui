@@ -3,4 +3,5 @@ export * from './floating-ball';
 export * from './hooks';
 export * from './scroll-circle';
 export * from './slider-puzzle';
+export * from './tabs';
 export * from './utils';
