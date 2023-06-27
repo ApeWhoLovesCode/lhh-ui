@@ -19,6 +19,10 @@ group:
 
 <code src="../demo/tabs/demo1.tsx"></code>
 
+### 自定义下标
+
+<code src="../demo/tabs/demo2.tsx"></code>
+
 
 ## API
 
