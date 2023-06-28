@@ -15,6 +15,21 @@ export type ScrollCircleProps = {
    */
   height?: string;
   /**
+   * 圆心的位置
+   * @default auto (宽度大于高度时在底部，否则在右侧)
+   */
+  centerPoint?: CenterPointType;
+  /**
+   * 圆的大小
+   * @default outside (圆溢出包裹它的盒子)
+   */
+  circleSize?: 'outside' | 'inside'  
+  /**
+   * 当 circleSize = 'inside' 时，设置圆形的内边距
+   * @default 5
+   */
+  circlePadding?: number
+  /**
    * 卡片间增加的角度
    * @default 1
    */
@@ -59,6 +74,8 @@ export type ScrollCircleItemType = {
   /** 点击了卡片(触摸时间小于150ms) */
   onClick?: (i: number) => void;
 } & NativeProps
+
+export type CenterPointType = 'auto' | 'center' | 'left' | 'top' | 'right' | 'bottom'
 
 export type CircleInfoType = {
   /** 滚动盒子的宽/高 */

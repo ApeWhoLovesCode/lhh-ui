@@ -8,7 +8,7 @@ import { withNativeProps } from '../utils/native-props';
 import { randomStr } from '../utils/random';
 import { isMobile } from '../utils/handleDom';
 
-const classPrefix = `lhhcom-tabs`;
+const classPrefix = `lhhui-tabs`;
 
 type TabItemType = {
   width: number;

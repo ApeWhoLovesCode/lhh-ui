@@ -13,6 +13,9 @@ export const ScrollCircle: React.FC<ScrollCircleProps> = ({
   cardAddDeg = 1,
   width = '100%',
   height = '100%',
+  centerPoint = 'auto',
+  circleSize = 'outside',
+  circlePadding = 5,
   initCartNum = 0,
   isAverage = true,
   isClockwise = true,
@@ -57,21 +60,24 @@ export const ScrollCircle: React.FC<ScrollCircleProps> = ({
   const init = async (isInit = true) => {
     const circleWrap = document.querySelector(`.${idRef.current}`)
     const cInfo = document.querySelector(`.${idRef.current} .${classPrefix}-cardWrap`)
-    circleDiv.current.w = circleWrap?.clientWidth ?? 0;
-    circleDiv.current.h = circleWrap?.clientHeight ?? 0;
-    isVertical.current = circleDiv.current.h > circleDiv.current.w;
-    info.current.circleWrapWH = isVertical.current ? circleDiv.current.w : circleDiv.current.h
+    const cw = circleWrap?.clientWidth ?? 0;
+    const ch = circleWrap?.clientHeight ?? 0;
+    isVertical.current = ch > cw;
+    info.current.circleWrapWH = isVertical.current ? cw : ch
     info.current.cardWH = cInfo?.[isVertical.current ? 'clientHeight' : 'clientWidth'] ?? 0;
     const cWH = cInfo?.[isVertical.current ? 'clientWidth' : 'clientHeight'] ?? 0;
-    info.current.circleR = Math.round(isVertical.current ? circleDiv.current.h : circleDiv.current.w);
+    info.current.circleR = Math.round(
+      circleSize === 'outside' ? Math.max(ch, cw) : (Math.min(ch, cw) / 2 - circlePadding - cWH / 2)
+    );
     // 屏幕宽高度对应的圆的角度
-    info.current.scrollViewDeg = getLineAngle(info.current.circleWrapWH, info.current.circleR);
+    info.current.scrollViewDeg = circleSize === 'outside' ? (
+      getLineAngle(info.current.circleWrapWH, info.current.circleR)
+    ) : 90;
     // 每张卡片所占用的角度
-    const _cardDeg =
-      (2 * 180 * Math.atan((info.current.cardWH ?? 0) / 2 / (info.current.circleR - cWH / 2))) /
-        Math.PI +
-      cardAddDeg;
+    const _cardDeg = (2 * 180 * Math.atan((info.current.cardWH ?? 0) / 2 / (info.current.circleR - cWH / 2))) / Math.PI + cardAddDeg;
     let { pageNum, pageSize } = pageState;
+    circleDiv.current.w = cw
+    circleDiv.current.h = ch
     // 是否采用均分卡片的方式
     if (isAverage && list) {
       const cardNum = Math.floor(360 / _cardDeg);
@@ -106,7 +112,7 @@ export const ScrollCircle: React.FC<ScrollCircleProps> = ({
         init()
       }, 0);
     }
-  }, [list, cardAddDeg]);
+  }, [list, cardAddDeg, centerPoint, circleSize, circlePadding, initCartNum, isAverage]);
 
   const { info: tInfo, onTouchFn } = useTouchEvent({
     onTouchStart() {
@@ -115,7 +121,8 @@ export const ScrollCircle: React.FC<ScrollCircleProps> = ({
       props.onTouchStart?.();
     },
     onTouchMove() {
-      const xy = isVertical.current ? tInfo.deltaY : -tInfo.deltaX;
+      const isY = circleSize === 'outside' ? isVertical.current : tInfo.offsetY > tInfo.offsetX
+      const xy = isY ? tInfo.deltaY : -tInfo.deltaX;
       const deg = Math.round(
         touchInfo.current.startDeg - info.current.scrollViewDeg * (xy / info.current.circleWrapWH),
       );
@@ -167,8 +174,7 @@ export const ScrollCircle: React.FC<ScrollCircleProps> = ({
   };
 
   const circleStyle = useMemo(() => {
-    let w = 0,
-      h = info.current.circleR;
+    let w = 0, h = info.current.circleR;
     if (isVertical.current) {
       w = info.current.circleR;
       h = 0;
@@ -179,7 +185,7 @@ export const ScrollCircle: React.FC<ScrollCircleProps> = ({
       transitionDuration: duration + 's',
       transform: `translate(calc(-50% + ${w}px), calc(-50% + ${h}px)) rotate(${rotateDeg}deg)`,
     };
-  }, [rotateDeg, duration]);
+  }, [rotateDeg, duration, centerPoint]);
 
   return (
     <ScrollCircleCtx.Provider

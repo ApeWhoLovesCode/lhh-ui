@@ -12,7 +12,7 @@ export default () => {
   }, []);
 
   return (
-    <div style={{position: 'relative', width: 200, height: 400}}>
+    <div style={{width: 200, height: 400}}>
       <ScrollCircle
         list={list}
         isPagination={false}

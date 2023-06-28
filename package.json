@@ -13,8 +13,7 @@
   "scripts": {
     "build": "father build",
     "build:watch": "father dev",
-    "dev": "PORT=8811 dumi dev",
-    "devWin": "cross-env PORT=6109 dumi dev",
+    "dev": "cross-env PORT=8811 dumi dev",
     "docs:build": "dumi build",
     "doctor": "father doctor",
     "prepublishOnly": "father doctor && npm run build",

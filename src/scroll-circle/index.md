@@ -15,21 +15,23 @@ group:
 
 ## 演示
 
+<code src="../demo/scroll-circle/demo5.tsx"></code>
+
 ### 常规使用
 
-<code src="../demo/scroll-circle/demo1.tsx"></code>
+<!-- <code src="../demo/scroll-circle/demo1.tsx"></code> -->
 
 ### 分页使用
 
-<code src="../demo/scroll-circle/demo2.tsx"></code>
+<!-- <code src="../demo/scroll-circle/demo2.tsx"></code> -->
 
 ### 卡片间距和不均分排列
 
-<code src="../demo/scroll-circle/demo3.tsx"></code>
+<!-- <code src="../demo/scroll-circle/demo3.tsx"></code> -->
 
 ### 垂直布局
 
-<code src="../demo/scroll-circle/demo4.tsx"></code>
+<!-- <code src="../demo/scroll-circle/demo4.tsx"></code> -->
 
 ## API
 
