@@ -27,6 +27,13 @@ export const ScrollCircle: React.FC<ScrollCircleProps> = ({
   ...props
 }) => {
   const idRef = useRef(randomStr(classPrefix));
+  /** 整个滚动盒子的区域 */
+  const circleDiv = useRef({
+    w: 0,
+    h: 0,
+    left: 0,
+    top: 0,
+  });
   /** 滚动盒子需要的信息 */
   const info = useRef<CircleInfoType>({
     circleWrapWH: 0,
@@ -52,10 +59,6 @@ export const ScrollCircle: React.FC<ScrollCircleProps> = ({
     pageSize: 10,
   });
   const [duration, setDuration] = useState(0.6);
-  const circleDiv = useRef({
-    w: 0,
-    h: 0,
-  });
 
   const init = async (isInit = true) => {
     const circleWrap = document.querySelector(`.${idRef.current}`)
@@ -67,17 +70,22 @@ export const ScrollCircle: React.FC<ScrollCircleProps> = ({
     info.current.cardWH = cInfo?.[isVertical.current ? 'clientHeight' : 'clientWidth'] ?? 0;
     const cWH = cInfo?.[isVertical.current ? 'clientWidth' : 'clientHeight'] ?? 0;
     info.current.circleR = Math.round(
-      circleSize === 'outside' ? Math.max(ch, cw) : (Math.min(ch, cw) / 2 - circlePadding - cWH / 2)
+      centerPoint === 'center' && circleSize === 'inside' ? (Math.min(ch, cw) / 2 - circlePadding - cWH / 2) : Math.max(ch, cw)
     );
     // 屏幕宽高度对应的圆的角度
-    info.current.scrollViewDeg = circleSize === 'outside' ? (
+    info.current.scrollViewDeg = centerPoint !== 'center' ? (
       getLineAngle(info.current.circleWrapWH, info.current.circleR)
     ) : 90;
     // 每张卡片所占用的角度
     const _cardDeg = (2 * 180 * Math.atan((info.current.cardWH ?? 0) / 2 / (info.current.circleR - cWH / 2))) / Math.PI + cardAddDeg;
     let { pageNum, pageSize } = pageState;
-    circleDiv.current.w = cw
-    circleDiv.current.h = ch
+    if(centerPoint === 'center') {
+      circleDiv.current.w = cw
+      circleDiv.current.h = ch
+      const circleDivRect = circleWrap?.getBoundingClientRect()
+      circleDiv.current.left = circleDivRect?.left ?? 0
+      circleDiv.current.top = circleDivRect?.top ?? 0
+    }
     // 是否采用均分卡片的方式
     if (isAverage && list) {
       const cardNum = Math.floor(360 / _cardDeg);
@@ -114,15 +122,35 @@ export const ScrollCircle: React.FC<ScrollCircleProps> = ({
     }
   }, [list, cardAddDeg, centerPoint, circleSize, circlePadding, initCartNum, isAverage]);
 
+  const getXy = () => {
+    let xy = 0
+    if(centerPoint === 'auto') {
+      xy = isVertical.current ? tInfo.deltaY : -tInfo.deltaX
+    } else if(centerPoint === 'center') {
+      const {left, top, w, h} = circleDiv.current
+      const vy = left < tInfo.startX && tInfo.startX < left + w / 2 ? 1 : -1
+      const vx = top < tInfo.startY && tInfo.startY < top + h / 2 ? 1 : -1
+      xy = tInfo.offsetY > tInfo.offsetX ? vy * tInfo.deltaY : vx * -tInfo.deltaX
+    } else if(centerPoint === 'left') {
+      xy = -tInfo.deltaY
+    } else if(centerPoint === 'top') {
+      xy = tInfo.deltaX
+    } else if(centerPoint === 'right') {
+      xy = tInfo.deltaY
+    } else if(centerPoint === 'bottom') {
+      xy = -tInfo.deltaX
+    } 
+    return xy
+  }
+
   const { info: tInfo, onTouchFn } = useTouchEvent({
-    onTouchStart() {
+    onTouchStart(e) {
       touchInfo.current.startDeg = rotateDeg;
       setDuration(0.1);
       props.onTouchStart?.();
     },
     onTouchMove() {
-      const isY = circleSize === 'outside' ? isVertical.current : tInfo.offsetY > tInfo.offsetX
-      const xy = isY ? tInfo.deltaY : -tInfo.deltaX;
+      const xy = getXy()
       const deg = Math.round(
         touchInfo.current.startDeg - info.current.scrollViewDeg * (xy / info.current.circleWrapWH),
       );
@@ -132,7 +160,7 @@ export const ScrollCircle: React.FC<ScrollCircleProps> = ({
     onTouchEnd() {
       const { startDeg } = touchInfo.current;
       // 移动的距离
-      const xy = isVertical.current ? tInfo.deltaY : -tInfo.deltaX;
+      const xy = getXy();
       let _duration = 0.6;
       let deg = rotateDeg;
       // 触摸的始末距离大于卡片高度的一半，并且触摸时间小于300ms，则触摸距离和时间旋转更多
@@ -174,18 +202,29 @@ export const ScrollCircle: React.FC<ScrollCircleProps> = ({
   };
 
   const circleStyle = useMemo(() => {
-    let w = 0, h = info.current.circleR;
-    if (isVertical.current) {
-      w = info.current.circleR;
-      h = 0;
+    let x = 0, y = 0;
+    if(centerPoint === 'auto') {
+      if (isVertical.current) {
+        x = info.current.circleR;
+      } else {
+        y = info.current.circleR;
+      }
+    } else if(centerPoint === 'left') {
+      x = -info.current.circleR
+    } else if(centerPoint === 'top') {
+      y = -info.current.circleR
+    } else if(centerPoint === 'right') {
+      x = info.current.circleR
+    } else if(centerPoint === 'bottom') {
+      y = info.current.circleR
     }
     return {
       width: `${info.current.circleR * 2}px`,
       height: `${info.current.circleR * 2}px`,
       transitionDuration: duration + 's',
-      transform: `translate(calc(-50% + ${w}px), calc(-50% + ${h}px)) rotate(${rotateDeg}deg)`,
+      transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) rotate(${rotateDeg}deg)`,
     };
-  }, [rotateDeg, duration, centerPoint]);
+  }, [rotateDeg, duration, centerPoint, circleSize]);
 
   return (
     <ScrollCircleCtx.Provider
@@ -195,6 +234,7 @@ export const ScrollCircle: React.FC<ScrollCircleProps> = ({
         isVertical: isVertical.current,
         isClockwise,
         isClick: touchInfo.current.isClick,
+        centerPoint,
       }}
     >
       <div
@@ -203,8 +243,9 @@ export const ScrollCircle: React.FC<ScrollCircleProps> = ({
           width: width,
           height: height,
         }}
+        {...onTouchFn}
       >
-        <div className={`${classPrefix}-area`} style={circleStyle} {...onTouchFn}>
+        <div className={`${classPrefix}-area`} style={circleStyle}>
           {children}
         </div>
         <div

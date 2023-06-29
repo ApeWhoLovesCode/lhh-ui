@@ -45,7 +45,7 @@ export type ScrollCircleProps = {
    */
   isAverage?: boolean;
   /**
-   * 是否是顺时针 (注意：垂直方向时，顺逆是相反的)
+   * 是否将当前方向翻转
    * @default true
    */
   isClockwise?: boolean;

@@ -32,7 +32,6 @@ export type MouseTouchE = {
   screenY: number;
 };
 
-
 function getDirection(x: number, y: number) {
   if (x > y && x > MIN_DISTANCE) {
     return 'horizontal';
@@ -42,6 +41,15 @@ function getDirection(x: number, y: number) {
   }
   return '';
 }
+const changeEvent = (event: TouchEventType | MouseTouchE) => {
+  // changedTouches 是 touchEnd 的值
+  return (
+    (event as TouchEventType)?.touches?.[0] ??
+    (event as TouchEventType)?.changedTouches?.[0] ??
+    (event as MouseTouchE)
+  );
+};
+
 const useTouch = () => {
   const state = useRef<TouchState>({
     startX: 0,
@@ -71,15 +79,6 @@ const useTouch = () => {
       offsetY: 0,
       direction: '',
     });
-  };
-
-  const changeEvent = (event: TouchEventType | MouseTouchE) => {
-    // changedTouches 是 touchEnd 的值
-    return (
-      (event as TouchEventType)?.touches?.[0] ??
-      (event as TouchEventType)?.changedTouches?.[0] ??
-      (event as MouseTouchE)
-    );
   };
 
   const start = (event: TouchEventType | MouseTouchE) => {
