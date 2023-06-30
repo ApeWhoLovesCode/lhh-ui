@@ -1,5 +1,6 @@
+import { UseTouchEventParamsMd } from './doc';
 import useTouchEvent from './useTouchEvent';
 
-export { useTouchEvent };
+export { useTouchEvent, UseTouchEventParamsMd };
 export default useTouchEvent;
-export type { UseTouchesOptions, UseTouchesParams } from './type';
+export type { UseTouchEventParams, UseTouchesOptions, UseTouchesParams } from './type';

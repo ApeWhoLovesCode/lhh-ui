@@ -50,26 +50,3 @@ export const classMergeBem = (classnames: string, arr?: string[]) => {
 export const isMobile = !!navigator.userAgent.match(
   /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i,
 );
-
-/** 鼠标事件 */
-// export type MouseEventType = React.MouseEvent<HTMLDivElement, MouseEvent>;
-// export type TouchEventType = React.TouchEvent<HTMLDivElement>
-export type MouseEventType = MouseEvent | globalThis.MouseEvent;
-export type TouchEventType = React.TouchEvent<HTMLDivElement>;
-/** 鼠标或手指事件 */
-export type MouseTouchEvent = MouseEventType | TouchEventType;
-/** 处理鼠标或手指的事件 */
-export const handleMouseOfTouch = (e: MouseTouchEvent) => {
-  const target = !isMobile
-    ? (e as MouseEventType)
-    : (e as TouchEventType).touches[0] ||
-      (e as TouchEventType).changedTouches[0];
-  return {
-    pageX: target.pageX,
-    pageY: target.pageY,
-    clientX: target.clientX,
-    clientY: target.clientY,
-    screenX: target.screenX,
-    screenY: target.screenY,
-  };
-};

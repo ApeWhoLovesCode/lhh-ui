@@ -1,5 +1,6 @@
 import { useRef } from 'react';
-import { TouchEventType } from '../../utils/handleDom';
+import { UseTouchStateMd } from './doc';
+import { TouchEventType } from '../useTouchEvent/type';
 const MIN_DISTANCE = 10;
 
 export type TouchDirection = '' | 'vertical' | 'horizontal';
@@ -120,4 +121,4 @@ const useTouch = () => {
 };
 
 export default useTouch;
-export { useTouch }
+export { useTouch, UseTouchStateMd }

@@ -1,7 +1,7 @@
-import { isMobile, MouseTouchEvent } from '../../utils/handleDom';
+import { isMobile } from '../../utils/handleDom';
 import useTouch from '../useTouch';
 import useLatest from '../useLatest';
-import { IsTouchEvent, UseTouchesOptions, UseTouchEventParams } from './type';
+import { IsTouchEvent, MouseTouchEvent, UseTouchesOptions, UseTouchEventParams } from './type';
 
 /** 绑定手指触摸或鼠标事件 */
 export default function useTouchEvent(options: UseTouchEventParams = {}) {

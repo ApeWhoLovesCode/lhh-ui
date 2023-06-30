@@ -1,9 +1,19 @@
-import { MouseTouchEvent } from '../../utils/handleDom';
 import { TouchState } from '../useTouch';
 
+/** 鼠标事件 */
+// export type MouseEventType = React.MouseEvent<HTMLDivElement, MouseEvent>;
+// export type TouchEventType = React.TouchEvent<HTMLDivElement>
+export type MouseEventType = React.MouseEvent<HTMLDivElement> | MouseEvent;
+export type TouchEventType = React.TouchEvent<HTMLDivElement>;
+/** 鼠标或手指事件 */
+export type MouseTouchEvent = MouseEventType | TouchEventType;
+
 export type UseTouchesOptions = {
+  /** 点击触摸开始 */
   onTouchStart?: (e: MouseTouchEvent) => void;
+  /** 触摸移动 */
   onTouchMove?: (e: MouseTouchEvent, touchState?: TouchState) => void;
+  /** 触摸结束 */
   onTouchEnd?: (e: MouseTouchEvent) => void;
 };
 
