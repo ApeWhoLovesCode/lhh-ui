@@ -5,31 +5,28 @@ import { ScrollCircleCtx } from "./context";
 const classPrefix = 'lhhui-scroll-circle';
 
 export const ScrollCircleItem: React.FC<ScrollCircleItemType> = ({ index, onClick, children }) => {
-  const { circleR, cardDeg, isVertical, centerPoint, isClockwise, isClick } = useContext(ScrollCircleCtx);
+  const { circleR, cardDeg, isVertical, centerPoint, isFlipDirection, isClick } = useContext(ScrollCircleCtx);
 
   const cardStyle = useMemo(() => {
-    let initDeg = 0
-    let nx = 1;
-    let ny = 1;
-    let isAddDeg = false
+    let initDeg = 0, nx = 1, ny = 1, isAddDeg = false;
     if(centerPoint === 'left') {
       initDeg = -90;
-      if(isClockwise) {
+      if(isFlipDirection) {
         ny = -1;
         isAddDeg = true;
       }
     } else if(centerPoint === 'top') {
       initDeg = 180; 
-      nx = isClockwise ? 1 : -1;
+      nx = isFlipDirection ? 1 : -1;
     } else if(centerPoint === 'right' || centerPoint === 'auto' && isVertical) {
       initDeg = 90;
-      if(!isClockwise) {
+      if(!isFlipDirection) {
         ny = -1;
         isAddDeg = true;
       }
-    } else if(centerPoint === 'bottom' || centerPoint === 'auto' && !isVertical) {
+    } else if(centerPoint === 'bottom' || centerPoint === 'auto' && !isVertical || centerPoint === 'center') {
       initDeg = 0;
-      nx = isClockwise ? -1 : 1;
+      nx = isFlipDirection ? -1 : 1;
     }
     const deg = initDeg + cardDeg * index;
     const top = circleR * (1 - ny * Math.cos((deg * Math.PI) / 180));
@@ -40,7 +37,7 @@ export const ScrollCircleItem: React.FC<ScrollCircleItemType> = ({ index, onClic
       left: `${left}px`,
       transform: `translate(-50%, -50%) rotate(${rotate}deg)`,
     };
-  }, [circleR, cardDeg, isVertical, centerPoint, isClockwise]);
+  }, [circleR, cardDeg, isVertical, centerPoint, isFlipDirection]);
 
   return (
     <div

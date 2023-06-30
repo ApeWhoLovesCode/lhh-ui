@@ -18,7 +18,7 @@ export const ScrollCircle: React.FC<ScrollCircleProps> = ({
   circlePadding = 5,
   initCartNum = 0,
   isAverage = true,
-  isClockwise = true,
+  isFlipDirection = true,
   isPagination = true,
   leftArrow,
   rightArrow,
@@ -148,6 +148,14 @@ export const ScrollCircle: React.FC<ScrollCircleProps> = ({
       touchInfo.current.startDeg = rotateDeg;
       setDuration(0.1);
       props.onTouchStart?.();
+      if(centerPoint === 'center') {
+        const circleWrap = document.querySelector(`.${idRef.current}`)
+        circleDiv.current.w = circleWrap?.clientWidth ?? 0
+        circleDiv.current.h = circleWrap?.clientHeight ?? 0
+        const circleDivRect = circleWrap?.getBoundingClientRect()
+        circleDiv.current.left = circleDivRect?.left ?? 0
+        circleDiv.current.top = circleDivRect?.top ?? 0
+      }
     },
     onTouchMove() {
       const xy = getXy()
@@ -232,7 +240,7 @@ export const ScrollCircle: React.FC<ScrollCircleProps> = ({
         circleR: info.current.circleR,
         cardDeg: cardDeg.current,
         isVertical: isVertical.current,
-        isClockwise,
+        isFlipDirection,
         isClick: touchInfo.current.isClick,
         centerPoint,
       }}

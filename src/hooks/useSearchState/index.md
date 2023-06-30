@@ -27,10 +27,10 @@ group:
 
 如果真的需要这样做，请用 `useSearchParamsFilter` 替代，下面是一个使用例子。
 
-#### 错误用法 ❌
+#### 错误用法 <Badge type="error">error</Badge>
 
 <code src="../../demo/hooks/useSearchState/demo2.tsx"></code>
 
-#### 正确用法 ✅
+#### 正确用法 <Badge type="success">true</Badge>
 
 <code src="../../demo/hooks/useSearchState/demo3.tsx"></code>

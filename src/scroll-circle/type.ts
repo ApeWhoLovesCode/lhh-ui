@@ -48,7 +48,7 @@ export type ScrollCircleProps = {
    * 是否将当前方向翻转
    * @default true
    */
-  isClockwise?: boolean;
+  isFlipDirection?: boolean;
   /**
    * 是否分页
    * @default true

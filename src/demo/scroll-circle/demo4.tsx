@@ -1,37 +1,70 @@
-import React, { useState, useEffect } from 'react';
-import { ScrollCircle } from 'lhh-ui';
+import React from 'react';
+import { ScrollCircle, classBem, isMobile } from 'lhh-ui';
+import './index.less';
+import { CenterPointType } from 'lhh-ui/scroll-circle/type';
 
+const arrCenter: CenterPointType[] = ['center', 'center']
+const arr: CenterPointType[] = ['left','left', 'right','right', 'top','top', 'bottom','bottom']
+const arrAuto: CenterPointType[] = ['auto', 'auto', 'auto', 'auto']
+const listFew = Array.from({length: 10}, (_, i) => ({ _id: 'id' + i, title: i }))
+const list = Array.from({length: 16}, (_, i) => ({ _id: 'id' + i, title: i }))
 export default () => {
-  const [list, setList] = useState<any[]>([]);
 
-  useEffect(() => {
-    setTimeout(() => {
-      const newList = new Array(12).fill('Hello').map((v, i) => ({ _id: 'id' + i, title: v + i }));
-      setList(newList);
-    }, 50);
-  }, []);
+  const item = (v: CenterPointType, i: number, isCenter?: boolean) => (
+    <ScrollCircle
+      list={isCenter ? listFew : list}
+      isPagination={false}
+      initCartNum={0}
+      centerPoint={v}
+      isFlipDirection={i % 2 === 1}
+      circleSize={isCenter ? 'inside' : 'outside'}
+    >
+      {(isCenter ? listFew : list)?.map((item, i) => (
+        <ScrollCircle.Item
+          key={item._id}
+          index={i}
+        >
+          <div className='card'>
+            {item.title}
+          </div>
+        </ScrollCircle.Item>
+      ))}
+    </ScrollCircle>
+  )
 
   return (
-    <div style={{width: 200, height: 400}}>
-      <ScrollCircle
-        list={list}
-        isPagination={false}
-        initCartNum={2}
-      >
-        {list?.map((item, i) => (
-          <ScrollCircle.Item
-            key={item._id}
-            index={i}
-            onClick={() => {
-              console.log('点击了卡片的回调');
-            }}
-          >
-            <div style={{width: 100, height: 130, border: '2px solid #aaa', userSelect: 'none'}}>
-              <h4>{item.title}</h4>
+    <div className={classBem('demo-scrollcircle', {isMobile})}>
+      <div className='wrap'>
+        {arrCenter.map((v, i) => (
+          <div key={i}>
+            <div className='title'>{v}{i % 2 === 1 ? ' + 翻转方向' : null}</div>
+            <div className='item'>
+              {item(v, i, true)}
             </div>
-          </ScrollCircle.Item>
+          </div>
         ))}
-      </ScrollCircle>
+      </div>
+      <div className='wrap'>
+        {arr.map((v, i) => (
+          <div key={i}>
+            <div className='title'>{v}{i % 2 === 1 ? ' + 翻转方向' : null}</div>
+            <div className='item'>
+              {item(v, i)}
+            </div>
+          </div>
+        ))}
+      </div>
+      <h3 style={{maxWidth: 400, textAlign: 'center'}}>------- auto -------</h3>
+      <div className='wrap'>
+        {arrAuto.map((v, i) => (
+          <div key={i}>
+            <div className='title'>{i < 2 ? '横向' : '纵向'}{i % 2 === 1 ? ' + 翻转方向' : null}</div>
+            <div className={classBem('item', {col: i >= 2})}>
+              {item(v, i)}
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

@@ -15,23 +15,21 @@ group:
 
 ## 演示
 
-<code src="../demo/scroll-circle/demo5.tsx"></code>
-
 ### 常规使用
 
-<!-- <code src="../demo/scroll-circle/demo1.tsx"></code> -->
+<code src="../demo/scroll-circle/demo1.tsx"></code>
 
 ### 分页使用
 
-<!-- <code src="../demo/scroll-circle/demo2.tsx"></code> -->
+<code src="../demo/scroll-circle/demo2.tsx"></code>
 
-### 卡片间距和不均分排列
+### 设置卡片间距和不均分排列
 
-<!-- <code src="../demo/scroll-circle/demo3.tsx"></code> -->
+<code src="../demo/scroll-circle/demo3.tsx"></code>
 
-### 垂直布局
+### 设置各方向上的圆心 (centerPoint)
 
-<!-- <code src="../demo/scroll-circle/demo4.tsx"></code> -->
+<code src="../demo/scroll-circle/demo4.tsx"></code>
 
 ## API
 
@@ -42,3 +40,14 @@ group:
 ### ScrollCircle.Item
 
 <API id="ScrollCircleItem"></API>
+
+### centerPoint <Badge>CenterPointType</Badge>
+
+|  属性名   | 描述  |
+|  ----  | ----  |
+| auto  | 自动适应，当圆形区域宽度大于高度时，圆心会自动在底部，否则在右边 |
+| center  | 建议搭配 circleSize='inside' 一起使用（让整个圆形在盒子内部） |
+| left | 让圆心在左边 |
+| top | 让圆心在顶部 |
+| right | 让圆心在右边 |
+| bottom | 让圆心在底部 |

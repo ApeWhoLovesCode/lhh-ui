@@ -1,13 +1,51 @@
-.demo-scrollcircle-wrap {
-  border: 1px solid #ccc;
-}
-
-.card {
-  border: 2px solid #aaa;
-  user-select: none;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 14px;
-  font-weight: bold;
+.demo-scrollcircle {
+  .wrap {
+    width: 420px;
+    display: grid;
+    gap: 16px;
+    grid-template: 'a a';
+    margin-bottom: 10px;
+  }
+  .title {
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 8px;
+    text-align: center;
+  }
+  .item {
+    border: 1px solid #ccc;
+    width: 200px;
+    height: 200px;
+    &-col {
+      height: 250px;
+    }
+  }
+  .card {
+    border: 2px solid #aaa;
+    user-select: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    font-weight: bold;
+    width: 30px;
+    height: 30px;
+  }
+  &-isMobile {
+    .wrap {
+      width: 100%;
+      gap: 12px;
+    }
+    .item {
+      width: 150px;
+      height: 150px;
+      &-col {
+        height: 200px;
+      }
+    }
+    .card {
+      width: 20px;
+      height: 20px;
+    }
+  }
 }
