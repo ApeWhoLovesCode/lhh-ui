@@ -7,6 +7,6 @@ const ScrollCircle = attachPropertiesToComponent(_ScrollCircle, {
   Item: ScrollCircleItem,
 });
 
-export type { ScrollCircleItemType, ScrollCircleProps } from './type';
+export type { ScrollCircleItemType, ScrollCircleProps, ScrollCircleInstance } from './type';
 export { ScrollCircle, ScrollCircleItem };
 export default ScrollCircle;

@@ -11,22 +11,22 @@ export const ScrollCircleItem: React.FC<ScrollCircleItemType> = ({ index, onClic
     let initDeg = 0, nx = 1, ny = 1, isAddDeg = false;
     if(centerPoint === 'left') {
       initDeg = -90;
-      if(isFlipDirection) {
+      if(!isFlipDirection) {
         ny = -1;
         isAddDeg = true;
       }
     } else if(centerPoint === 'top') {
       initDeg = 180; 
-      nx = isFlipDirection ? 1 : -1;
+      nx = !isFlipDirection ? 1 : -1;
     } else if(centerPoint === 'right' || centerPoint === 'auto' && isVertical) {
       initDeg = 90;
-      if(!isFlipDirection) {
+      if(isFlipDirection) {
         ny = -1;
         isAddDeg = true;
       }
     } else if(centerPoint === 'bottom' || centerPoint === 'auto' && !isVertical || centerPoint === 'center') {
       initDeg = 0;
-      nx = isFlipDirection ? -1 : 1;
+      nx = !isFlipDirection ? -1 : 1;
     }
     const deg = initDeg + cardDeg * index;
     const top = circleR * (1 - ny * Math.cos((deg * Math.PI) / 180));

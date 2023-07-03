@@ -32,7 +32,7 @@ export default () => {
   return (
     <div style={{width: 400, height: 200}}>
       <ScrollCircle
-        list={list}
+        listLength={list.length}
         onPageChange={onPageChange}
       >
         {items?.map((item, i) => (

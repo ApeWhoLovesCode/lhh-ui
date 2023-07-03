@@ -2,8 +2,8 @@ import { ReactNode } from 'react';
 import { NativeProps } from '../utils/native-props';
 
 export type ScrollCircleProps = {
-  /** 传入卡片的数组 */
-  list: any[];
+  /** 传入卡片的数组长度 */
+  listLength: number;
   /**
    * 滚动列表的宽度
    * @default 100%
@@ -46,7 +46,6 @@ export type ScrollCircleProps = {
   isAverage?: boolean;
   /**
    * 是否将当前方向翻转
-   * @default true
    */
   isFlipDirection?: boolean;
   /**
@@ -58,12 +57,20 @@ export type ScrollCircleProps = {
   leftArrow?: ReactNode;
   /** 右边分页箭头的内容区域 */
   rightArrow?: ReactNode;
+  /** 禁止触摸滚动 */
+  disableTouch?: boolean
   /** 发生触摸的回调 */
   onTouchStart?: () => void;
   /** 发生滚动的回调 */
   onTouchMove?: () => void;
   /** 触摸结束的回调 */
   onTouchEnd?: () => void;
+  /** 
+   * 触摸结束的回调
+   * @curIndex 当前处于正中的索引
+   * @deg 当前旋转的角度
+   */
+  onScrollEnd?: (curIndex: number, deg: number) => void
   /** 分页触发回调改变页码 */
   onPageChange?: (page: { pageNum: number; pageSize: number }) => void;
 } & NativeProps
@@ -74,6 +81,11 @@ export type ScrollCircleItemType = {
   /** 点击了卡片(触摸时间小于150ms) */
   onClick?: (i: number) => void;
 } & NativeProps
+
+export type ScrollCircleInstance = {
+  /** 旋转到指定角度或者指定索引 */
+  scrollTo: (e: {deg?: number, index?: number, duration?: number}) => void
+}
 
 export type CenterPointType = 'auto' | 'center' | 'left' | 'top' | 'right' | 'bottom'
 

@@ -14,7 +14,7 @@ export default () => {
   return (
     <div style={{width: 400, height: 200}}>
       <ScrollCircle
-        list={list}
+        listLength={list.length}
         isAverage={false}
         isPagination={false}
         cardAddDeg={3}

@@ -12,9 +12,9 @@ export default () => {
 
   const item = (v: CenterPointType, i: number, isCenter?: boolean) => (
     <ScrollCircle
-      list={isCenter ? listFew : list}
+      listLength={isCenter ? listFew.length : list.length}
       isPagination={false}
-      initCartNum={0}
+      initCartNum={2}
       centerPoint={v}
       isFlipDirection={i % 2 === 1}
       circleSize={isCenter ? 'inside' : 'outside'}

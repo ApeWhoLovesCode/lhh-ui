@@ -31,6 +31,14 @@ group:
 
 <code src="../demo/scroll-circle/demo4.tsx"></code>
 
+### 操作旋转
+
+<code src="../demo/scroll-circle/demo5.tsx"></code> 
+
+### 多层旋转
+
+<code src="../demo/scroll-circle/demo6.tsx"></code>
+
 ## API
 
 ### ScrollCircle

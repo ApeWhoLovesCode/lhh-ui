@@ -1,15 +1,16 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { getLineAngle } from './utils';
+import React, { useState, useEffect, useRef, useMemo, forwardRef, useImperativeHandle } from 'react';
+import { getLineAngle, getRotateDegAbs } from './utils';
 import { randomStr } from '../utils/random';
 import { classBem, isMobile } from '../utils/handleDom';
 import useTouchEvent from '../hooks/useTouchEvent';
-import { CircleInfoType, CircleTouchType, ScrollCircleProps } from './type';
+import { CircleInfoType, CircleTouchType, ScrollCircleInstance, ScrollCircleProps } from './type';
 import { ScrollCircleCtx } from './context';
+import { withNativeProps } from '../utils';
 
 const classPrefix = 'lhhui-scroll-circle';
 
-export const ScrollCircle: React.FC<ScrollCircleProps> = ({
-  list,
+export const ScrollCircle = forwardRef<ScrollCircleInstance, ScrollCircleProps>(({
+  listLength = 0,
   cardAddDeg = 1,
   width = '100%',
   height = '100%',
@@ -18,14 +19,15 @@ export const ScrollCircle: React.FC<ScrollCircleProps> = ({
   circlePadding = 5,
   initCartNum = 0,
   isAverage = true,
-  isFlipDirection = true,
+  isFlipDirection = false,
   isPagination = true,
   leftArrow,
   rightArrow,
   children,
+  disableTouch = false,
   onPageChange,
   ...props
-}) => {
+}, ref) => {
   const idRef = useRef(randomStr(classPrefix));
   /** 整个滚动盒子的区域 */
   const circleDiv = useRef({
@@ -88,10 +90,10 @@ export const ScrollCircle: React.FC<ScrollCircleProps> = ({
       circleDiv.current.top = circleDivRect?.top ?? 0
     }
     // 是否采用均分卡片的方式
-    if (isAverage && list) {
+    if (isAverage && listLength) {
       const cardNum = Math.floor(360 / _cardDeg);
       // 判断总卡片数是否超过一个圆
-      const _cardNum = Math.min(cardNum, list.length);
+      const _cardNum = Math.min(cardNum, listLength);
       pageSize = _cardNum;
       setPageState((p) => ({ ...p, pageSize }));
       cardDeg.current = 360 / _cardNum;
@@ -100,7 +102,7 @@ export const ScrollCircle: React.FC<ScrollCircleProps> = ({
     }
     onPageChange?.({ pageNum, pageSize });
     if(isInit) {
-      setRotateDeg(cardDeg.current * initCartNum * (isVertical.current ? 1 : -1));
+      scrollTo({index: initCartNum})
     }
   };
 
@@ -109,7 +111,7 @@ export const ScrollCircle: React.FC<ScrollCircleProps> = ({
   }
 
   useEffect(() => {
-    if (list?.length) {
+    if (listLength) {
       setTimeout(() => {
         init()
       }, 0);
@@ -118,7 +120,7 @@ export const ScrollCircle: React.FC<ScrollCircleProps> = ({
     return () => {
       if (!isMobile) window.removeEventListener('resize', resizeFn);
     };
-  }, [list, cardAddDeg, centerPoint, circleSize, circlePadding, initCartNum, isAverage]);
+  }, [listLength, cardAddDeg, centerPoint, circleSize, circlePadding, initCartNum, isAverage, isFlipDirection]);
 
   const getXy = () => {
     let xy = 0
@@ -142,7 +144,7 @@ export const ScrollCircle: React.FC<ScrollCircleProps> = ({
   }
 
   const { info: tInfo, onTouchFn } = useTouchEvent({
-    onTouchStart(e) {
+    onTouchStart() {
       touchInfo.current.startDeg = rotateDeg;
       setDuration(0.1);
       props.onTouchStart?.();
@@ -190,10 +192,24 @@ export const ScrollCircle: React.FC<ScrollCircleProps> = ({
       const _deg = cardDeg.current * Math[mathMethods](deg / cardDeg.current);
       setRotateDeg(_deg);
       props.onTouchEnd?.();
+      _onScrollEnd(_deg, _duration)
     },
+    isStopPropagation: true,
+    isDisable: {
+      all: disableTouch
+    }
   });
 
-  const disableRight = pageState.pageNum * pageState.pageSize >= (list?.length ?? 0);
+  const _onScrollEnd = (deg: number, _duration: number) => {
+    if(props.onScrollEnd) {
+      setTimeout(() => {
+        const index = Math.abs(Math.floor(deg / cardDeg.current))
+        props.onScrollEnd?.(index % listLength, deg)
+      }, (_duration ?? duration) * 1000);
+    }
+  }
+
+  const disableRight = pageState.pageNum * pageState.pageSize >= (listLength);
   const disableLeft = pageState.pageNum <= 1;
 
   const onPageChangeFn = (isAdd?: boolean) => {
@@ -232,6 +248,22 @@ export const ScrollCircle: React.FC<ScrollCircleProps> = ({
     };
   }, [rotateDeg, duration, info, centerPoint, circleSize]);
 
+  const scrollTo = ({deg, index, duration: _duration}: {deg?: number, index?: number, duration?: number}) => {
+    if(typeof index === 'number' || typeof deg === 'number') {
+      const _deg = typeof index === 'number' ? cardDeg.current * index : deg!
+      const absV = getRotateDegAbs(centerPoint, isVertical.current, isFlipDirection)
+      setRotateDeg(_deg * absV);
+      if(typeof _duration === 'number') {
+        setDuration(_duration)
+      }
+      _onScrollEnd(_deg * absV, _duration ?? duration)
+    }
+  }
+
+  useImperativeHandle(ref, () => ({
+    scrollTo
+  }))
+
   return (
     <ScrollCircleCtx.Provider
       value={{
@@ -243,42 +275,44 @@ export const ScrollCircle: React.FC<ScrollCircleProps> = ({
         centerPoint,
       }}
     >
-      <div
-        className={`${classPrefix} ${idRef.current}`}
-        style={{
-          width: width,
-          height: height,
-        }}
-        {...onTouchFn}
-      >
-        <div className={`${classPrefix}-area`} style={circleStyle}>
-          {children}
-        </div>
+      {withNativeProps(props, (
         <div
-          className={`${classBem(`${classPrefix}-arrow`, { left: true, disable: disableLeft })}`}
-          onClick={() => onPageChangeFn()}
+          className={`${classPrefix} ${idRef.current}`}
+          style={{
+            width: width,
+            height: height,
+          }}
+          {...onTouchFn}
         >
-          {isPagination ? (
-            leftArrow ?? (
-              <div className={`${classBem(`${classPrefix}-arrow-area`, { left: true })}`}>
-                {'<'}
-              </div>
-            )
-          ) : null}
+          <div className={`${classPrefix}-area`} style={circleStyle}>
+            {children}
+          </div>
+          <div
+            className={`${classBem(`${classPrefix}-arrow`, { left: true, disable: disableLeft })}`}
+            onClick={() => onPageChangeFn()}
+          >
+            {isPagination ? (
+              leftArrow ?? (
+                <div className={`${classBem(`${classPrefix}-arrow-area`, { left: true })}`}>
+                  {'<'}
+                </div>
+              )
+            ) : null}
+          </div>
+          <div
+            className={`${classBem(`${classPrefix}-arrow`, { right: true, disable: disableRight })}`}
+            onClick={() => onPageChangeFn(true)}
+          >
+            {isPagination ? (
+              rightArrow ?? (
+                <div className={`${classBem(`${classPrefix}-arrow-area`, { right: true })}`}>
+                  {'>'}
+                </div>
+              )
+            ) : null}
+          </div>
         </div>
-        <div
-          className={`${classBem(`${classPrefix}-arrow`, { right: true, disable: disableRight })}`}
-          onClick={() => onPageChangeFn(true)}
-        >
-          {isPagination ? (
-            rightArrow ?? (
-              <div className={`${classBem(`${classPrefix}-arrow-area`, { right: true })}`}>
-                {'>'}
-              </div>
-            )
-          ) : null}
-        </div>
-      </div>
+      ))}
     </ScrollCircleCtx.Provider>
   );
-};
+});
