@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo, forwardRef, useImperativeHandle } from 'react';
-import { getLineAngle, getRotateDegAbs } from './utils';
+import { getCircleTransformXy, getLineAngle, getRotateDegAbs } from './utils';
 import { randomStr } from '../utils/random';
 import { classBem, isMobile } from '../utils/handleDom';
 import useTouchEvent from '../hooks/useTouchEvent';
@@ -60,7 +60,7 @@ export const ScrollCircle = forwardRef<ScrollCircleInstance, ScrollCircleProps>(
     /** 每页条数 */
     pageSize: 10,
   });
-  const [duration, setDuration] = useState(0.6);
+  const [duration, setDuration] = useState(600);
 
   const init = async (isInit = true) => {
     const circleWrap = document.querySelector(`.${idRef.current}`)
@@ -146,7 +146,7 @@ export const ScrollCircle = forwardRef<ScrollCircleInstance, ScrollCircleProps>(
   const { info: tInfo, onTouchFn } = useTouchEvent({
     onTouchStart() {
       touchInfo.current.startDeg = rotateDeg;
-      setDuration(0.1);
+      setDuration(100);
       props.onTouchStart?.();
       if(centerPoint === 'center') {
         const circleWrap = document.querySelector(`.${idRef.current}`)
@@ -169,14 +169,14 @@ export const ScrollCircle = forwardRef<ScrollCircleInstance, ScrollCircleProps>(
       const { startDeg } = touchInfo.current;
       // 移动的距离
       const xy = getXy();
-      let _duration = 0.6;
+      let _duration = 600;
       let deg = rotateDeg;
       // 触摸的始末距离大于卡片高度的一半，并且触摸时间小于300ms，则触摸距离和时间旋转更多
       if (Math.abs(xy) > info.cardWH / 2 && tInfo.time < 300) {
         // 增加角度变化
         const v = tInfo.time / 300;
         const changeDeg = (info.scrollViewDeg * (xy / info.circleWrapWH)) / v;
-        _duration = 1;
+        _duration = 1000;
         deg = Math.round(startDeg - changeDeg);
       }
       // 处理转动的角度为：卡片的角度的倍数 (xy > 0 表示向上滑动)
@@ -203,9 +203,13 @@ export const ScrollCircle = forwardRef<ScrollCircleInstance, ScrollCircleProps>(
   const _onScrollEnd = (deg: number, _duration: number) => {
     if(props.onScrollEnd) {
       setTimeout(() => {
-        const index = Math.abs(Math.floor(deg / cardDeg.current))
-        props.onScrollEnd?.(index % listLength, deg)
-      }, (_duration ?? duration) * 1000);
+        const absV = getRotateDegAbs(centerPoint, isVertical.current, isFlipDirection)
+        let index = Math.floor(deg / cardDeg.current) % listLength * absV
+        if(index < 0) {
+          index += listLength 
+        }
+        props.onScrollEnd?.(index, deg)
+      }, _duration ?? duration);
     }
   }
 
@@ -224,26 +228,11 @@ export const ScrollCircle = forwardRef<ScrollCircleInstance, ScrollCircleProps>(
   };
 
   const circleStyle = useMemo(() => {
-    let x = 0, y = 0;
-    if(centerPoint === 'auto') {
-      if (isVertical.current) {
-        x = info.circleR;
-      } else {
-        y = info.circleR;
-      }
-    } else if(centerPoint === 'left') {
-      x = -info.circleR
-    } else if(centerPoint === 'top') {
-      y = -info.circleR
-    } else if(centerPoint === 'right') {
-      x = info.circleR
-    } else if(centerPoint === 'bottom') {
-      y = info.circleR
-    }
+    const {x, y} = getCircleTransformXy(centerPoint, isVertical.current, info.circleR)
     return {
       width: `${info.circleR * 2}px`,
       height: `${info.circleR * 2}px`,
-      transitionDuration: duration + 's',
+      transitionDuration: duration + 'ms',
       transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) rotate(${rotateDeg}deg)`,
     };
   }, [rotateDeg, duration, info, centerPoint, circleSize]);

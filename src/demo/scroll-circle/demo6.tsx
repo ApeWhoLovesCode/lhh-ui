@@ -1,54 +1,74 @@
 import React, { forwardRef, useImperativeHandle, useRef, useState } from 'react';
 import { ScrollCircle, ScrollCircleInstance, isMobile } from 'lhh-ui';
-import './index.less';
+import './demo6.less';
+import { useUpdateEffect } from 'ahooks';
 
-const list = Array.from({length: isMobile ? 10 : 16}, (_, i) => ({ _id: 'id' + i, title: i }))
+const list = Array.from({length: isMobile ? 10 : 16}, (_, i) => ({ id: 'id' + i, title: i + '' }))
 export default () => {
   const scrollCircleRef = useRef<ScrollCircleInstance>(null)
-  const scrollCircleListRef = useRef<(ScrollCircleInstance | null)[]>([])
+  const scrollCircleListRef = useRef<(CircleItemInstance | null)[]>([])
+  const [curIndex, setCurIndex] = useState(0);
+  const [curIndex2, setCurIndex2] = useState(0);
 
   const onScrollCircle = () => {
-    scrollCircleRef.current?.scrollTo({index: Math.floor(Math.random() * list.length), duration: 1.5})
+    scrollCircleRef.current?.scrollTo({index: Math.floor(Math.random() * list.length), duration: 1500})
     scrollCircleListRef.current.forEach((ref, index) => {
-      ref?.scrollTo({index: Math.floor(Math.random() * list.length), duration: 3})
+      ref?.scrollTo({index: Math.floor(Math.random() * list.length), duration: 3000})
     })
   }
 
+  useUpdateEffect(() => {
+    setTimeout(() => {
+      setCurIndex2(scrollCircleListRef.current[curIndex]!.getIndex())
+    }, 1600);
+  }, [curIndex])
+
   return (
     <>
-      <div style={{width: isMobile ? 300 : 600, height: 400, border: '1px solid #ccc'}}>
+      <div style={{width: isMobile ? 300 : 650, height: 500, border: '1px solid #ccc'}}>
         <ScrollCircle
           ref={scrollCircleRef}
           listLength={list.length}
           isPagination={false}
           initCartNum={2}
+          onScrollEnd={(index) => {
+            setCurIndex(index)
+          }}
         >
           {list?.map((item, i) => (
             <ScrollCircle.Item
-              key={item._id}
+              key={item.id}
               index={i}
             >
-              <div className='circleItem'>
-                <CircleItem ref={ref => scrollCircleListRef.current[i] = ref} item={item} />
+              <div className={`circleItem ${curIndex === i ? 'circleItem-active' : ''}`}>
+                <CircleItem 
+                  ref={ref => scrollCircleListRef.current[i] = ref} 
+                  title={item.title} 
+                />
               </div>
             </ScrollCircle.Item>
           ))}
         </ScrollCircle>
       </div>
+      <h4>当前选中的索引是：<b>{curIndex}</b> 和 <b>{curIndex2}</b></h4>
       <button onClick={() => {onScrollCircle()}}>开始旋转</button>
     </>
   );
 };
 
-const CircleItem = forwardRef<ScrollCircleInstance, any>(({item}, ref) => {
-  const list = Array.from({length: 12}, (_, i) => ({ _id: 'id' + i, title: i }))
+type CircleItemInstance = ScrollCircleInstance & {getIndex: () => number}
+const CircleItem = forwardRef<CircleItemInstance, {title: string}>((
+  {title}, ref
+) => {
+  const list = Array.from({length: 12}, (_, i) => ({ id: 'id' + i, title: i }))
   const scrollCircleRef = useRef<ScrollCircleInstance>(null)
   const [curIndex, setCurIndex] = useState(0);
 
   useImperativeHandle(ref, () => ({
     scrollTo: (e) => {
       scrollCircleRef.current?.scrollTo(e)
-    }
+    },
+    getIndex: () => curIndex
   }))
 
   return (
@@ -66,7 +86,7 @@ const CircleItem = forwardRef<ScrollCircleInstance, any>(({item}, ref) => {
       >
         {list?.map((item, i) => (
           <ScrollCircle.Item
-            key={item._id}
+            key={item.id}
             index={i}
           >
             <div className={`item ${curIndex === i ? 'item-active' : ''}`}>
@@ -75,7 +95,7 @@ const CircleItem = forwardRef<ScrollCircleInstance, any>(({item}, ref) => {
           </ScrollCircle.Item>
         ))}
       </ScrollCircle>
-      <div className="centerItem">{item.title}</div>
+      <div className="centerItem">{title}</div>
     </div>
   )
 })

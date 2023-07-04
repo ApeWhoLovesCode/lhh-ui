@@ -33,9 +33,9 @@ group:
 
 ### 操作旋转
 
-<code src="../demo/scroll-circle/demo5.tsx"></code> 
+<code src="../demo/scroll-circle/demo5.tsx"></code>
 
-### 多层旋转
+### 组件多层嵌套
 
 <code src="../demo/scroll-circle/demo6.tsx"></code>
 
