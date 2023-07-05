@@ -21,6 +21,12 @@ group:
 
 <code src="../../demo/hooks/useSearchState/demo1.tsx"></code>
 
+### 数字，数组，对象等非String类型
+
+- 建议：处理 `Object` 类型时最好用 `useSearchSetState`，这样地址栏会清晰很多。
+
+<code src="../../demo/hooks/useSearchState/demo4.tsx"></code>
+
 ## 注意
 
 使用该钩子时，不要在一个函数内 `setParam` 多次，否则会有闭包问题，导致url参数前值被后值覆盖；
