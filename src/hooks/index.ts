@@ -4,6 +4,7 @@ export * from './useLatest';
 export * from './useMergeProps';
 export * from './useRender';
 export * from './useSearchParamsFilter';
+export * from './useSearchSetState';
 export * from './useSearchState';
 export * from './useTouch';
 export * from './useTouchEvent';
