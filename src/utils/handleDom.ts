@@ -1,5 +1,4 @@
 import classNames from 'classnames';
-import type { MouseEvent } from 'react';
 
 /** 处理style的px */
 export const handleStylePx = (v: number | string) => {
