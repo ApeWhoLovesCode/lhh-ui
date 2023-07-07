@@ -9,6 +9,7 @@ export default () => {
   const scrollCircleListRef = useRef<(CircleItemInstance | null)[]>([])
   const [curIndex, setCurIndex] = useState(0);
   const [curIndex2, setCurIndex2] = useState(0);
+  const isGo = useRef(false)
 
   const onScrollCircle = () => {
     scrollCircleRef.current?.scrollTo({index: Math.floor(Math.random() * list.length), duration: 1500})
@@ -17,11 +18,16 @@ export default () => {
     })
   }
 
-  useUpdateEffect(() => {
-    setTimeout(() => {
-      setCurIndex2(scrollCircleListRef.current[curIndex]!.getIndex())
-    }, 1600);
-  }, [curIndex])
+  const setIndexs = (index: number) => {
+    setCurIndex(index)
+    if(isGo.current) {
+      setTimeout(() => {
+        setCurIndex2(scrollCircleListRef.current[index]!.getIndex())
+      }, 1600);
+    } else {
+      setCurIndex2(scrollCircleListRef.current[index]!.getIndex())
+    }
+  }
 
   return (
     <>
@@ -32,7 +38,7 @@ export default () => {
           isPagination={false}
           initCartNum={2}
           onScrollEnd={(index) => {
-            setCurIndex(index)
+            setIndexs(index)
           }}
         >
           {list?.map((item, i) => (
@@ -44,6 +50,8 @@ export default () => {
                 <CircleItem 
                   ref={ref => scrollCircleListRef.current[i] = ref} 
                   title={item.title} 
+                  isSelect={curIndex === i}
+                  setCurIndex2={setCurIndex2}
                 />
               </div>
             </ScrollCircle.Item>
@@ -57,8 +65,13 @@ export default () => {
 };
 
 type CircleItemInstance = ScrollCircleInstance & {getIndex: () => number}
-const CircleItem = forwardRef<CircleItemInstance, {title: string}>((
-  {title}, ref
+type CircleItemProps = {
+  title: string
+  isSelect: boolean
+  setCurIndex2: (i: number) => void
+}
+const CircleItem = forwardRef<CircleItemInstance, CircleItemProps>((
+  {title, isSelect, setCurIndex2}, ref
 ) => {
   const list = Array.from({length: 12}, (_, i) => ({ id: 'id' + i, title: i }))
   const scrollCircleRef = useRef<ScrollCircleInstance>(null)
@@ -82,6 +95,9 @@ const CircleItem = forwardRef<CircleItemInstance, {title: string}>((
         circleSize='inside'
         onScrollEnd={(index) => {
           setCurIndex(index)
+          if(isSelect) {
+            setCurIndex2(index)
+          }
         }}
       >
         {list?.map((item, i) => (
