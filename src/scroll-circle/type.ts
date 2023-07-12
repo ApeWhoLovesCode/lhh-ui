@@ -88,21 +88,3 @@ export type ScrollCircleInstance = {
 }
 
 export type CenterPointType = 'auto' | 'center' | 'left' | 'top' | 'right' | 'bottom'
-
-export type CircleInfoType = {
-  /** 滚动盒子的宽/高 */
-  circleWrapWH: number;
-  /** 卡片宽/高 */
-  cardWH: number;
-  /** 圆的半径 */
-  circleR: number;
-  /** 可滚动区域高度对应的圆的角度 */
-  scrollViewDeg: number;
-};
-
-export type CircleTouchType = {
-  /** 记录滚动触摸的旋转度数 */
-  startDeg: number;
-  /** 当前是否是点击 */
-  isClick: boolean;
-};

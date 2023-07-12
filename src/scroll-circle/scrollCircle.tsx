@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef, useMemo, forwardRef, useImperativeHandle } from 'react';
-import { getCircleTransformXy, getLineAngle, getRotateDegAbs } from './utils';
+import { calcAngle, getCircleTransformXy, getLineAngle, getRotateDegAbs } from './utils';
 import { randomStr } from '../utils/random';
 import { classBem, isMobile } from '../utils/handleDom';
 import useTouchEvent from '../hooks/useTouchEvent';
-import { CircleInfoType, CircleTouchType, ScrollCircleInstance, ScrollCircleProps } from './type';
+import { ScrollCircleInstance, ScrollCircleProps } from './type';
 import { ScrollCircleCtx } from './context';
 import { withNativeProps } from '../utils';
 
@@ -36,16 +36,29 @@ export const ScrollCircle = forwardRef<ScrollCircleInstance, ScrollCircleProps>(
     left: 0,
     top: 0,
   });
+  /** 圆心的位置 */
+  const circleCenter = useRef({
+    x: 0,
+    y: 0,
+  })
   /** 滚动盒子需要的信息 */
-  const [info, setInfo] = useState<CircleInfoType>({
+  const [info, setInfo] = useState({
+    /** 滚动盒子的宽/高 */
     circleWrapWH: 0,
+    /** 卡片宽/高 */
     cardWH: 0,
+    /** 圆的半径 */
     circleR: 0,
+    /** 可滚动区域高度对应的圆的角度 */
     scrollViewDeg: 0,
   });
   /** 触摸信息 */
-  const touchInfo = useRef<CircleTouchType>({
+  const touchInfo = useRef({
+    /** 记录开始时刻的滚动度数 */
     startDeg: 0,
+    /** 记录之前滚动的旋转度数 */
+    preDeg: 0,
+    /** 当前是否是点击 */
     isClick: false,
   });
   /** 卡片间的度数 */
@@ -100,6 +113,7 @@ export const ScrollCircle = forwardRef<ScrollCircleInstance, ScrollCircleProps>(
     } else {
       cardDeg.current = _cardDeg;
     }
+    console.log('cardDeg.current: ', cardDeg.current);
     onPageChange?.({ pageNum, pageSize });
     if(isInit) {
       scrollTo({index: initCartNum})
@@ -145,23 +159,36 @@ export const ScrollCircle = forwardRef<ScrollCircleInstance, ScrollCircleProps>(
 
   const { info: tInfo, onTouchFn } = useTouchEvent({
     onTouchStart() {
-      touchInfo.current.startDeg = rotateDeg;
-      setDuration(100);
+      setDuration(10);
+      touchInfo.current.preDeg = rotateDeg;
       props.onTouchStart?.();
       if(centerPoint === 'center') {
-        const circleWrap = document.querySelector(`.${idRef.current}`)
-        circleDiv.current.w = circleWrap?.clientWidth ?? 0
-        circleDiv.current.h = circleWrap?.clientHeight ?? 0
-        const circleDivRect = circleWrap?.getBoundingClientRect()
-        circleDiv.current.left = circleDivRect?.left ?? 0
-        circleDiv.current.top = circleDivRect?.top ?? 0
+        const circleWrap = document.querySelector(`.${idRef.current}`)!
+        circleDiv.current.w = circleWrap.clientWidth
+        circleDiv.current.h = circleWrap.clientHeight
+        const circleDivRect = circleWrap.getBoundingClientRect()
+        circleDiv.current.left = circleDivRect.left
+        circleDiv.current.top = circleDivRect.top
+        circleCenter.current.x = circleDivRect.left + circleDivRect.width / 2
+        circleCenter.current.y = circleDivRect.top + circleDivRect.height / 2
+        const deg = calcAngle(
+          {x: tInfo.clientX, y: tInfo.clientY},
+          {x: circleCenter.current.x, y: circleCenter.current.y},
+        )
+        touchInfo.current.startDeg = deg;
       }
     },
     onTouchMove() {
-      const xy = getXy()
-      const deg = Math.round(
-        touchInfo.current.startDeg - info.scrollViewDeg * (xy / info.circleWrapWH),
-      );
+      const deg = calcAngle(
+        {x: tInfo.clientX, y: tInfo.clientY},
+        {x: circleCenter.current.x, y: circleCenter.current.y},
+      ) - touchInfo.current.startDeg + touchInfo.current.preDeg
+      // 旋转了一圈，需要归位
+      if(Math.abs(deg - rotateDeg) > 300) {
+        setDuration(0)
+      } else {
+        setDuration(10)
+      }
       setRotateDeg(deg);
       props.onTouchMove?.();
     },
@@ -172,6 +199,7 @@ export const ScrollCircle = forwardRef<ScrollCircleInstance, ScrollCircleProps>(
       let _duration = 600;
       let deg = rotateDeg;
       // 触摸的始末距离大于卡片高度的一半，并且触摸时间小于300ms，则触摸距离和时间旋转更多
+      // if (Math.abs(xy) > info.cardWH / 2 && tInfo.time < 300) {
       if (Math.abs(xy) > info.cardWH / 2 && tInfo.time < 300) {
         // 增加角度变化
         const v = tInfo.time / 300;

@@ -9,15 +9,17 @@ group:
   order: 1
 ---
 
-## 圆形滚动组件
+<!-- ## 圆形滚动组件
 
 将每一个卡片绕圆形旋转放置，并支持圆形滚动的方式
 
 ## 演示
 
-### 常规使用
+### 常规使用 -->
 
-<code src="../demo/scroll-circle/demo1.tsx"></code>
+<code src="../demo/scroll-circle/demo7.tsx"></code>
+
+<!-- <code src="../demo/scroll-circle/demo1.tsx"></code>
 
 ### 分页使用
 
@@ -37,7 +39,7 @@ group:
 
 ### 组件多层嵌套
 
-<code src="../demo/scroll-circle/demo6.tsx"></code>
+<code src="../demo/scroll-circle/demo6.tsx"></code> -->
 
 ## API
 

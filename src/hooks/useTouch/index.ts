@@ -17,6 +17,10 @@ export type TouchState = {
   offsetX: number;
   /** y的位移 正数 */
   offsetY: number;
+  /** 相对于浏览器的x坐标 */
+  clientX: number;
+  /** 相对于浏览器的y坐标 */
+  clientY: number;
   /** 当前移动的方向 */
   direction: TouchDirection;
   /** 触摸开始到结束的时间 */
@@ -59,6 +63,8 @@ const useTouch = () => {
     deltaY: 0,
     offsetX: 0,
     offsetY: 0,
+    clientX: 0,
+    clientY: 0,
     direction: '',
     time: 0,
   });
@@ -88,6 +94,8 @@ const useTouch = () => {
     setState({
       startX: touch.clientX,
       startY: touch.clientY,
+      clientX: touch.clientX,
+      clientY: touch.clientY,
     });
     startTime.current = Date.now();
   };
@@ -107,6 +115,8 @@ const useTouch = () => {
       deltaY,
       offsetX,
       offsetY,
+      clientX: touch.clientX,
+      clientY: touch.clientY,
       time,
       direction: !direction ? getDirection(offsetX, offsetY) : '',
     });

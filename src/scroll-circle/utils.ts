@@ -40,3 +40,12 @@ export const getRotateDegAbs = (
   }
   return (num * (isFlipDirection ? -1 : 1)) as -1 | 1
 }
+
+export function calcAngle(
+  event: {x: number, y: number}, 
+  center: {x: number, y: number}, 
+) {
+  const angle = Math.atan2(event.y - center.y, event.x - center.x);
+  const deg = (angle) * (180 / Math.PI)
+  return deg < 0 ? 360 + deg : deg;
+}
