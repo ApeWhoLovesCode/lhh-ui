@@ -95,13 +95,6 @@ export const ScrollCircle = forwardRef<ScrollCircleInstance, ScrollCircleProps>(
     const _cardDeg = (2 * 180 * Math.atan((info.cardWH ?? 0) / 2 / (info.circleR - cWH / 2))) / Math.PI + cardAddDeg;
     setInfo({...info})
     let { pageNum, pageSize } = pageState;
-    if(centerPoint === 'center') {
-      circleDiv.current.w = cw
-      circleDiv.current.h = ch
-      const circleDivRect = circleWrap?.getBoundingClientRect()
-      circleDiv.current.left = circleDivRect?.left ?? 0
-      circleDiv.current.top = circleDivRect?.top ?? 0
-    }
     // 是否采用均分卡片的方式
     if (isAverage && listLength) {
       const cardNum = Math.floor(360 / _cardDeg);
@@ -113,7 +106,6 @@ export const ScrollCircle = forwardRef<ScrollCircleInstance, ScrollCircleProps>(
     } else {
       cardDeg.current = _cardDeg;
     }
-    console.log('cardDeg.current: ', cardDeg.current);
     onPageChange?.({ pageNum, pageSize });
     if(isInit) {
       scrollTo({index: initCartNum})
@@ -162,21 +154,19 @@ export const ScrollCircle = forwardRef<ScrollCircleInstance, ScrollCircleProps>(
       setDuration(10);
       touchInfo.current.preDeg = rotateDeg;
       props.onTouchStart?.();
-      if(centerPoint === 'center') {
-        const circleWrap = document.querySelector(`.${idRef.current}`)!
-        circleDiv.current.w = circleWrap.clientWidth
-        circleDiv.current.h = circleWrap.clientHeight
-        const circleDivRect = circleWrap.getBoundingClientRect()
-        circleDiv.current.left = circleDivRect.left
-        circleDiv.current.top = circleDivRect.top
-        circleCenter.current.x = circleDivRect.left + circleDivRect.width / 2
-        circleCenter.current.y = circleDivRect.top + circleDivRect.height / 2
-        const deg = calcAngle(
-          {x: tInfo.clientX, y: tInfo.clientY},
-          {x: circleCenter.current.x, y: circleCenter.current.y},
-        )
-        touchInfo.current.startDeg = deg;
-      }
+      const circleWrap = document.querySelector(`.${idRef.current} .${classPrefix}-area`)!
+      circleDiv.current.w = circleWrap.clientWidth
+      circleDiv.current.h = circleWrap.clientHeight
+      const circleDivRect = circleWrap.getBoundingClientRect()
+      circleDiv.current.left = circleDivRect.left
+      circleDiv.current.top = circleDivRect.top
+      circleCenter.current.x = circleDivRect.left + circleDivRect.width / 2
+      circleCenter.current.y = circleDivRect.top + circleDivRect.height / 2
+      const deg = calcAngle(
+        {x: tInfo.clientX, y: tInfo.clientY},
+        {x: circleCenter.current.x, y: circleCenter.current.y},
+      )
+      touchInfo.current.startDeg = deg;
     },
     onTouchMove() {
       const deg = calcAngle(
@@ -193,7 +183,6 @@ export const ScrollCircle = forwardRef<ScrollCircleInstance, ScrollCircleProps>(
       props.onTouchMove?.();
     },
     onTouchEnd() {
-      const { startDeg } = touchInfo.current;
       // 移动的距离
       const xy = getXy();
       let _duration = 600;
@@ -202,10 +191,12 @@ export const ScrollCircle = forwardRef<ScrollCircleInstance, ScrollCircleProps>(
       // if (Math.abs(xy) > info.cardWH / 2 && tInfo.time < 300) {
       if (Math.abs(xy) > info.cardWH / 2 && tInfo.time < 300) {
         // 增加角度变化
-        const v = tInfo.time / 300;
-        const changeDeg = (info.scrollViewDeg * (xy / info.circleWrapWH)) / v;
+        const IncreaseVal = Math.sqrt(tInfo.time) / Math.sqrt(300);
+        // const changeDeg = (info.scrollViewDeg * (xy / info.circleWrapWH)) / v;
         _duration = 1000;
-        deg = Math.round(startDeg - changeDeg);
+        // let changeDeg = rotateDeg + touchInfo.current.startDeg - touchInfo.current.preDeg
+        // deg = touchInfo.current.preDeg + Math.round((changeDeg) / IncreaseVal);
+        deg = Math.round((rotateDeg) / IncreaseVal);
       }
       // 处理转动的角度为：卡片的角度的倍数 (xy > 0 表示向上滑动)
       let mathMethods: 'ceil' | 'floor' = 'ceil';
@@ -214,10 +205,10 @@ export const ScrollCircle = forwardRef<ScrollCircleInstance, ScrollCircleProps>(
       } else {
         mathMethods = xy > 0 ? 'floor' : 'ceil';
       }
+      const _deg = cardDeg.current * Math[mathMethods](deg / cardDeg.current);
       // 触摸距离小于10，并且触摸时间小于120ms才算点击
       touchInfo.current.isClick = Math.abs(xy) < 10 && tInfo.time < 120;
       setDuration(_duration);
-      const _deg = cardDeg.current * Math[mathMethods](deg / cardDeg.current);
       setRotateDeg(_deg);
       props.onTouchEnd?.();
       _onScrollEnd(_deg, _duration)
