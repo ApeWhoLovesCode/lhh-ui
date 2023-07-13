@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ScrollCircle } from 'lhh-ui';
+import { ScrollCircle, isMobile } from 'lhh-ui';
 
 export default () => {
   const [list, setList] = useState<any[]>([]);
@@ -12,7 +12,7 @@ export default () => {
   }, []);
 
   return (
-    <div style={{width: 400, height: 200}}>
+    <div style={{width: isMobile ? 300 : 400, height: 200}}>
       <ScrollCircle
         listLength={list.length}
         isAverage={false}
@@ -23,9 +23,6 @@ export default () => {
           <ScrollCircle.Item
             key={item._id}
             index={i}
-            onClick={() => {
-              console.log('点击了卡片的回调');
-            }}
           >
             <div style={{width: 120, height: 80, border: '2px solid #aaa', userSelect: 'none'}}>
               <h4>{item.title}</h4>

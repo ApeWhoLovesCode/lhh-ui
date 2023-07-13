@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { ScrollCircle } from 'lhh-ui';
+import React, { useState, useEffect, useRef } from 'react';
+import { ScrollCircle, ScrollCircleInstance, isMobile } from 'lhh-ui';
+import { ScrollCirclePageType } from 'lhh-ui/scroll-circle/type';
 
 export default () => {
   const [list, setList] = useState<any[]>([]);
   const [items, setItems] = useState<any[]>([]);
   const [pageNum, setPageNum] = useState(1);
   const [pageSize, setPageSize] = useState(20);
+  const scrollCircleRef = useRef<ScrollCircleInstance>(null)
 
   useEffect(() => {
     setTimeout(() => {
@@ -16,7 +18,7 @@ export default () => {
       setList(newList);
     }, 50);
   }, []);
-  const onPageChange = ({ pageNum, pageSize }: { pageNum: number; pageSize: number }) => {
+  const onPageChange = ({ pageNum, pageSize }: ScrollCirclePageType) => {
     const preIndex = (pageNum - 1) * pageSize;
     const newItems = list.slice(preIndex, preIndex + pageSize);
     // 填充空数据
@@ -28,27 +30,39 @@ export default () => {
     setPageNum(pageNum);
     setPageSize(pageSize);
   };
+  const onReducePage = () => {
+    if(pageNum <= 1) return
+    scrollCircleRef.current?.onPageChange({pageNum: pageNum - 1})
+    onPageChange({pageNum: pageNum - 1, pageSize})
+  }
+  const onAddPage = () => {
+    if(pageNum * pageSize >= list.length) return
+    scrollCircleRef.current?.onPageChange({pageNum: pageNum + 1})
+    onPageChange({pageNum: pageNum + 1, pageSize})
+  }
 
   return (
-    <div style={{width: 400, height: 200}}>
-      <ScrollCircle
-        listLength={list.length}
-        onPageChange={onPageChange}
-      >
-        {items?.map((item, i) => (
-          <ScrollCircle.Item
-            key={item._id}
-            index={i}
-            onClick={() => {
-              console.log('点击了卡片的回调');
-            }}
-          >
-            <div style={{width: 100, height: 50, border: '2px solid #aaa', userSelect: 'none'}}>
-              <h4>{item.title}</h4>
-            </div>
-          </ScrollCircle.Item>
-        ))}
-      </ScrollCircle>
-    </div>
+    <>
+      <div style={{width: isMobile ? 300 : 400, height: 200}}>
+        <ScrollCircle
+          ref={scrollCircleRef}
+          listLength={list.length}
+          onPageChange={onPageChange}
+        >
+          {items?.map((item, i) => (
+            <ScrollCircle.Item
+              key={item._id}
+              index={i}
+            >
+              <div style={{width: 100, height: 50, border: '2px solid #aaa', userSelect: 'none'}}>
+                <h4>{item.title}</h4>
+              </div>
+            </ScrollCircle.Item>
+          ))}
+        </ScrollCircle>
+      </div>
+      <button onClick={() => {onReducePage()}}>上一页</button>
+      <button onClick={() => {onAddPage()}}>下一页</button>
+    </>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { ScrollCircle, ScrollCircleInstance } from 'lhh-ui';
+import { ScrollCircle, ScrollCircleInstance, isMobile } from 'lhh-ui';
 
 const list = Array.from({length: 16}, (_, i) => ({ _id: 'id' + i, title: i }))
 export default () => {
@@ -7,23 +7,17 @@ export default () => {
 
   return (
     <>
-      <div style={{width: 400, height: 200}}>
+      <div style={{width: isMobile ? 300 : 400, height: 200}}>
         <ScrollCircle
           ref={scrollCircleRef}
           listLength={list.length}
           isPagination={false}
           initCartNum={2}
-          onScrollEnd={(index, deg) => {
-            console.log(index, deg);
-          }}
         >
           {list?.map((item, i) => (
             <ScrollCircle.Item
               key={item._id}
               index={i}
-              onClick={() => {
-                console.log('点击了卡片的回调');
-              }}
             >
               <div style={{width: 120, height: 80, border: '2px solid #aaa', userSelect: 'none'}}>
                 <h4>{item.title}</h4>

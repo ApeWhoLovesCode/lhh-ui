@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ScrollCircle } from 'lhh-ui';
+import { ScrollCircle, isMobile } from 'lhh-ui';
 
 export default () => {
   const [list, setList] = useState<any[]>([]);
@@ -12,7 +12,7 @@ export default () => {
   }, []);
 
   return (
-    <div style={{width: 400, height: 200}}>
+    <div style={{width: isMobile ? 300 : 400, height: 200}}>
       <ScrollCircle
         listLength={list.length}
         isPagination={false}

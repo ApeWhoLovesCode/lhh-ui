@@ -1,7 +1,6 @@
 import React, { forwardRef, useImperativeHandle, useRef, useState } from 'react';
 import { ScrollCircle, ScrollCircleInstance, isMobile } from 'lhh-ui';
 import './demo6.less';
-import { useUpdateEffect } from 'ahooks';
 
 const list = Array.from({length: isMobile ? 10 : 16}, (_, i) => ({ id: 'id' + i, title: i + '' }))
 export default () => {
@@ -14,7 +13,7 @@ export default () => {
   const onScrollCircle = () => {
     scrollCircleRef.current?.scrollTo({index: Math.floor(Math.random() * list.length), duration: 1500})
     scrollCircleListRef.current.forEach((ref, index) => {
-      ref?.scrollTo({index: Math.floor(Math.random() * list.length), duration: 3000})
+      ref?.scrollTo?.({index: Math.floor(Math.random() * list.length), duration: 3000})
     })
   }
 
@@ -64,7 +63,7 @@ export default () => {
   );
 };
 
-type CircleItemInstance = ScrollCircleInstance & {getIndex: () => number}
+type CircleItemInstance = Partial<ScrollCircleInstance> & {getIndex: () => number}
 type CircleItemProps = {
   title: string
   isSelect: boolean

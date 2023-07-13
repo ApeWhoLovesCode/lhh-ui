@@ -72,7 +72,7 @@ export type ScrollCircleProps = {
    */
   onScrollEnd?: (curIndex: number, deg: number) => void
   /** 分页触发回调改变页码 */
-  onPageChange?: (page: { pageNum: number; pageSize: number }) => void;
+  onPageChange?: (page: ScrollCirclePageType) => void;
 } & NativeProps
 
 export type ScrollCircleItemType = {
@@ -85,6 +85,10 @@ export type ScrollCircleItemType = {
 export type ScrollCircleInstance = {
   /** 旋转到指定角度或者指定索引 */
   scrollTo: (e: {deg?: number, index?: number, duration?: number}) => void
+  /** 触发分页改变页码 */
+  onPageChange: (page: Partial<ScrollCirclePageType>) => void;
 }
+
+export type ScrollCirclePageType = { pageNum: number; pageSize: number }
 
 export type CenterPointType = 'auto' | 'center' | 'left' | 'top' | 'right' | 'bottom'
