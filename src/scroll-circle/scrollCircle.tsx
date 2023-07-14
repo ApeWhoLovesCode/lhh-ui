@@ -162,9 +162,10 @@ export const ScrollCircle = forwardRef<ScrollCircleInstance, ScrollCircleProps>(
       let _duration = 600;
       let deg = rotateDeg;
       const changeDeg = deg - touchInfo.current.preDeg
-      // 触摸的角度大于10度，并且触摸时间小于300ms，则触摸距离和时间旋转更多
-      if (Math.abs(changeDeg) > 10 && tInfo.time < 300) {
-        const IncreaseVal = Math.sqrt(tInfo.time) / Math.sqrt(300); // 增加角度变化
+      // 触摸的角度大于10度，并且触摸时间小于250ms，则触摸距离和时间旋转更多
+      if (Math.abs(changeDeg) > 10 && tInfo.time < 250) {
+        // const IncreaseVal = Math.sqrt(tInfo.time) / Math.sqrt(300); // 增加角度变化
+        const IncreaseVal = tInfo.time / 250; // 增加角度变化
         _duration = 1000;
         deg = touchInfo.current.preDeg + Math.round((changeDeg) / IncreaseVal);
       }
