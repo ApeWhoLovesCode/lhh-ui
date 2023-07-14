@@ -5,4 +5,5 @@ export * from './handleDom';
 export * from './native-props';
 export * from './omit';
 export * from './random';
+export * from './replace';
 export * from './validate';

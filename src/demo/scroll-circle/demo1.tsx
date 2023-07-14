@@ -6,7 +6,7 @@ export default () => {
 
   useEffect(() => {
     setTimeout(() => {
-      const newList = new Array(12).fill('Hello').map((v, i) => ({ _id: 'id' + i, title: v + i }));
+      const newList = new Array(12).fill('Hello').map((v, i) => ({ id: 'id' + i, title: v + i }));
       setList(newList);
     }, 50);
   }, []);
@@ -20,7 +20,7 @@ export default () => {
       >
         {list?.map((item, i) => (
           <ScrollCircle.Item
-            key={item._id}
+            key={item.id}
             index={i}
             onClick={() => {
               console.log('点击了卡片的回调');

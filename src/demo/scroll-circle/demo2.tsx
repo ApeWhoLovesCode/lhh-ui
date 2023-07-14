@@ -30,13 +30,15 @@ export default () => {
     setPageNum(pageNum);
     setPageSize(pageSize);
   };
+  const disabledPre = pageNum <= 1
+  const disabledNext = pageNum * pageSize >= list.length
   const onReducePage = () => {
-    if(pageNum <= 1) return
+    if(disabledPre) return
     scrollCircleRef.current?.onPageChange({pageNum: pageNum - 1})
     onPageChange({pageNum: pageNum - 1, pageSize})
   }
   const onAddPage = () => {
-    if(pageNum * pageSize >= list.length) return
+    if(disabledNext) return
     scrollCircleRef.current?.onPageChange({pageNum: pageNum + 1})
     onPageChange({pageNum: pageNum + 1, pageSize})
   }
@@ -61,8 +63,8 @@ export default () => {
           ))}
         </ScrollCircle>
       </div>
-      <button onClick={() => {onReducePage()}}>上一页</button>
-      <button onClick={() => {onAddPage()}}>下一页</button>
+      <button disabled={disabledPre} onClick={() => {onReducePage()}}>上一页</button>
+      <button disabled={disabledNext} onClick={() => {onAddPage()}}>下一页</button>
     </>
   );
 };

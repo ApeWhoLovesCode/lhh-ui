@@ -15,6 +15,10 @@ group:
 
 ## 演示
 
+### 自定义拼图图片
+
+<code src="../demo/slider-puzzle/demo3.tsx"></code>
+
 ### 常规使用
 
 <code src="../demo/slider-puzzle/demo1.tsx"></code>
@@ -22,10 +26,6 @@ group:
 ### 4\*4 拼图块 以及间距等调整
 
 <code src="../demo/slider-puzzle/demo2.tsx"></code>
-
-### 自定义拼图图片
-
-<code src="../demo/slider-puzzle/demo3.tsx"></code>
 
 ## API
 

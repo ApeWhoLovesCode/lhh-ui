@@ -1,3 +1,4 @@
+export * from './animation-wrap';
 export * from './circle';
 export * from './floating-ball';
 export * from './hooks';

@@ -17,9 +17,9 @@ group:
 
 ### 组件多层嵌套
 
-<code src="../demo/scroll-circle/demo7.tsx"></code>
+<!-- <code src="../demo/scroll-circle/demo7.tsx"></code> -->
 
-<!-- <code src="../demo/scroll-circle/demo6.tsx"></code>
+<code src="../demo/scroll-circle/demo6.tsx"></code>
 
 ### 常规使用
 
@@ -39,7 +39,7 @@ group:
 
 ### 操作旋转
 
-<code src="../demo/scroll-circle/demo5.tsx"></code> -->
+<code src="../demo/scroll-circle/demo5.tsx"></code>
 
 ## API
 
