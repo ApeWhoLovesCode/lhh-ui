@@ -15,7 +15,6 @@ export const ScrollCircle = forwardRef<ScrollCircleInstance, ScrollCircleProps>(
   width = '100%',
   height = '100%',
   centerPoint = 'auto',
-  circleSize = 'outside',
   circlePadding = 5,
   initCartNum = 0,
   isAverage = true,
@@ -25,6 +24,7 @@ export const ScrollCircle = forwardRef<ScrollCircleInstance, ScrollCircleProps>(
   rightArrow,
   children,
   disableTouch = false,
+  radius,
   onPageChange,
   ...props
 }, ref) => {
@@ -80,7 +80,11 @@ export const ScrollCircle = forwardRef<ScrollCircleInstance, ScrollCircleProps>(
     const cardWH = cInfo?.[isVertical.current ? 'clientHeight' : 'clientWidth'] ?? 0;
     const cWH = cInfo?.[isVertical.current ? 'clientWidth' : 'clientHeight'] ?? 0;
     info.circleR = Math.round(
-      centerPoint === 'center' && circleSize === 'inside' ? (Math.min(ch, cw) / 2 - circlePadding - cWH / 2) : Math.max(ch, cw)
+      centerPoint === 'center' ? (
+        radius ?? Math.min(ch, cw) / 2 - circlePadding - cWH / 2
+      ) : (
+        radius ?? Math.max(ch, cw)
+      )
     );
     // 每张卡片所占用的角度
     const _cardDeg = (2 * 180 * Math.atan(cardWH / 2 / (info.circleR - cWH / 2))) / Math.PI + cardAddDeg;
@@ -108,15 +112,13 @@ export const ScrollCircle = forwardRef<ScrollCircleInstance, ScrollCircleProps>(
 
   useEffect(() => {
     if (listLength) {
-      setTimeout(() => {
-        init()
-      }, 0);
+      init()
     }
     if (!isMobile) window.addEventListener('resize', resizeFn);
     return () => {
       if (!isMobile) window.removeEventListener('resize', resizeFn);
     };
-  }, [listLength, cardAddDeg, centerPoint, circleSize, circlePadding, initCartNum, isAverage, isFlipDirection]);
+  }, [listLength, cardAddDeg, centerPoint, radius, circlePadding, initCartNum, isAverage, isFlipDirection]);
 
   /** 获取整个大圆的信息 */
   const getCircleDivInfo = () => {
@@ -219,7 +221,7 @@ export const ScrollCircle = forwardRef<ScrollCircleInstance, ScrollCircleProps>(
       transitionDuration: duration + 'ms',
       transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) rotate(${rotateDeg}deg)`,
     };
-  }, [rotateDeg, duration, info, centerPoint, circleSize]);
+  }, [rotateDeg, duration, info, centerPoint]);
 
   const scrollTo = ({deg, index, duration: _duration}: {deg?: number, index?: number, duration?: number}) => {
     if(typeof index === 'number' || typeof deg === 'number') {

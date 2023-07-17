@@ -55,6 +55,33 @@ export function roundingAngle({changeDeg, cardDeg, deg}: {changeDeg: number, car
   return cardDeg * Math[mathMethods](deg / cardDeg);
 }
 
+/** 获取卡片的度数和xy等信息 */
+export function getCardDegXY({centerPoint, isFlipDirection, isVertical}: {
+  centerPoint: CenterPointType, isFlipDirection: boolean, isVertical: boolean
+}) {
+  let initDeg = 0, nx = 1, ny = 1, isAddDeg = false;
+  if(centerPoint === 'left') {
+    initDeg = -90;
+    if(!isFlipDirection) {
+      ny = -1;
+      isAddDeg = true;
+    }
+  } else if(centerPoint === 'top') {
+    initDeg = 180; 
+    nx = !isFlipDirection ? 1 : -1;
+  } else if(centerPoint === 'right' || centerPoint === 'auto' && isVertical) {
+    initDeg = 90;
+    if(isFlipDirection) {
+      ny = -1;
+      isAddDeg = true;
+    }
+  } else if(centerPoint === 'bottom' || centerPoint === 'auto' && !isVertical || centerPoint === 'center') {
+    initDeg = 0;
+    nx = !isFlipDirection ? -1 : 1;
+  }
+  return {initDeg, nx, ny, isAddDeg}
+}
+
 /* 
 const getXy = () => {
   let xy = 0

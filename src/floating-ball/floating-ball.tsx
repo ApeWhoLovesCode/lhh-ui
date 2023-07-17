@@ -1,5 +1,4 @@
-import React, { useState, useEffect, FC, useRef } from 'react';
-import { randomStr } from '../utils/random';
+import React, { useState, FC, useRef, useLayoutEffect } from 'react';
 import useTouchEvent from '../hooks/useTouchEvent';
 import { FloatingBallProps } from './type';
 
@@ -7,7 +6,6 @@ const classPrefix = `lhhui-floating-ball`;
 const screenW = window.innerWidth, screenH = window.innerHeight;
 
 const FloatingBall: FC<FloatingBallProps> = ({ axis = 'xy', magnetic, ...props }) => {
-  const idRef = useRef(randomStr(classPrefix));
   /** 悬浮球的宽，高，上下左右距离 */
   const ball = useRef({ w: 0, h: 0, r: 0, l: 0, t: 0, b: 0 });
   const touchRef = useRef({
@@ -57,11 +55,9 @@ const FloatingBall: FC<FloatingBallProps> = ({ axis = 'xy', magnetic, ...props }
     },
   });
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const init = () => {
-      const ballDom = document.querySelector(`.${idRef.current} .${classPrefix}-button`)
-      if(!ballDom) return
-      const ballInfo = ballDom.getBoundingClientRect()
+      const ballInfo = buttonRef.current!.getBoundingClientRect()
       ball.current.w = ballInfo.width
       ball.current.h = ballInfo.height
       ball.current.l = ballInfo.left
@@ -69,13 +65,11 @@ const FloatingBall: FC<FloatingBallProps> = ({ axis = 'xy', magnetic, ...props }
       ball.current.t = ballInfo.top
       ball.current.b = window.innerHeight - ballInfo.bottom
     }
-    setTimeout(() => {
-      init()
-    }, 10);
+    init()
   }, [])
   
   return (
-    <div className={`${classPrefix} ${idRef.current}`} {...props}>
+    <div className={`${classPrefix}`} {...props}>
       <div
         ref={buttonRef}
         className={`${classPrefix}-button`}

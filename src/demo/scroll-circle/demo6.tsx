@@ -91,7 +91,6 @@ const CircleItem = forwardRef<CircleItemInstance, CircleItemProps>((
         isPagination={false}
         initCartNum={0}
         centerPoint='center'
-        circleSize='inside'
         onScrollEnd={(index) => {
           setCurIndex(index)
           if(isSelect) {

@@ -11,7 +11,6 @@ export default () => {
           listLength={list.length}
           isPagination={false}
           centerPoint='center'
-          circleSize='inside'
         >
           {list?.map((item, i) => (
             <ScrollCircle.Item

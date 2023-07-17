@@ -17,7 +17,7 @@ group:
 
 ### 组件多层嵌套
 
-<!-- <code src="../demo/scroll-circle/demo7.tsx"></code> -->
+<code src="../demo/scroll-circle/demo7.tsx"></code>
 
 <code src="../demo/scroll-circle/demo6.tsx"></code>
 
@@ -56,7 +56,7 @@ group:
 |  属性名   | 描述  |
 |  ----  | ----  |
 | auto  | 自动适应，当圆形区域宽度大于高度时，圆心会自动在底部，否则在右边 |
-| center  | 建议搭配 circleSize='inside' 一起使用（让整个圆形在盒子内部） |
+| center  | 让整个圆形在盒子内 |
 | left | 让圆心在左边 |
 | top | 让圆心在顶部 |
 | right | 让圆心在右边 |

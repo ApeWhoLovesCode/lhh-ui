@@ -26,6 +26,11 @@ export type AnimationWrapProps = {
    * @default true
    */
   isInitTrigger?: boolean
+  /** 
+   * 初始化时开始动画的延迟时间
+   * @default 100 (单位: ms)
+   */
+  delayTime?: number
 } & NativeProps
 
 export type AnimationWrapName = 'curtain'

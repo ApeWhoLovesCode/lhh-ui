@@ -1,4 +1,4 @@
-import React, { useState, useEffect, forwardRef, useImperativeHandle, useMemo } from 'react';
+import React, { useState, useEffect, forwardRef, useImperativeHandle, useMemo, useRef } from 'react';
 import './index.less';
 import { withNativeProps } from '../utils/native-props';
 import useMergeProps from '../hooks/useMergeProps';
@@ -14,26 +14,34 @@ const defaultProps = {
   duration: 4000,
   background: '#fff',
   isInitTrigger: true,
+  delayTime: 100,
 }
 type RequireType = keyof typeof defaultProps
 
 const AnimationWrap = forwardRef<AnimationWrapInstance, AnimationWrapProps>((comProps, ref) => {
   const props = useMergeProps<AnimationWrapProps, RequireType>(comProps, defaultProps)
-  const { name, position, duration: p_duration, background, isInitTrigger, children, ...ret } = props
+  const { name, position, duration: p_duration, background, isInitTrigger, delayTime, children, ...ret } = props
   const [distance, setDistance] = useState(0);
   const [duration, setDuration] = useState(p_duration);
+  const delayTimer = useRef<NodeJS.Timeout>()
 
   const init = () => {
-    if(isInitTrigger) {
-      setDistance(100)
-    }
+    setDistance(100)
   }
 
   useEffect(() => {
-    setTimeout(() => {
-      init()
-    }, 100);
-  }, [isInitTrigger])
+    if(isInitTrigger) {
+      delayTimer.current = setTimeout(() => {
+        init()
+      }, delayTime);
+    }
+    return () => {
+      if(isInitTrigger) {
+        clearTimeout(delayTimer.current)
+        delayTimer.current = undefined
+      }
+    }
+  }, [isInitTrigger, delayTime])
 
   const run = () => {
     setDistance(0)

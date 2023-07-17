@@ -19,13 +19,13 @@ export type ScrollCircleProps = {
    * @default auto (宽度大于高度时在底部，否则在右侧)
    */
   centerPoint?: CenterPointType;
-  /**
-   * 圆的大小
-   * @default outside (圆溢出包裹它的盒子)
+  /** 
+   * 圆的半径
+   * @default 取组件宽和高中的最大值
    */
-  circleSize?: 'outside' | 'inside'  
+  radius?: number
   /**
-   * 当 circleSize = 'inside' 时，设置圆形的内边距
+   * 当 centerPoint = 'center' 时，设置圆形的内边距
    * @default 5
    */
   circlePadding?: number

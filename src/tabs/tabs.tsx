@@ -1,4 +1,4 @@
-import React, { forwardRef, useImperativeHandle, FC, useState, useEffect, useRef, ReactElement, ComponentProps } from 'react';
+import React, { forwardRef, useImperativeHandle, FC, useState, useEffect, useRef, ReactElement, ComponentProps, useLayoutEffect } from 'react';
 import classNames from 'classnames';
 import { useDebounceFn } from 'ahooks';
 import { traverseReactNode } from './traverse-react-node';
@@ -6,7 +6,7 @@ import { useRender } from '../hooks';
 import { TabProps, TabsInstance, TabsProps } from './type';
 import { withNativeProps } from '../utils/native-props';
 import { randomStr } from '../utils/random';
-import { isMobile } from '../utils/handleDom';
+import { classBem, classMergeBem, isMobile } from '../utils/handleDom';
 
 const classPrefix = `lhhui-tabs`;
 
@@ -82,10 +82,8 @@ export const Tabs = forwardRef<TabsInstance, TabsProps>(
       setIsLineShow(true);
     }, {wait: 100});
 
-    useEffect(() => {
-      setTimeout(() => {
-        getInfo();
-      }, 10);
+    useLayoutEffect(() => {
+      getInfo();
       if(!isMobile) window.addEventListener('resize', getInfo)
       return () => {
         if(!isMobile) window.removeEventListener('resize', getInfo)
@@ -105,11 +103,11 @@ export const Tabs = forwardRef<TabsInstance, TabsProps>(
     return withNativeProps(
       ret,
       <div className={`${classPrefix} ${idRef.current}`}>
-        <div className={`${classPrefix}-header ${classPrefix}-header-left`}>
-          <div className={`${classPrefix}-mask ${classPrefix}-mask-left`}></div>
+        <div className={classMergeBem(`${classPrefix}-header`, ['left'])}>
+          <div className={classMergeBem(`${classPrefix}-mask`, ['left'])}></div>
         </div>
-        <div className={`${classPrefix}-header ${classPrefix}-header-right`}>
-          <div className={`${classPrefix}-mask ${classPrefix}-mask-right`}></div>
+        <div className={classMergeBem(`${classPrefix}-header`, ['right'])}>
+          <div className={classMergeBem(`${classPrefix}-mask`, ['right'])}></div>
         </div>
         <div
           ref={scrollViewRef}
@@ -149,11 +147,7 @@ export const Tabs = forwardRef<TabsInstance, TabsProps>(
             {/* 底部选中的横线样式 */}
             {
               <div
-                className={`
-                  ${classPrefix}-line 
-                  ${isAnimate ? classPrefix + '-line-animate' : ''}
-                  ${isLineShow ? `${classPrefix}-line-show` : `${classPrefix}-line-hide`}
-                `}
+                className={classBem(`${classPrefix}-line`, {animate: isAnimate, show: isLineShow, hide: !isLineShow})}
                 style={{
                   transform: `translateX(calc(${tabList[curI]?.left}px - 50%))`,
                 }}

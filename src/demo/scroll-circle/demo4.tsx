@@ -17,7 +17,6 @@ export default () => {
       initCartNum={2}
       centerPoint={v}
       isFlipDirection={i % 2 === 1}
-      circleSize={isCenter ? 'inside' : 'outside'}
     >
       {(isCenter ? listFew : list)?.map((item, i) => (
         <ScrollCircle.Item

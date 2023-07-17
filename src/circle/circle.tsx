@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import useMergeProps from '../hooks/useMergeProps';
 import colorVar from '../style/var';
 import { isObj, randomStr, range, withNativeProps } from '../utils';
@@ -169,11 +169,9 @@ const Circle = (comProps: CirclePropsType) => {
   }, [size, ready]);
 
   /** 初始化获取 canvas 上下文 */
-  useEffect(() => {
+  useLayoutEffect(() => {
     const init = () => {
-      const canvas = document.querySelector(
-        `#${idRef.current}`,
-      ) as HTMLCanvasElement;
+      const canvas = document.querySelector(`#${idRef.current}`) as HTMLCanvasElement;
       if (!canvas) return;
       canvasRef.current.ctx = canvas.getContext('2d')!;
       canvasRef.current.ratio = window.devicePixelRatio || 1;
@@ -181,10 +179,7 @@ const Circle = (comProps: CirclePropsType) => {
       setCurColor();
       renderCircle();
     };
-    setTimeout(() => {
-      init();
-    }, 10);
-
+    init();
     return () => {
       _cancelAnimationFrame();
     };
