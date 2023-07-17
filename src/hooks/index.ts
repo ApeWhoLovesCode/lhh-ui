@@ -2,6 +2,7 @@ export * from './useKeepInterval';
 export * from './useKeepIntervalMap';
 export * from './useLatest';
 export * from './useMergeProps';
+export * from './usePropsState';
 export * from './useRender';
 export * from './useSearchParamsFilter';
 export * from './useSearchSetState';

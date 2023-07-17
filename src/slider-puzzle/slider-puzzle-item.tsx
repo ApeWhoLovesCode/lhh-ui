@@ -85,8 +85,7 @@ const SliderPuzzleItem = (comProps: SliderPuzzleItemProps) => {
         if(isVertical) {
           y += (grid.h + gap) * xy
           direction = diff > 0 ? 4 : 2
-        }
-        else {
+        } else {
           x += (grid.w + gap) * xy
           direction = diff > 0 ? 3 : 1
         }

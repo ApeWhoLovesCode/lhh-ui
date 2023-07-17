@@ -1,10 +1,10 @@
-import React, { useState, useEffect, forwardRef, useImperativeHandle, useMemo, useRef } from 'react';
+import React, { useState, useEffect, forwardRef, useImperativeHandle, useRef } from 'react';
 import './index.less';
 import { withNativeProps } from '../utils/native-props';
-import useMergeProps from '../hooks/useMergeProps';
 import { AnimationWrapInstance, AnimationWrapName, AnimationWrapPosition, AnimationWrapProps } from './type';
 import { classBem, replaceLineToSpace } from '../utils';
 import { getTransformCurtaion, handleLinearGradient } from './utils';
+import { useMergeProps, usePropsState } from '../hooks';
 
 const classPrefix = `lhhui-animation-wrap`;
 
@@ -22,7 +22,7 @@ const AnimationWrap = forwardRef<AnimationWrapInstance, AnimationWrapProps>((com
   const props = useMergeProps<AnimationWrapProps, RequireType>(comProps, defaultProps)
   const { name, position, duration: p_duration, background, isInitTrigger, delayTime, children, ...ret } = props
   const [distance, setDistance] = useState(0);
-  const [duration, setDuration] = useState(p_duration);
+  const [duration, setDuration] = usePropsState(p_duration);
   const delayTimer = useRef<NodeJS.Timeout>()
 
   const init = () => {

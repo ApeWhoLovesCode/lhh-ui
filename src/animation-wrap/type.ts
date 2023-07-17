@@ -12,8 +12,8 @@ export type AnimationWrapProps = {
    */
   position?: AnimationWrapPosition
   /** 
-   * 方向 
-   * @default 8000 (单位: ms)
+   * 动画时间
+   * @default 4000 (单位: ms)
    */
   duration?: number
   /**
