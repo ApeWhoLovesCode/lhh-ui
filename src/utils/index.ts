@@ -1,4 +1,5 @@
 export * from './attach-properties-to-component';
+export * from './clipboard';
 export * from './compute';
 export * from './format';
 export * from './handleDom';
