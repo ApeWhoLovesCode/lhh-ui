@@ -3,9 +3,10 @@
 [![NPM version](https://img.shields.io/npm/v/lhh-ui.svg?style=flat)](https://npmjs.org/package/lhh-ui)
 [![NPM downloads](http://img.shields.io/npm/dm/lhh-ui.svg?style=flat)](https://npmjs.org/package/lhh-ui)
 
-### 线上地址
+### 资源
 
-http://lhhui.codeape.site
+- 文档: http://lhhui.codeape.site
+- 源码: https://github.com/ApeWhoLovesCode/lhh-ui
 
 ### 使用技术
 
