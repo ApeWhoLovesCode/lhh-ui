@@ -6,8 +6,8 @@ import { CenterPointType } from 'lhh-ui/scroll-circle/type';
 const arrCenter: CenterPointType[] = ['center', 'center']
 const arr: CenterPointType[] = ['left','left', 'right','right', 'top','top', 'bottom','bottom']
 const arrAuto: CenterPointType[] = ['auto', 'auto', 'auto', 'auto']
-const listFew = Array.from({length: 10}, (_, i) => ({ _id: 'id' + i, title: i }))
-const list = Array.from({length: 16}, (_, i) => ({ _id: 'id' + i, title: i }))
+const listFew = Array.from({length: 10}, (_, i) => ({ id: 'id' + i, title: i }))
+const list = Array.from({length: 16}, (_, i) => ({ id: 'id' + i, title: i }))
 export default () => {
 
   const item = (v: CenterPointType, i: number, isCenter?: boolean) => (
@@ -20,7 +20,7 @@ export default () => {
     >
       {(isCenter ? listFew : list)?.map((item, i) => (
         <ScrollCircle.Item
-          key={item._id}
+          key={item.id}
           index={i}
         >
           <div className='card'>
