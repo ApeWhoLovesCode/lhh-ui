@@ -1,5 +1,4 @@
 import AnimationWrap from "./animationWrap";
-import { AnimationWrapInstance, AnimationWrapName, AnimationWrapPosition, AnimationWrapProps } from './type';
 import './index.less'
 
 export default AnimationWrap
@@ -9,4 +8,4 @@ export type {
   AnimationWrapInstance, 
   AnimationWrapName, 
   AnimationWrapPosition 
-}
+} from './type';

@@ -2,6 +2,7 @@ export * from './animation-wrap';
 export * from './circle';
 export * from './floating-ball';
 export * from './hooks';
+export * from './huarong-road';
 export * from './scroll-circle';
 export * from './slider-puzzle';
 export * from './tabs';
