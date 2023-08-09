@@ -11,11 +11,11 @@ const classPrefix = `lhhui-huarongRoad`;
 
 const defaultProps = {
   locationArr: [
-    [2, 1, 1, 2],
-    [2, 1, 1, 2],
-    [2, 2, 2, 2],
-    [2, 3, 3, 2],
-    [3, 0, 0, 3],
+    [21, 1, 1, 22],
+    [21, 1, 1, 22],
+    [23, 24, 24, 25],
+    [23, 31, 32, 25],
+    [33, 0, 0, 34],
   ] as HeroesIndex[][],
   gap: 2,
   fillItemBackground: '#3e3e3e',
@@ -36,7 +36,7 @@ const HuarongRoad = forwardRef<HuarongRoadInstance, HuarongRoadProps>((comProps,
     const cardWrap = document.querySelector(`.${idRef.current} .${classPrefix}-area`)
     const width = cardWrap?.clientWidth ?? 0
     const height = width * 1.25
-    setState({height, gridSize: width / 4})
+    setState({height, gridSize: (width - gap * 3) / 4})
   }, {wait: 100});
 
   const initData = () => {
@@ -72,6 +72,8 @@ const HuarongRoad = forwardRef<HuarongRoadInstance, HuarongRoadProps>((comProps,
     <HuarongRoadCtx.Provider
       value={{
         gap,
+        gridSize: state.gridSize,
+        locationArr,
       }}
     >
       {(withNativeProps(ret,

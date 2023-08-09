@@ -3,17 +3,17 @@ import { NativeProps } from "../utils/native-props";
 
 export type HuarongRoadProps = { 
   /** 
-   * 英雄们，不传，则按照索引，0:boss，1-5:五虎将，6-9:小兵
+   * 英雄们，不传，则按照index索引（0:boss，1-5:五虎将，6-9:小兵）
    */
   heroes?: Heroes
   /** 
    * 英雄的位置
    * @default [
-   *  [2, 1, 1, 2],
-   *  [2, 1, 1, 2],
-   *  [2, 2, 2, 2],
-   *  [2, 3, 3, 2],
-   *  [3, 0, 0, 3],
+   *  [21, 1,  1,  22],
+   *  [21, 1,  1,  22],
+   *  [23, 24, 24, 25],
+   *  [23, 31, 32, 25],
+   *  [33, 0,  0,  34],
    * ]
    */
   locationArr?: HeroesIndex[][]
@@ -80,8 +80,8 @@ export type Heroes = {
   soldiers: ReactNode[]
 }
 
-/** 英雄的索引，1:boss，2:五虎将，3:小兵，0:空格 */
-export type HeroesIndex = 1 | 2 | 3 | 0
+/** 英雄的索引，1:boss，2?:五虎将(21代表两格是一个英雄)，3?:小兵，0:空格 */
+export type HeroesIndex = 1 | 21 | 22 | 23 | 24 | 25 | 31 | 32 | 33 | 34 | 0
 
 export type General = {
   children: ReactNode

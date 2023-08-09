@@ -13,5 +13,12 @@
 }
 
 .@{class-prefix-item} {
-  
+  position: absolute;
+  transition: transform ease .4s;
+  -webkit-tap-highlight-color: transparent;
+  // 使触摸事件不产生默认行为
+  touch-action: none;
+  &-hover:hover {
+    filter: drop-shadow(1px 1px 3px rgba(37, 37, 37, 0.5));
+  }
 }
