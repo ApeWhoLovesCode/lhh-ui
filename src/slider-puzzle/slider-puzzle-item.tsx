@@ -6,7 +6,7 @@ import { SliderPuzzleCtx } from './context';
 import useTouchEvent from '../hooks/useTouchEvent';
 import { useSetState } from 'ahooks';
 import { classPrefixItem } from './config';
-import { checkDirectionVal, checkDirectionXY, range } from '../utils/compute';
+import { DirectionType, checkDirectionVal, checkDirectionXY, range } from '../utils/compute';
 import { getRowColItem } from './utils';
 import { classBem } from '../utils/handleDom';
 import React from 'react';
@@ -50,7 +50,7 @@ const SliderPuzzleItem = (comProps: SliderPuzzleItemProps) => {
 
   /** 当前可移动的方向 */
   const moveDirection = useMemo(() => (
-    checkDirectionVal(gridArr!, info.rowNum, info.colNum)
+    checkDirectionVal({arr: gridArr, row: info.rowNum, col: info.colNum}) as DirectionType
   ), [gridArr, info.rowNum, info.colNum])
 
   const {info: _info, onTouchFn} = useTouchEvent({

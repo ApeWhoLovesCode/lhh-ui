@@ -1,20 +1,21 @@
+import { DirectionType, checkDirectionVal } from "../utils";
 import { HeroesIndex } from "./type";
 
 export const getPositionItem = (
-  {gridSize, index, locationArr, gap}: {
+  {gridSize, index, gridArr, gap}: {
     gridSize: number
     index: number
-    locationArr: HeroesIndex[][] 
+    gridArr: HeroesIndex[][] 
     gap: number
   }
 ) => {
-  let obj = {
+  const obj = {
     row: 0,
     col: 0,
     width: gridSize,
     height: gridSize,
   }
-  locationArr.some((item, rowIndex) => {
+  gridArr.some((item, rowIndex) => {
     const colIndex = item.indexOf(handleIndex(index))
     if(colIndex !== -1) {
       obj.row = rowIndex
@@ -44,4 +45,61 @@ export const handleIndex = (index: number): HeroesIndex => {
   } else {
     return 25 + index as HeroesIndex
   }
+}
+
+/** 获取行列的位置 */
+export function getRowColItem(gridArr: HeroesIndex[][], index: number) {
+  const obj = {
+    row: 0,
+    col: 0,
+  }
+  gridArr.some((item, rowIndex) => {
+    const colIndex = item.indexOf(handleIndex(index))
+    if(colIndex !== -1) {
+      obj.row = rowIndex
+      obj.col = colIndex
+      return true
+    }
+    return false
+  })
+  return obj
+}
+
+/** 检查华容道item可以移动的方向 */
+export function checkRoadDirection(arr: HeroesIndex[][], row: number, col: number): DirectionType[] | 0 {
+  if(!arr?.length) return 0
+  const value = arr[row][col]
+  if(value > 30) { // 小兵
+    const direction = checkDirectionVal({arr, row, col, isArr: true}) as DirectionType[] | 0
+    return direction
+  } else { 
+    let heroStatus: 1 | 2 | 3 = 1
+    if(value > 20) { // 五虎将
+      heroStatus = arr[row][col + 1] === value ? 2 : 3
+    }
+    return handleHeroDirectionVal({arr, row, col, heroStatus})
+  }
+}
+
+/**
+ * 
+ * @param heroStatus 1: boss 2: 横着的英雄 3: 竖着的英雄
+ * @returns 
+ */
+function handleHeroDirectionVal({arr, row, col, heroStatus}: {
+  arr: number[][], row: number, col: number, heroStatus: 1 | 2 | 3
+}): DirectionType[] | 0 {
+  const checkArr = [
+    {row: row - 1, col: col},
+    {row: row, col: col + (heroStatus === 2 || heroStatus === 1 ? 2 : 1)},
+    {row: row + (heroStatus === 3 || heroStatus === 1 ? 2 : 1), col: col},
+    {row: row, col: col - 1},
+  ]
+  const res: DirectionType[] = []
+  for(let i = 0; i < checkArr.length; i++) {
+    if(arr[checkArr[i].row]?.[checkArr[i].col] === 0) {
+      res.push((i + 1) as DirectionType)
+    }
+  }
+  return res.length ? res : 0
 }

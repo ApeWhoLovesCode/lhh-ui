@@ -10,20 +10,38 @@ export function createTwoArray<T>(rowNum: number, colNum: number, cb: (rowNum: n
   ))
 }
 
-/** 方向 1:左 2:上 3:右 4:下 0:不能移动 */
+/** 方向 1:上 2:右 3:下 4:左 0:不能移动 */
 export type DirectionType = 1 | 2 | 3 | 4 | 0
-/** 检查可以移动的方向  */
-export function checkDirectionVal(arr: number[][], row: number, col: number): DirectionType {
-  if(!arr || !arr?.length) return 0
-  if(arr[row]?.[col - 1] === 0) return 1;
-  else if(arr[row - 1]?.[col] === 0) return 2;
-  else if(arr[row]?.[col + 1] === 0) return 3;
-  else if(arr[row + 1]?.[col] === 0) return 4;
-  return 0
+/** 
+ * 检查可以移动的方向
+ * @isArr 代表以数组形式返回可以移动的方向值
+ * @returns 0: 代表没方向可移动
+ */
+export function checkDirectionVal({arr, row, col, isArr}: {
+  arr?: number[][], row: number, col: number, isArr?: boolean
+}): DirectionType | DirectionType[] {
+  if(!arr?.length) return 0
+  const checkArr = [
+    {row: row - 1, col: col},
+    {row: row, col: col + 1},
+    {row: row + 1, col: col},
+    {row: row, col: col - 1},
+  ]
+  const res: DirectionType[] = []
+  for(let i = 0; i < checkArr.length; i++) {
+    if(arr[checkArr[i].row]?.[checkArr[i].col] === 0) {
+      if(isArr) {
+        res.push(i + 1 as DirectionType)
+      } else {
+        return i + 1 as DirectionType
+      }
+    }
+  }
+  return res.length ? res : 0
 }
 /** 检查xy的移动方向 */
 export function checkDirectionXY(deltaX: number, deltaY: number) {
-  const directionX = !deltaX ? 0 : (deltaX > 0 ? 3 : 1) as DirectionType
-  const directionY = !deltaY ? 0 : (deltaY > 0 ? 4 : 2) as DirectionType
+  const directionX = !deltaX ? 0 : (deltaX > 0 ? 2 : 4) as DirectionType
+  const directionY = !deltaY ? 0 : (deltaY > 0 ? 3 : 1) as DirectionType
   return {directionX, directionY}
 }

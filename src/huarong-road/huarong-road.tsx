@@ -6,6 +6,7 @@ import { HeroesIndex, HuarongRoadInstance, HuarongRoadProps } from './type';
 import { HuarongRoadCtx } from './context';
 import { useDebounceFn, useSetState } from 'ahooks';
 import { isMobile, randomStr } from '../utils';
+import { GridPosition } from '../slider-puzzle/type';
 
 const classPrefix = `lhhui-huarongRoad`;
 
@@ -31,6 +32,8 @@ const HuarongRoad = forwardRef<HuarongRoadInstance, HuarongRoadProps>((comProps,
     /** 每一个格子的大小 */
     gridSize: 50,
   })
+  const [gridArr, setGridArr] = useState<HeroesIndex[][]>(locationArr);
+  const [isReset, setIsReset] = useState(false);
 
   const {run: getCardInfo} = useDebounceFn(() => {
     const cardWrap = document.querySelector(`.${idRef.current} .${classPrefix}-area`)
@@ -40,11 +43,25 @@ const HuarongRoad = forwardRef<HuarongRoadInstance, HuarongRoadProps>((comProps,
   }, {wait: 100});
 
   const initData = () => {
-    
+    // let initSpaceIndex: number | undefined = void 0, initSpaceIndex2: number | undefined = void 0;
+    // locationArr.forEach((arr, i) => {
+    //   const index = arr.indexOf(0)
+    //   const index2 = arr.lastIndexOf(0)
+    //   if(index !== -1) {
+    //     if(index !== index2 || initSpaceIndex) {
+    //       initSpaceIndex2 = 4 * i + index2
+    //     }
+    //     if(initSpaceIndex === void 0) {
+    //       initSpaceIndex = 4 * i + index
+    //     } 
+    //   }
+    // })
+    // setState({initSpaceIndex: initSpaceIndex ?? 0, initSpaceIndex2: initSpaceIndex2 ?? 0})
   }
 
   const init = () => {
     getCardInfo()
+    initData()
   }
 
   useEffect(() => {
@@ -55,8 +72,12 @@ const HuarongRoad = forwardRef<HuarongRoadInstance, HuarongRoadProps>((comProps,
     }
   }, [gap])
 
-  const reset = () => {
+  const onChangeGrid = (p: GridPosition, pPre: GridPosition) => {
     
+  }
+
+  const reset = () => {
+    setIsReset(v => !v)
   }
 
   useImperativeHandle(ref, () => ({
@@ -73,7 +94,9 @@ const HuarongRoad = forwardRef<HuarongRoadInstance, HuarongRoadProps>((comProps,
       value={{
         gap,
         gridSize: state.gridSize,
-        locationArr,
+        gridArr,
+        isReset,
+        onChangeGrid,
       }}
     >
       {(withNativeProps(ret,
