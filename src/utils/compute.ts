@@ -10,8 +10,10 @@ export function createTwoArray<T>(rowNum: number, colNum: number, cb: (rowNum: n
   ))
 }
 
+/** 方向 1:上 2:右 3:下 4:左 */
+export type Direction = 1 | 2 | 3 | 4
 /** 方向 1:上 2:右 3:下 4:左 0:不能移动 */
-export type DirectionType = 1 | 2 | 3 | 4 | 0
+export type DirectionType = Direction | 0
 /** 
  * 检查可以移动的方向
  * @isArr 代表以数组形式返回可以移动的方向值

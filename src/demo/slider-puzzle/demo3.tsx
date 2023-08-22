@@ -13,7 +13,9 @@ export default () => {
       globalAlpha={1}
       puzzleImg="http://lhh.codeape.site/img/tom.jpeg"
       onComplete={() => {
-        alert('恭喜你完成了拼图');
+        setTimeout(() => {
+          alert('恭喜你完成了拼图');
+        }, 400);
       }}
     >
       {/* 这里是完整的拼图 */}

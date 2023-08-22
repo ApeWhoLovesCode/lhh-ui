@@ -2,8 +2,8 @@ import { NativeProps } from "../utils/native-props";
 
 export type SliderPuzzleProps = { 
   /** 
-   * 遍历item的数组的长度，建议是size * size - 1
-   * @default 0
+   * 遍历item的数组的长度，建议是 size * size - 1
+   * @default children 的长度
    */
   listLength?: number
   /** 

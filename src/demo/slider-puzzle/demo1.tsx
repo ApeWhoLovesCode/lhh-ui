@@ -15,7 +15,9 @@ export default () => {
         style={{ width: '300px', height: '300px' }}
         isGameMode={isGameMode}
         onComplete={() => {
-          alert('恭喜你完成了拼图');
+          setTimeout(() => {
+            alert('恭喜你完成了拼图');
+          }, 400);
         }}
       >
         {arr.map((item, index) => (

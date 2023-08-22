@@ -13,7 +13,9 @@ export default () => {
       gap={10}
       puzzleColor="#1677ff"
       onComplete={() => {
-        alert('恭喜你完成了拼图');
+        setTimeout(() => {
+          alert('恭喜你完成了拼图');
+        }, 400);
       }}
     >
       {arr.map((item, index) => (

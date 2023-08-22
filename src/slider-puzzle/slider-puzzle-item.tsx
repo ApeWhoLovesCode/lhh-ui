@@ -75,25 +75,25 @@ const SliderPuzzleItem = (comProps: SliderPuzzleItemProps) => {
       }
       // 检测当前方向上的移动
       if(!diff) return
-      const xy = diff > 0 ? 1 : -1
       let x = info.startX
       let y = info.startY
       let direction = 0
       let {rowNum, colNum} = info
       // 发生改变
-      if(Math.abs(diff) >= (isVertical ? grid.h : grid.w) / 2) {
+      if(Math.abs(diff) >= ((isVertical ? grid.h : grid.w) + gap) / 2) {
+        const xy = diff > 0 ? 1 : -1
         if(isVertical) {
           y += (grid.h + gap) * xy
-          direction = diff > 0 ? 4 : 2
+          direction = diff > 0 ? 3 : 1
         } else {
           x += (grid.w + gap) * xy
-          direction = diff > 0 ? 3 : 1
+          direction = diff > 0 ? 2: 4
         }
         switch (direction) {
-          case 1: colNum--; break;
-          case 2: rowNum--; break;
-          case 3: colNum++; break;
-          case 4: rowNum++; break;
+          case 1: rowNum--; break;
+          case 2: colNum++; break;
+          case 3: rowNum++; break;
+          case 4: colNum--; break;
         }
         onChangeGrid(
           {row: rowNum, col: colNum},

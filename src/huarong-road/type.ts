@@ -3,6 +3,11 @@ import { NativeProps } from "../utils/native-props";
 
 export type HuarongRoadProps = { 
   /** 
+   * 遍历item的数组的长度，建议是 size * size - 1
+   * @default children 的长度
+   */
+  listLength?: number
+  /** 
    * 英雄们，不传，则按照index索引（0:boss，1-5:五虎将，6-9:小兵）
    */
   heroes?: Heroes

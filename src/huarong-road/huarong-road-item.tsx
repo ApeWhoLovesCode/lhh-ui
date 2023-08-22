@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useContext } from 'react';
+import React, { useState, useEffect, useMemo, useContext, useRef } from 'react';
 import './index.less';
 import { withNativeProps } from '../utils/native-props';
 import useMergeProps from '../hooks/useMergeProps';
@@ -7,7 +7,7 @@ import { useTouchEvent } from '../hooks';
 import { HuarongRoadCtx } from './context';
 import { useSetState } from 'ahooks';
 import { checkRoadDirection, getPositionItem, getRowColItem } from './utils';
-import { checkDirectionXY, range } from '../utils';
+import { Direction, checkDirectionXY, range } from '../utils';
 
 const classPrefix = `lhhui-huarongRoadItem`;
 
@@ -19,7 +19,7 @@ type RequireType = keyof typeof defaultProps
 const HuarongRoadItem = (comProps: HuarongRoadItemProps) => {
   const props = useMergeProps<HuarongRoadItemProps, RequireType>(comProps, defaultProps)
   const { index, children, ...ret } = props
-  const { gap, gridSize, gridArr, isReset, onChangeGrid } = useContext(HuarongRoadCtx)
+  const { gap, gridSize, gridArr, locationArr, isReset, onChangeGrid } = useContext(HuarongRoadCtx)
 
   const [info, setInfo] = useSetState({
     startX: 0,
@@ -31,11 +31,12 @@ const HuarongRoadItem = (comProps: HuarongRoadItemProps) => {
     rowNum: 0,
     colNum: 0,
   })
+  const isVerticalRef = useRef<boolean>()
 
   useEffect(() => {
-    const {row, col} = getRowColItem(gridArr, index)
+    const {row, col} = getRowColItem(locationArr, index)
     setInfo({ rowNum: row, colNum: col, x: 0, y: 0 })
-  }, [index, gridArr, isReset])
+  }, [index, locationArr, isReset])
 
   /** 当前可移动的方向 */
   const moveDirection = useMemo(() => (
@@ -44,15 +45,21 @@ const HuarongRoadItem = (comProps: HuarongRoadItemProps) => {
 
   const {info: _info, onTouchFn} = useTouchEvent({
     onTouchStart() {
+      isVerticalRef.current = void 0
       setInfo({startX: info.x, startY: info.y, duration: 0})
     },
     onTouchMove() {
       const {directionX, directionY} = checkDirectionXY(_info.deltaX, _info.deltaY)
-      console.log('moveDirection: ', moveDirection);
       if(!moveDirection) return
-      if(moveDirection.includes(directionX)) {
+      if(moveDirection.includes(directionX) && isVerticalRef.current !== true) {
+        if(isVerticalRef.current === void 0) {
+          isVerticalRef.current = false
+        }
         setInfo({x: range(_info.deltaX, -gridSize - gap, gridSize + gap) + info.startX})
-      } else if(moveDirection.includes(directionY)) {
+      } else if(moveDirection.includes(directionY) && isVerticalRef.current !== false) {
+        if(isVerticalRef.current === void 0) {
+          isVerticalRef.current = true
+        }
         setInfo({y: range(_info.deltaY, -gridSize - gap, gridSize + gap) + info.startY})
       }
     },
@@ -65,30 +72,36 @@ const HuarongRoadItem = (comProps: HuarongRoadItemProps) => {
       }
       // 检测当前方向上的移动
       if(!diff) return
-      const xy = diff > 0 ? 1 : -1
       let x = info.startX
       let y = info.startY
-      let direction = 0
       let {rowNum, colNum} = info
+      const size = gridSize + gap
       // 发生改变
-      if(Math.abs(diff) >= gridSize / 2) {
+      if(Math.abs(diff) >= size / 2) {
+        const moveTwoSize = (Math.abs(diff) >= size * 1.5) ? 2 : 1
+        const xy = (diff > 0 ? 1 : -1) * moveTwoSize
+        let direction: Direction = 1
         if(isVertical) {
-          y += (gridSize + gap) * xy
-          direction = diff > 0 ? 4 : 2
-        } else {
-          x += (gridSize + gap) * xy
+          y += size * xy
           direction = diff > 0 ? 3 : 1
+        } else {
+          x += size * xy
+          direction = diff > 0 ? 2 : 4
         }
         switch (direction) {
-          case 1: colNum--; break;
-          case 2: rowNum--; break;
-          case 3: colNum++; break;
-          case 4: rowNum++; break;
+          case 1: rowNum -= moveTwoSize; break;
+          case 2: colNum += moveTwoSize; break;
+          case 3: rowNum += moveTwoSize; break;
+          case 4: colNum -= moveTwoSize; break;
         }
-        onChangeGrid(
-          {row: rowNum, col: colNum},
-          {row: info.rowNum, col: info.colNum}
-        )
+        onChangeGrid({
+          p: {row: info.rowNum, col: info.colNum},
+          target: {row: rowNum, col: colNum},
+          index,
+          direction,
+          isVertical,
+          xy,
+        })
       }
       setInfo({x, y, duration: 0.4, rowNum, colNum})
     },
@@ -99,7 +112,7 @@ const HuarongRoadItem = (comProps: HuarongRoadItemProps) => {
   })
 
   const cardStyle = useMemo(() => {
-    const {row, col, width, height} = getPositionItem({gridSize, index, gridArr, gap})
+    const {row, col, width, height} = getPositionItem({gridSize, index, locationArr, gap})
     const handlegap = (v: number) => 0 < v ? v * gap : 0
     return {
       width,
@@ -107,7 +120,7 @@ const HuarongRoadItem = (comProps: HuarongRoadItemProps) => {
       top: gridSize * row + handlegap(row),
       left: gridSize * col + handlegap(col)
     }
-  }, [gridSize, index, gridArr, gap, getPositionItem])
+  }, [gridSize, index, locationArr, gap, getPositionItem])
   
   return withNativeProps(
     ret,

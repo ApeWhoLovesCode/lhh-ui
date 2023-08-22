@@ -2,10 +2,10 @@ import { DirectionType, checkDirectionVal } from "../utils";
 import { HeroesIndex } from "./type";
 
 export const getPositionItem = (
-  {gridSize, index, gridArr, gap}: {
+  {gridSize, index, locationArr, gap}: {
     gridSize: number
     index: number
-    gridArr: HeroesIndex[][] 
+    locationArr: HeroesIndex[][] 
     gap: number
   }
 ) => {
@@ -15,7 +15,7 @@ export const getPositionItem = (
     width: gridSize,
     height: gridSize,
   }
-  gridArr.some((item, rowIndex) => {
+  locationArr.some((item, rowIndex) => {
     const colIndex = item.indexOf(handleIndex(index))
     if(colIndex !== -1) {
       obj.row = rowIndex
@@ -70,8 +70,7 @@ export function checkRoadDirection(arr: HeroesIndex[][], row: number, col: numbe
   if(!arr?.length) return 0
   const value = arr[row][col]
   if(value > 30) { // 小兵
-    const direction = checkDirectionVal({arr, row, col, isArr: true}) as DirectionType[] | 0
-    return direction
+    return checkDirectionVal({arr, row, col, isArr: true}) as DirectionType[] | 0
   } else { 
     let heroStatus: 1 | 2 | 3 = 1
     if(value > 20) { // 五虎将
@@ -87,19 +86,28 @@ export function checkRoadDirection(arr: HeroesIndex[][], row: number, col: numbe
  * @returns 
  */
 function handleHeroDirectionVal({arr, row, col, heroStatus}: {
-  arr: number[][], row: number, col: number, heroStatus: 1 | 2 | 3
+  arr: HeroesIndex[][], row: number, col: number, heroStatus: 1 | 2 | 3
 }): DirectionType[] | 0 {
+  const colNext = heroStatus === 2 || heroStatus === 1
+  const rowNext = heroStatus === 3 || heroStatus === 1
   const checkArr = [
-    {row: row - 1, col: col},
-    {row: row, col: col + (heroStatus === 2 || heroStatus === 1 ? 2 : 1)},
-    {row: row + (heroStatus === 3 || heroStatus === 1 ? 2 : 1), col: col},
-    {row: row, col: col - 1},
+    {row: row - 1, col: col, colNext},
+    {row: row, col: col + (colNext ? 2 : 1), rowNext},
+    {row: row + (rowNext ? 2 : 1), col: col, colNext},
+    {row: row, col: col - 1, rowNext},
   ]
   const res: DirectionType[] = []
   for(let i = 0; i < checkArr.length; i++) {
-    if(arr[checkArr[i].row]?.[checkArr[i].col] === 0) {
+    const isColNext = checkArr[i].colNext ? arr[checkArr[i].row]?.[checkArr[i].col + 1] === 0 : true
+    const isRowNext = checkArr[i].rowNext ? arr[checkArr[i].row + 1]?.[checkArr[i].col] === 0 : true
+    if(arr[checkArr[i].row]?.[checkArr[i].col] === 0 && isColNext && isRowNext) {
       res.push((i + 1) as DirectionType)
     }
   }
   return res.length ? res : 0
+}
+
+/** 检查是否获胜 */
+export function checkToWin(arr: HeroesIndex[][]) {
+  return arr[3][1] === 1 && arr[3][2] === 1 && arr[4][1] === 1 && arr[4][2] === 1
 }
