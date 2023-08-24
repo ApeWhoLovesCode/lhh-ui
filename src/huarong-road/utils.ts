@@ -1,4 +1,4 @@
-import { DirectionType, checkDirectionVal } from "../utils";
+import { Direction, DirectionType } from "../utils";
 import { HeroesIndex } from "./type";
 
 export const getPositionItem = (
@@ -65,46 +65,70 @@ export function getRowColItem(gridArr: HeroesIndex[][], index: number) {
   return obj
 }
 
+type CheckDirectionRes = {[key in Direction]: number} | 0
+
 /** 检查华容道item可以移动的方向 */
-export function checkRoadDirection(arr: HeroesIndex[][], row: number, col: number): DirectionType[] | 0 {
+export function checkRoadDirection(arr: HeroesIndex[][], row: number, col: number): CheckDirectionRes {
   if(!arr?.length) return 0
   const value = arr[row][col]
   if(value > 30) { // 小兵
-    return checkDirectionVal({arr, row, col, isArr: true}) as DirectionType[] | 0
+    return handleHeroDirectionVal({arr, row, col, status: 4})
   } else { 
-    let heroStatus: 1 | 2 | 3 = 1
+    let status: HeroesStatus = 1
     if(value > 20) { // 五虎将
-      heroStatus = arr[row][col + 1] === value ? 2 : 3
+      status = arr[row][col + 1] === value ? 2 : 3
     }
-    return handleHeroDirectionVal({arr, row, col, heroStatus})
+    return handleHeroDirectionVal({arr, row, col, status})
   }
 }
 
+type HeroesStatus = 1 | 2 | 3 | 4
 /**
  * 
- * @param heroStatus 1: boss 2: 横着的英雄 3: 竖着的英雄
+ * @param status 1: boss 2: 横着的英雄 3: 竖着的英雄
  * @returns 
  */
-function handleHeroDirectionVal({arr, row, col, heroStatus}: {
-  arr: HeroesIndex[][], row: number, col: number, heroStatus: 1 | 2 | 3
-}): DirectionType[] | 0 {
-  const colNext = heroStatus === 2 || heroStatus === 1
-  const rowNext = heroStatus === 3 || heroStatus === 1
-  const checkArr = [
-    {row: row - 1, col: col, colNext},
-    {row: row, col: col + (colNext ? 2 : 1), rowNext},
-    {row: row + (rowNext ? 2 : 1), col: col, colNext},
-    {row: row, col: col - 1, rowNext},
+function handleHeroDirectionVal({arr, row, col, status}: {
+  arr: HeroesIndex[][], row: number, col: number, status: HeroesStatus
+}): CheckDirectionRes {
+  const colNext = status === 2 || status === 1
+  const rowNext = status === 3 || status === 1
+  const checkArr: checkItem[] = [
+    {addRow: -1, addCol: 0, colNext},
+    // {addRow: 0, addCol: colNext ? 2 : 1, rowNext},
+    {addRow: 0, addCol: 1, rowNext},
+    // {addRow: rowNext ? 2 : 1, addCol: 0, colNext},
+    {addRow: 1, addCol: 0, colNext},
+    {addRow: 0, addCol: -1, rowNext},
   ]
-  const res: DirectionType[] = []
-  for(let i = 0; i < checkArr.length; i++) {
-    const isColNext = checkArr[i].colNext ? arr[checkArr[i].row]?.[checkArr[i].col + 1] === 0 : true
-    const isRowNext = checkArr[i].rowNext ? arr[checkArr[i].row + 1]?.[checkArr[i].col] === 0 : true
-    if(arr[checkArr[i].row]?.[checkArr[i].col] === 0 && isColNext && isRowNext) {
-      res.push((i + 1) as DirectionType)
+  const res: CheckDirectionRes = {1: 0, 2: 0, 3: 0, 4: 0}
+  // 检查下一个格子是否为空
+  const checkNextGrid = ({addRow, addCol, rowNext, colNext}: checkItem, i: number) => {
+    const isColNext = colNext ? arr[row + addRow]?.[col + addCol + 1] === 0 : true
+    const isRowNext = rowNext ? arr[row + addRow + 1]?.[col + addCol] === 0 : true
+    if(arr[row + addRow]?.[col + addCol] === 0 && isColNext && isRowNext) {
+      res[(i + 1) as Direction]++
+      checkNextGrid({
+        addRow: addRow += checkArr[i].addRow, 
+        addCol: addCol += checkArr[i].addCol, 
+        rowNext, 
+        colNext
+      }, i)
     }
   }
-  return res.length ? res : 0
+  for(let i = 0; i < checkArr.length; i++) {
+    let {addRow, addCol, ...p} = checkArr[i]
+    if(i === 1 && colNext) addCol++;
+    if(i === 2 && rowNext) addRow++;
+    checkNextGrid({addRow, addCol, ...p}, i)
+  }
+  return Object.values(res).some(v => v) ? res : 0
+}
+type checkItem = {
+  addRow: number
+  addCol: number 
+  rowNext?: boolean
+  colNext?: boolean
 }
 
 /** 检查是否获胜 */

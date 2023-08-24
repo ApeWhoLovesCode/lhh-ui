@@ -42,11 +42,8 @@ export type HuarongRoadProps = {
    * @default #1f1f1f
    */
   background?: string
-  /**
-   * 数量不够作为补充的卡片的背景颜色
-   * @default #3e3e3e
-   */
-  fillItemBackground?: string
+  /** 数量不够作为补充的卡片的类名*/
+  fillItemClassName?: string
   /** 拼图完成了的回调 */
   onComplete?: () => void
   /** 拼图整体大小发生了变化的回调 */

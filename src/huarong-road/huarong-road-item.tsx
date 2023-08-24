@@ -51,16 +51,18 @@ const HuarongRoadItem = (comProps: HuarongRoadItemProps) => {
     onTouchMove() {
       const {directionX, directionY} = checkDirectionXY(_info.deltaX, _info.deltaY)
       if(!moveDirection) return
-      if(moveDirection.includes(directionX) && isVerticalRef.current !== true) {
+      if(moveDirection[directionX as Direction] && isVerticalRef.current !== true) {
         if(isVerticalRef.current === void 0) {
           isVerticalRef.current = false
         }
-        setInfo({x: range(_info.deltaX, -gridSize - gap, gridSize + gap) + info.startX})
-      } else if(moveDirection.includes(directionY) && isVerticalRef.current !== false) {
+        const rangeVal = (gridSize + gap) * moveDirection[directionX as Direction]
+        setInfo({x: range(_info.deltaX, -rangeVal, rangeVal) + info.startX})
+      } else if(moveDirection[directionY as Direction] && isVerticalRef.current !== false) {
         if(isVerticalRef.current === void 0) {
           isVerticalRef.current = true
         }
-        setInfo({y: range(_info.deltaY, -gridSize - gap, gridSize + gap) + info.startY})
+        const rangeVal = (gridSize + gap) * moveDirection[directionY as Direction]
+        setInfo({y: range(_info.deltaY, -rangeVal, rangeVal) + info.startY})
       }
     },
     onTouchEnd() {
@@ -99,8 +101,6 @@ const HuarongRoadItem = (comProps: HuarongRoadItemProps) => {
           target: {row: rowNum, col: colNum},
           index,
           direction,
-          isVertical,
-          xy,
         })
       }
       setInfo({x, y, duration: 0.4, rowNum, colNum})

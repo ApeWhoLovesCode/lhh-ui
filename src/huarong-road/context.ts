@@ -30,6 +30,4 @@ export type onChangeGridParams = {
   /** 1:上 2:右 3:下 4:左 */
   direction: Direction
   index: number
-  xy: number
-  isVertical: boolean
 }

@@ -7,15 +7,17 @@ import { HuarongRoadCtx, onChangeGridParams } from './context';
 import { useDebounceFn, useSetState } from 'ahooks';
 import { isMobile, randomStr } from '../utils';
 import { checkToWin } from './utils';
+import HuarongRoadItem from './huarong-road-item';
+import { ITEM_NUM, heroesList } from './config';
 
 const classPrefix = `lhhui-huarongRoad`;
 
 const defaultProps = {
   locationArr: [
+    // [0, 0, 0, 0],
     // [0, 1, 1, 0],
     // [0, 1, 1, 0],
-    // [0, 0, 0, 0],
-    // [0, 0, 0, 0],
+    // [0, 31, 0, 0],
     // [0, 0, 0, 0],
     [21, 1, 1, 22],
     [21, 1, 1, 22],
@@ -24,13 +26,12 @@ const defaultProps = {
     [33, 0, 0, 34],
   ] as HeroesIndex[][],
   gap: 2,
-  fillItemBackground: '#3e3e3e',
 }
 type RequireType = keyof typeof defaultProps
 
 const HuarongRoad = forwardRef<HuarongRoadInstance, HuarongRoadProps>((comProps, ref) => {
   const props = useMergeProps<HuarongRoadProps, RequireType>(comProps, defaultProps)
-  const { heroes, locationArr, gap, isCustom, background, fillItemBackground, width, onComplete, children, ...ret } = props
+  const { heroes, locationArr, listLength, gap, isCustom, background, fillItemClassName, width, onComplete, children, ...ret } = props
   const idRef = useRef(randomStr(classPrefix));
   const [state, setState] = useSetState({
     height: 100,
@@ -74,7 +75,7 @@ const HuarongRoad = forwardRef<HuarongRoadInstance, HuarongRoadProps>((comProps,
     }
   }, [gap])
 
-  const onChangeGrid = ({p, target, direction, index, isVertical, xy}: onChangeGridParams) => {
+  const onChangeGrid = ({p, target, direction, index}: onChangeGridParams) => {
     function exChangeVal(row: number, col: number, row2: number, col2: number) {
       [gridArr[row][col], gridArr[row2][col2]] = [gridArr[row2][col2], gridArr[row][col]];
     }
@@ -84,18 +85,20 @@ const HuarongRoad = forwardRef<HuarongRoadInstance, HuarongRoadProps>((comProps,
         exChangeVal(p.row + v[0], p.col + v[1], target.row + v[0], target.col + v[1])
       })
     }
+    const isForward = direction === 2 || direction === 3 // 代表是正向
     if(index < 1) { // boss
+      const isVertical = direction === 3 || direction === 1
       const arr = [
         [0, 0],
         isVertical ? [0, 1] : [1, 0],
       ];
-      const arrMethod = xy > 0 ? 'unshift' : 'push';
+      const arrMethod = isForward ? 'unshift' : 'push';
       arr[arrMethod]([1, 1])
       arr[arrMethod](isVertical ? [1, 0] : [0, 1])
       onExChangeVal(arr)
     } else if(index <= 5) { // 五虎将
       const arr = [[0, 0]];
-      const arrMethod = xy > 0 ? 'unshift' : 'push';
+      const arrMethod = isForward ? 'unshift' : 'push';
       arr[arrMethod](state.heroesIndexs[index - 1] ? [1, 0] : [0, 1])
       onExChangeVal(arr)
     } else { // 小兵
@@ -116,9 +119,26 @@ const HuarongRoad = forwardRef<HuarongRoadInstance, HuarongRoadProps>((comProps,
   }))
 
   const renderChildren = () => {
-    const fillNum = 10 - Object.values(children?.valueOf() ?? {}).length
-    if(!fillNum) return children
-    return children
+    const hasNum = (listLength ?? Object.values(children?.valueOf() ?? {}).length)
+    if(ITEM_NUM - hasNum <= 0) return children
+    const fillArr = []
+    for(let i = hasNum; i < ITEM_NUM; i++) {
+      fillArr.push(
+        <HuarongRoadItem 
+          key={heroesList[i] + i} 
+          index={i} 
+          className={`${classPrefix}-fillItem ${fillItemClassName}`}
+        >
+          {heroesList[i]}
+        </HuarongRoadItem>
+      )
+    }
+    return (
+      <>
+        {children}
+        {fillArr}
+      </>
+    )
   }
   
   return (
