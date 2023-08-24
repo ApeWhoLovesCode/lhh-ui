@@ -100,10 +100,10 @@ const SliderPuzzle = forwardRef<SliderPuzzleInstance, SliderPuzzleProps>((comPro
   }))
 
   const renderChildren = () => {
-    const fillNum = size * size - listLength - 1
-    if(!fillNum) return children
+    const hasNum = (listLength ?? Object.values(children?.valueOf() ?? {}).length)
+    if(size * size - 1 - hasNum <= 0) return children
     const fillArr = []
-    for(let i = listLength; i < size * size - 1; i++) {
+    for(let i = hasNum; i < size * size - 1; i++) {
       fillArr.push(
         <SliderPuzzleItem 
           key={i} 
