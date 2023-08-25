@@ -31,7 +31,7 @@ type RequireType = keyof typeof defaultProps
 
 const HuarongRoad = forwardRef<HuarongRoadInstance, HuarongRoadProps>((comProps, ref) => {
   const props = useMergeProps<HuarongRoadProps, RequireType>(comProps, defaultProps)
-  const { heroes, locationArr, listLength, gap, isCustom, background, fillItemClassName, width, onComplete, children, ...ret } = props
+  const { locationArr, listLength, gap, fillItemClassName, width, onComplete, onResize, children, ...ret } = props
   const idRef = useRef(randomStr(classPrefix));
   const [state, setState] = useSetState({
     height: 100,
@@ -40,14 +40,18 @@ const HuarongRoad = forwardRef<HuarongRoadInstance, HuarongRoadProps>((comProps,
     /** 英雄的索引对应的是横的还是竖的, true 表示是竖的，false 表示是横的 */
     heroesIndexs: new Array(5) as boolean[]
   })
-  const [gridArr, setGridArr] = useState<HeroesIndex[][]>(locationArr);
+  const [gridArr, setGridArr] = useState<HeroesIndex[][]>(JSON.parse(JSON.stringify(locationArr)));
   const [isReset, setIsReset] = useState(false);
 
   const {run: getCardInfo} = useDebounceFn(() => {
     const cardWrap = document.querySelector(`.${idRef.current} .${classPrefix}-area`)
     const width = cardWrap?.clientWidth ?? 0
     const height = width * 1.25
-    setState({height, gridSize: (width - gap * 3) / 4})
+    const gridSize = (width - gap * 3) / 4
+    setState({height, gridSize})
+    if(state.gridSize !== gridSize) {
+      onResize?.(gridSize)
+    }
   }, {wait: 100});
 
   const initData = () => {
@@ -111,6 +115,8 @@ const HuarongRoad = forwardRef<HuarongRoadInstance, HuarongRoadProps>((comProps,
   }
 
   const reset = () => {
+    initData()
+    setGridArr(JSON.parse(JSON.stringify(locationArr)))
     setIsReset(v => !v)
   }
 
@@ -157,7 +163,6 @@ const HuarongRoad = forwardRef<HuarongRoadInstance, HuarongRoadProps>((comProps,
         className={`${classPrefix} ${idRef.current}`} 
         style={{
           padding: gap + 'px', 
-          background,
           width,
         }}
       >

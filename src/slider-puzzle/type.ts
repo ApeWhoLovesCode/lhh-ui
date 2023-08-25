@@ -41,12 +41,12 @@ export type SliderPuzzleItemProps = {
   /** 当前item的索引 */
   index: number
   /** 
-   * 触摸时间，触摸时长大于该值就无法触发点击回调
+   * 触摸时间，触摸时长大于该值就无法触发 onClick
    * @default 150
    */
   touchTime?: number 
   /** 
-   * 触摸距离，触摸距离大于该值就无法触发点击回调
+   * 触摸距离，触摸距离大于该值就无法触发 onClick
    * @default 8
    */
   touchDistance?: number 

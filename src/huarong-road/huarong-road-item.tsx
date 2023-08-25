@@ -7,18 +7,20 @@ import { useTouchEvent } from '../hooks';
 import { HuarongRoadCtx } from './context';
 import { useSetState } from 'ahooks';
 import { checkRoadDirection, getPositionItem, getRowColItem } from './utils';
-import { Direction, checkDirectionXY, range } from '../utils';
+import { Direction, checkDirectionXY, classBem, range } from '../utils';
 
 const classPrefix = `lhhui-huarongRoadItem`;
 
 const defaultProps = {
-  
+  touchTime: 150,
+  touchDistance: 8,
+  isHover: true,
 }
 type RequireType = keyof typeof defaultProps
 
 const HuarongRoadItem = (comProps: HuarongRoadItemProps) => {
   const props = useMergeProps<HuarongRoadItemProps, RequireType>(comProps, defaultProps)
-  const { index, children, ...ret } = props
+  const { index, touchTime, touchDistance, isHover, onClick, children, ...ret } = props
   const { gap, gridSize, gridArr, locationArr, isReset, onChangeGrid } = useContext(HuarongRoadCtx)
 
   const [info, setInfo] = useSetState({
@@ -125,13 +127,18 @@ const HuarongRoadItem = (comProps: HuarongRoadItemProps) => {
   return withNativeProps(
     ret,
     <div 
-      className={classPrefix}
+      className={`${classBem(classPrefix, {hover: isHover, disableTouch: !moveDirection})}`}
       style={{
         ...cardStyle,
         transitionDuration: info.duration + 's',
         transform: `translate(${info.x}px, ${info.y}px)`,
       }}
       {...onTouchFn} 
+      onClick={() => {
+        if(_info.time < touchTime && _info.deltaY < touchDistance && _info.offsetX < touchDistance) {
+          onClick?.(index)
+        }
+      }}
     >
       {children}
     </div>

@@ -14,7 +14,7 @@ import React from 'react';
 const defaultProps = {
   touchTime: 150,
   touchDistance: 8,
-  isHover: true,
+  isHover: false,
 }
 
 const SliderPuzzleItem = (comProps: SliderPuzzleItemProps) => {
@@ -120,7 +120,7 @@ const SliderPuzzleItem = (comProps: SliderPuzzleItemProps) => {
   return withNativeProps(
     ret,
     <div 
-      className={`${classBem(classPrefixItem, {hover: isHover})}`}
+      className={`${classBem(classPrefixItem, {hover: isHover, disableTouch: !moveDirection})}`}
       style={{
         ...cardPosition,
         width: grid.w + 'px',
@@ -130,7 +130,7 @@ const SliderPuzzleItem = (comProps: SliderPuzzleItemProps) => {
       }}
       {...onTouchFn} 
       onClick={() => {
-        if(_info.time < touchTime && Math.abs(_info.deltaY) < touchDistance && Math.abs(_info.deltaX) < touchDistance) {
+        if(_info.time < touchTime && _info.deltaY < touchDistance && _info.offsetX < touchDistance) {
           onClick?.(index)
         }
       }}

@@ -17,6 +17,8 @@ group:
 
 ### 组件多层嵌套
 
+<!-- <code src="../demo/scroll-circle/lotteryDemo.tsx"></code> -->
+
 <!-- <code src="../demo/scroll-circle/demo7.tsx"></code> -->
 
 <code src="../demo/scroll-circle/demo6.tsx"></code>

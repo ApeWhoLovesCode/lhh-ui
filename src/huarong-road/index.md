@@ -11,7 +11,9 @@ group:
 
 ## 华容道组件
 
-华容道小游戏。
+由曹操，五虎将和4个小卒组成的华容道小游戏。
+
+整体是 4 * 5 的格子，曹操占4格，五虎将横或竖向占2格，卒占1格，两个空格，当曹操移动到最底下游戏获胜。
 
 ## 演示
 
@@ -19,17 +21,28 @@ group:
 
 <code src="../demo/huarong-road/demo1.tsx"></code>
 
+### 自定义曹操，五虎将和小兵的位置
+
+<code src="../demo/huarong-road/demo2.tsx"></code>
+
+### 调整滑块间的间隙
+
+<code src="../demo/huarong-road/demo3.tsx"></code>
 
 ## API
 
-### SliderPuzzle
+### HuarongRoad
 
-<API id="SliderPuzzle"></API>
+<API id="HuarongRoad"></API>
 
-### SliderPuzzle.Item
+### HuarongRoad.Item
 
-<API id="SliderPuzzleItem"></API>
+<API id="HuarongRoadItem"></API>
 
-### SliderPuzzle.Canvas
+### HeroesIndex
 
-<API id="SliderPuzzleCanvas"></API>
+|  值    | 描述         | 占位         |
+|  ----  | ----        | ----        |
+|   1    | 曹操（boss） | 占4格        |
+| 21 - 25 | 五虎将      | 横或竖向占2格 |
+| 31 - 34 | 卒         | 占1格        |
