@@ -14,7 +14,7 @@ import React from 'react';
 const defaultProps = {
   touchTime: 150,
   touchDistance: 8,
-  isHover: false,
+  isHover: true,
 }
 
 const SliderPuzzleItem = (comProps: SliderPuzzleItemProps) => {
