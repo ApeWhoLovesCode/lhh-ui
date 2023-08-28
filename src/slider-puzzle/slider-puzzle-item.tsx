@@ -75,13 +75,11 @@ const SliderPuzzleItem = (comProps: SliderPuzzleItemProps) => {
       }
       // 检测当前方向上的移动
       if(!diff) return
-      let x = info.startX
-      let y = info.startY
-      let direction = 0
-      let {rowNum, colNum} = info
+      let {startX: x, startY: y, rowNum, colNum} = info
       // 发生改变
       if(Math.abs(diff) >= ((isVertical ? grid.h : grid.w) + gap) / 2) {
         const xy = diff > 0 ? 1 : -1
+        let direction = 0
         if(isVertical) {
           y += (grid.h + gap) * xy
           direction = diff > 0 ? 3 : 1

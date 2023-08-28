@@ -2,7 +2,7 @@
 export const randomStr = (v?: string) =>
   `${v ? v + '-' : ''}${Math.ceil(Math.random() * 10e5).toString(36)}-${Date.now().toString(36)}`;
 
-/** 打乱数组 Fisher Yates shuffle算法 */
+/** 打乱数组 Fisher Yates shuffle 算法 */
 export function shuffleArray(array: any[]) {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));

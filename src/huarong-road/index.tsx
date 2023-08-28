@@ -12,5 +12,6 @@ export type {
   HuarongRoadProps,
   HuarongRoadItemProps,
   HuarongRoadInstance,
+  HeroesIndex,
 } from './type';
 export default HuarongRoad;

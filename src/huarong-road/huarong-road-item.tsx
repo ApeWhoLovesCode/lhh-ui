@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useContext, useRef } from 'react';
+import React, { useEffect, useMemo, useContext, useRef } from 'react';
 import './index.less';
 import { withNativeProps } from '../utils/native-props';
 import useMergeProps from '../hooks/useMergeProps';
@@ -76,9 +76,7 @@ const HuarongRoadItem = (comProps: HuarongRoadItemProps) => {
       }
       // 检测当前方向上的移动
       if(!diff) return
-      let x = info.startX
-      let y = info.startY
-      let {rowNum, colNum} = info
+      let {startX: x, startY: y, rowNum, colNum} = info
       const size = gridSize + gap
       // 发生改变
       if(Math.abs(diff) >= size / 2) {

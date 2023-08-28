@@ -62,8 +62,78 @@
 }
 
 .lotteryDemo {
+  position: relative;
   .item {
-    font-size: 16px;
-    width: 16px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    width: 50px;
+    height: 100px;
+    .text {
+      position: relative;
+      z-index: 1;
+      font-size: 16px;
+      width: 16px;
+      user-select: none;
+    }
+    .triangle {
+      width: 0;
+      height: 0;
+      position: absolute;
+      top: 0;
+      border-style: solid;
+      border-width: 50px 16.5px;
+      &-left {
+        left: 50%;
+        border-color: #ccc #ccc transparent transparent;
+        transform: translate(-100%);
+      }
+      &-right {
+        right: 50%;
+        border-color: #ccc transparent transparent #ccc;
+        transform: translate(100%);
+      }
+    }
+    &-0 {
+      .triangle-left {
+        border-color: orange orange transparent transparent;
+      }
+      .triangle-right {
+        border-color: orange transparent transparent orange;
+      }
+    }
+    &-1 {
+      .triangle-left {
+        border-color: yellow yellow transparent transparent;
+      }
+      .triangle-right {
+        border-color: yellow transparent transparent yellow;
+      }
+    }
+    &-2 {
+      .triangle-left {
+        border-color: greenyellow greenyellow transparent transparent;
+      }
+      .triangle-right {
+        border-color: greenyellow transparent transparent greenyellow;
+      }
+    }
+    &-3 {
+      .triangle-left {
+        border-color: green green transparent transparent;
+      }
+      .triangle-right {
+        border-color: green transparent transparent green;
+      }
+    }
+  }
+  .pointer {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 50px;
+    font-weight: bold;
   }
 }

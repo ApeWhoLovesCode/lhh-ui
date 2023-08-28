@@ -61,9 +61,3 @@ export type HuarongRoadInstance = {
 
 /** 英雄的索引，1:boss，2?:五虎将(21代表两格是一个英雄)，3?:卒，0:空格 */
 export type HeroesIndex = 1 | 21 | 22 | 23 | 24 | 25 | 31 | 32 | 33 | 34 | 0
-
-export type General = {
-  children: ReactNode
-  /** 是否是竖着的 */
-  isVertical: boolean
-}
