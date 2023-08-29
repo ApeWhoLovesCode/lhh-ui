@@ -1,0 +1,61 @@
+.lotteryDemo {
+  position: relative;
+  .item {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    width: 50px;
+    height: 80px;
+    .text {
+      position: relative;
+      z-index: 1;
+      font-size: 16px;
+      font-weight: bold;
+      width: 16px;
+      user-select: none;
+      color: #a57ae2;
+    }
+    .triangle {
+      width: 0;
+      height: 0;
+      position: absolute;
+      top: 0;
+      border-style: solid;
+      border-width: 50px 16.5px;
+      z-index: -1;
+      &-left {
+        left: 50%;
+        border-color: #ccc #ccc transparent transparent;
+        transform: translate(-100%);
+      }
+      &-right {
+        right: 50%;
+        border-color: #ccc transparent transparent #ccc;
+        transform: translate(100%);
+      }
+      &-center {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        height: 130px;
+        transform: translate(-50%);
+        width: 2px;
+      }
+    }
+  }
+  .pointer {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 32px;
+    font-weight: bold;
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    line-height: 50px;
+    background-color: #fff;
+    border-radius: 50%;
+  }
+}

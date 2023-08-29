@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ScrollCircle, ScrollCircleInstance, shuffleArray } from 'lhh-ui';
-import './index.less';
+import './lotteryDemo.less';
 
 type Item = {
   level: number
@@ -11,6 +11,7 @@ type Item = {
 export default () => {
   const scrollCircleRef = useRef<ScrollCircleInstance>(null)
   const [list, setList] = useState<Item[]>([]);
+  const [selectIndex, setSelectIndex] = useState(0);
 
   const init = () => {
     const arr: Item[] = [
@@ -35,31 +36,40 @@ export default () => {
   }
 
   const onScrollCicle = () => {
-    const deg = 360 * (Math.floor(Math.random() * 50) / 10)
+    const itemDeg = 360 / list.length
+    const index = Math.floor(Math.random() * 10)
+    const deg = index * itemDeg + 360 * (3 + Math.ceil(Math.random() * 3))
     scrollCircleRef.current?.scrollTo({
       deg: deg,
       duration: 5000
     })
+    setTimeout(() => {
+      setSelectIndex(index)
+    }, 5000);
   }
 
   useEffect(() => {
     init()
   }, [])
 
+  const triangleStyle = {
+    borderWidth: `${90}px ${30}px`
+  }
+
   return (
     <>
       <div className='lotteryDemo' style={{width: 360, height: 360}}>
-        {/* <div className='item' style={{background: ''}}>
-          <div className='text'>{'一等奖'}</div>
-        </div> */}
         <ScrollCircle
           ref={scrollCircleRef}
           listLength={list.length}
           isPagination={false}
           centerPoint='center'
           cardAddDeg={0}
-          radius={120}
-          // disableTouch
+          radius={140}
+          disableTouch
+          style={{
+            borderRadius: '50%'
+          }}
         >
           {list?.map((item, i) => (
             <ScrollCircle.Item
@@ -68,8 +78,15 @@ export default () => {
             >
               {/* <div className={`item item-${item.level}`} style={{background: item.color}}> */}
               <div className={`item item-${item.level}`}>
-                <div className="triangle triangle-left"></div>
-                <div className="triangle triangle-right"></div>
+                <div className="triangle triangle-left" style={{
+                  ...triangleStyle,
+                  borderColor: `${item.color} ${item.color} transparent transparent`,
+                }}></div>
+                <div className="triangle-center" style={{background: item.color}}></div>
+                <div className="triangle triangle-right" style={{
+                  ...triangleStyle,
+                  borderColor: `${item.color} transparent transparent ${item.color}`,
+                }}></div>
                 <div className='text'>{item.text}</div>
               </div>
             </ScrollCircle.Item>
@@ -78,7 +95,7 @@ export default () => {
         <div className="pointer">↑</div>
       </div>
       <div>
-        <h4>当前奖励是:</h4>
+        <h5>当前选中的奖项是：{list[selectIndex]?.text}</h5>
         <button onClick={() => onScrollCicle()}>抽奖</button>
       </div>
     </>
