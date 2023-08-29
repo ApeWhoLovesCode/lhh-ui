@@ -29,6 +29,10 @@ group:
 
 <code src="../demo/huarong-road/demo3.tsx"></code>
 
+### 随机色块华容道
+
+<code src="../demo/huarong-road/demo4.tsx"></code>
+
 ## API
 
 ### HuarongRoad
