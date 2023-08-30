@@ -84,20 +84,17 @@ export function checkRoadDirection(arr: HeroesIndex[][], row: number, col: numbe
 
 type HeroesStatus = 1 | 2 | 3 | 4
 /**
- * 
- * @param status 1: boss 2: 横着的英雄 3: 竖着的英雄
- * @returns 
+ * @param status 1: boss 2: 横着的英雄 3: 竖着的英雄 4: 卒
  */
 function handleHeroDirectionVal({arr, row, col, status}: {
   arr: HeroesIndex[][], row: number, col: number, status: HeroesStatus
 }): CheckDirectionRes {
   const colNext = status === 2 || status === 1
   const rowNext = status === 3 || status === 1
+  // 上右下左四个位置组成的数组。
   const checkArr: checkItem[] = [
     {addRow: -1, addCol: 0, colNext},
-    // {addRow: 0, addCol: colNext ? 2 : 1, rowNext},
     {addRow: 0, addCol: 1, rowNext},
-    // {addRow: rowNext ? 2 : 1, addCol: 0, colNext},
     {addRow: 1, addCol: 0, colNext},
     {addRow: 0, addCol: -1, rowNext},
   ]
