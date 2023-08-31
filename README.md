@@ -3,6 +3,8 @@
 [![NPM version](https://img.shields.io/npm/v/lhh-ui.svg?style=flat)](https://npmjs.org/package/lhh-ui)
 [![NPM downloads](http://img.shields.io/npm/dm/lhh-ui.svg?style=flat)](https://npmjs.org/package/lhh-ui)
 
+主要存放一些个人开发的有意思组件。
+
 ### 资源
 
 - 文档: http://lhhui.codeape.site

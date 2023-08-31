@@ -1,7 +1,7 @@
 ---
 hero:
   title: lhh-ui
-  description: lhh个人开发的react组件库
+  description: 个人开发的react组件库（存放一些有意思的组件）
   actions:
     - text: 开始
       link: /components/slider-puzzle
