@@ -20,7 +20,7 @@ export default () => {
       >
         {list.map((color, index) => (
           <HuarongRoad.Item key={color + index} index={index}>
-            <div className='demo4-huarongRoad-item' style={{background: color}}></div>
+            <div style={{background: color, width: '100%', height: '100%'}}></div>
           </HuarongRoad.Item>
         ))}
       </HuarongRoad>
