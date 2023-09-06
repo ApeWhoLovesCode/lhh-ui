@@ -185,9 +185,13 @@ export const ScrollCircle = forwardRef<ScrollCircleInstance, ScrollCircleProps>(
     }
   });
 
+  const scrollEndTimerRef = useRef<NodeJS.Timeout>()
+  useEffect(() => {
+    return () => {clearTimeout(scrollEndTimerRef.current)}
+  }, [])
   const _onScrollEnd = (deg: number, _duration: number) => {
     if(props.onScrollEnd) {
-      setTimeout(() => {
+      scrollEndTimerRef.current = setTimeout(() => {
         const absV = getRotateDegAbs(centerPoint, isVertical.current, isFlipDirection)
         let index = Math.floor(deg / info.cardDeg) % listLength * absV
         if(index < 0) {
