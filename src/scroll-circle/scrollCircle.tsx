@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo, forwardRef, useImperativeHandle } from 'react';
+import React, { useState, useEffect, useRef, useMemo, forwardRef, useImperativeHandle, useCallback } from 'react';
 import { calcAngle, getCircleTransformXy, getRotateDegAbs, roundingAngle } from './utils';
 import { randomStr } from '../utils/random';
 import { classBem, isMobile } from '../utils/handleDom';
@@ -202,21 +202,6 @@ export const ScrollCircle = forwardRef<ScrollCircleInstance, ScrollCircleProps>(
     }
   }
 
-  const disableRight = pageState.pageNum * pageState.pageSize >= (listLength);
-  const disableLeft = pageState.pageNum <= 1;
-
-  const onPageChangeFn = (isAdd?: boolean) => {
-    if (isAdd) {
-      if (disableRight) return;
-    } else {
-      if (disableLeft) return;
-    }
-    pageState.pageNum += isAdd ? 1 : -1;
-    setPageState({...pageState})
-    setRotateDeg(0);
-    onPageChange?.({ ...pageState });
-  };
-
   const circleStyle = useMemo(() => {
     const {x, y} = getCircleTransformXy(centerPoint, isVertical.current, info.circleR)
     return {
@@ -256,6 +241,50 @@ export const ScrollCircle = forwardRef<ScrollCircleInstance, ScrollCircleProps>(
     onPageChange: _onPageChange
   }))
 
+  const renderPagination = useCallback(() => {
+    if(!isPagination) return null
+
+    const disableRight = pageState.pageNum * pageState.pageSize >= (listLength);
+    const disableLeft = pageState.pageNum <= 1;
+
+    const onPageChangeFn = (isAdd?: boolean) => {
+      if (isAdd) {
+        if (disableRight) return;
+      } else {
+        if (disableLeft) return;
+      }
+      pageState.pageNum += isAdd ? 1 : -1;
+      setPageState({...pageState})
+      setRotateDeg(0);
+      onPageChange?.({ ...pageState });
+    };
+
+    return (
+      <>
+        <div
+          className={`${classBem(`${classPrefix}-arrow`, { left: true, disable: disableLeft })}`}
+          onClick={() => onPageChangeFn()}
+        >
+          {leftArrow ?? (
+            <div className={`${classBem(`${classPrefix}-arrow-area`, { left: true })}`}>
+              {'<'}
+            </div>
+          )}
+        </div>
+        <div
+          className={`${classBem(`${classPrefix}-arrow`, { right: true, disable: disableRight })}`}
+          onClick={() => onPageChangeFn(true)}
+        >
+          {rightArrow ?? (
+            <div className={`${classBem(`${classPrefix}-arrow-area`, { right: true })}`}>
+              {'>'}
+            </div>
+          )}
+        </div>
+      </>
+    )
+  }, [isPagination, leftArrow, rightArrow, pageState])
+
   return (
     <ScrollCircleCtx.Provider
       value={{
@@ -279,30 +308,7 @@ export const ScrollCircle = forwardRef<ScrollCircleInstance, ScrollCircleProps>(
           <div className={`${classPrefix}-area`} style={circleStyle}>
             {children}
           </div>
-          <div
-            className={`${classBem(`${classPrefix}-arrow`, { left: true, disable: disableLeft })}`}
-            onClick={() => onPageChangeFn()}
-          >
-            {isPagination ? (
-              leftArrow ?? (
-                <div className={`${classBem(`${classPrefix}-arrow-area`, { left: true })}`}>
-                  {'<'}
-                </div>
-              )
-            ) : null}
-          </div>
-          <div
-            className={`${classBem(`${classPrefix}-arrow`, { right: true, disable: disableRight })}`}
-            onClick={() => onPageChangeFn(true)}
-          >
-            {isPagination ? (
-              rightArrow ?? (
-                <div className={`${classBem(`${classPrefix}-arrow-area`, { right: true })}`}>
-                  {'>'}
-                </div>
-              )
-            ) : null}
-          </div>
+          {renderPagination()}
         </div>
       ))}
     </ScrollCircleCtx.Provider>

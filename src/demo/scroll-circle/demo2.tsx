@@ -63,7 +63,7 @@ export default () => {
           ))}
         </ScrollCircle>
       </div>
-      <button disabled={disabledPre} onClick={() => {onReducePage()}}>上一页</button>
+      <button disabled={disabledPre} onClick={() => {onReducePage()}} style={{margin: 12}}>上一页</button>
       <button disabled={disabledNext} onClick={() => {onAddPage()}}>下一页</button>
     </>
   );
