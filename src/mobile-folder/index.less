@@ -1,0 +1,113 @@
+@import '../style/index.less';
+@class-prefix: ~'lhhui-mobile-folder';
+@popZIndex: 1000;
+@popZIndexGt: 1001;
+.@{class-prefix} {
+  @size: var(--size);
+  transition: border-radius .3s;
+  background-color: rgba(255, 255, 255, .3);
+  border-radius: calc(@size / 6);
+  &-area {
+    box-sizing: border-box;
+    display: grid;
+    grid-template: 'a a' 'b b';
+    gap: calc(@size / 4);
+    padding: calc(@size / 4);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  &:hover {
+    border-radius: calc(@size / 4);
+  }
+  &-item {
+    position: relative;
+    width: @size;
+    height: @size;
+    user-select: none;
+    -webkit-user-drag: none;
+    transition: transform .3s, opacity .2s;
+    &-last {
+      box-sizing: border-box;
+      display: grid;
+      grid-template: 'a a' 'b b';
+      gap: calc(@size / 9);
+    }
+    &-sub {
+      width: calc(@size / 9 * 4);
+      height: calc(@size / 9 * 4);
+      // opacity 控制大于 4 的溢出项的提前隐藏;
+      transition: transform 0.4s, opacity .2s;
+    }
+    &-overflowHide {
+      overflow: hidden;
+    }
+    &-more {
+      z-index: @popZIndexGt;
+      overflow: visible;
+      .@{class-prefix}-item-sub {
+        width: @size;
+        height: @size;
+      }
+    }
+    &-title {
+      margin-top: 5px;
+      font-size: 14px;
+      color: #fff;
+      text-align: center;
+    }
+  }
+  &-icon {
+    display: block;
+    width: 100%;
+    height: 100%;
+    transition: all .4s;
+    user-select: none;
+    -webkit-user-drag: none;
+    &:hover {
+      scale: 1.05;
+    }
+  }
+  &-pop {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: @popZIndex;
+    background-color: rgba(0, 0, 0, .2);
+    &-content {
+      display: grid;
+      gap: calc(@size / 2);
+      grid-template: 'a a a';
+    }
+    &-item {
+      width: @size;
+      height: @size;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+    &-show {
+      display: flex;
+      opacity: 1;
+      .@{class-prefix} {
+        &-pop-item {
+          animation: popShow 0.3s ease;
+        }
+      }
+    }
+    @keyframes popShow {
+      0% {
+        opacity: 0;
+      }
+      99% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+  }
+}
