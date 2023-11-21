@@ -4,11 +4,6 @@ import { NativeProps } from "../utils/native-props";
 export type MobileFolderProps = { 
   /** 需要渲染的列表 */
   list: MobileFolderItem[]
-  /** 
-   * n * n
-   * @default 2
-   */
-  colNum?: number
 } & NativeProps
 
 export type MobileFolderItem = {

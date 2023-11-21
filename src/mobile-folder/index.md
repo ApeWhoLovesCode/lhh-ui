@@ -18,6 +18,19 @@ group:
 
 <code src="../demo/mobile-folder/demo1.tsx"></code>
 
+### 自定义 children
+
+<code src="../demo/mobile-folder/demo2.tsx"></code>
+
 ## API
 
 <API id="MobileFolder"></API>
+
+### MobileFolderItem
+
+|  属性名    | 描述            | 类型         | 默认值 |
+|  ----     | ----           | ----         | ---- |
+|   icon    | 渲染的内容为图片  | `string`       | `--` |
+| title     | 标题            | `string`       | `--` |
+| children  | 自定义渲染的内容  | `ReactNode`    | `--` |
+| onClick   | 点击的回调       | `(item: MobileFolderItem, i: number) => void` | `--` |

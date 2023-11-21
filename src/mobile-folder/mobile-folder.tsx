@@ -8,13 +8,14 @@ import { useDebounceFn } from 'ahooks';
 const classPrefix = `lhhui-mobile-folder`;
 
 const defaultProps = {
-  colNum: 2,
+  
 }
 type RequireType = keyof typeof defaultProps
 
 const MobileFolder = (comProps: MobileFolderProps) => {
   const props = useMergeProps<MobileFolderProps, RequireType>(comProps, defaultProps)
-  const { list, colNum, ...ret } = props
+  const { list, ...ret } = props
+  const colNum = 2;
   const idRef = useRef(randomStr(classPrefix));
   const [size, setSize] = useState(50);
   /** 展示更多 */
@@ -48,6 +49,7 @@ const MobileFolder = (comProps: MobileFolderProps) => {
   }
 
   const onShowMore = () => {
+    if(isShowMore) return
     document.body.style.overflow = 'hidden';
     setIsShowMore(true)
     setIsMoreOverflowHidden(false)
@@ -80,7 +82,7 @@ const MobileFolder = (comProps: MobileFolderProps) => {
     ret,
     <div className={`${classPrefix} ${idRef.current}`} style={{['--size' as any]: size + 'px'}}>
       <div className={`${classPrefix}-area`}>
-        {/* 前几个正确项 */}
+        {/* 前几个较大项 */}
         {list?.slice(0, moreNum)?.map((item, i) => {
           const moreItem = moreItems[i]
           return (
@@ -123,12 +125,13 @@ const MobileFolder = (comProps: MobileFolderProps) => {
                   transform: moreItem ? `translate(${moreItem.x}px, ${moreItem.y}px)` : '',
                   opacity: i >= 4 ?( moreItem ? 1 : 0) : '',
                 }}
+                onClick={() => onClickItem(item, moreNum + i)}
               >
                 {item.icon ? (
                   <img className={`${classPrefix}-icon`} src={item.icon} />
                 ) : item.children}
-                {isShowMore && (
-                  <div className={`${classPrefix}-item-title`}>{ item.title ?? 'pop' }</div>
+                {isShowMore && Boolean(item.title) && (
+                  <div className={`${classPrefix}-item-title`}>{ item.title }</div>
                 )}
               </div>
             )
@@ -146,10 +149,6 @@ const MobileFolder = (comProps: MobileFolderProps) => {
                 e.stopPropagation()
               }}
             >
-              {/* {item.icon ? (
-                // <img className={`${classPrefix}-icon`} src={item.icon} />
-                <img className={`${classPrefix}-icon`} src={'https://lhh.codeape.site/img/legend-td-icon.png'} />
-              ) : item.children} */}
             </div>
           )))}
         </div>
