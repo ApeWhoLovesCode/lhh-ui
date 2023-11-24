@@ -11,6 +11,7 @@ group:
 
 ## 手机文件夹组件
 
+将一个列表类似手机文件夹那样包裹起来
 
 ## 演示
 
@@ -23,6 +24,8 @@ group:
 <code src="../demo/mobile-folder/demo2.tsx"></code>
 
 ## API
+
+### MobileFolderProps
 
 <API id="MobileFolder"></API>
 

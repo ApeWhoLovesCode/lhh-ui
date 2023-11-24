@@ -71,7 +71,7 @@ const MobileFolder = (comProps: MobileFolderProps) => {
   const onHideMore = () => {
     setMoreItems([])
     setIsShowMore(false)
-    // 200ms 对应 sub 中，
+    // 200ms 后溢出项的 opacity 就为 0 了，300ms 后开启溢出隐藏。
     setTimeout(() => {
       setIsMoreOverflowHidden(true)
       document.body.style.overflow = 'auto'
