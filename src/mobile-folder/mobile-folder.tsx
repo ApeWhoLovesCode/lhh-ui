@@ -45,6 +45,7 @@ const MobileFolder = (comProps: MobileFolderProps) => {
   const moreNum = Math.pow(colNum, 2) - 1;
 
   const onClickItem = (item: MobileFolderItem, i: number) => {
+    if(i >= 3 && !moreItems.length) return
     item.onClick?.(item, i)
   }
 
@@ -78,6 +79,17 @@ const MobileFolder = (comProps: MobileFolderProps) => {
     }, 300);
   }
 
+  const renderItemContent = (item: MobileFolderItem) => (
+    <>
+      {item.icon ? (
+        <img className={`${classPrefix}-icon`} src={item.icon} />
+      ) : item.children}
+      {isShowMore && (
+        <div className={`${classPrefix}-item-title`}>{ item.title }</div>
+      )}
+    </>
+  )
+
   return withNativeProps(
     ret,
     <div className={`${classPrefix} ${idRef.current}`} style={{['--size' as any]: size + 'px'}}>
@@ -97,12 +109,7 @@ const MobileFolder = (comProps: MobileFolderProps) => {
                 transform: moreItem ? `translate(${moreItem.x}px, ${moreItem.y}px)` : '',
               }}
             >
-              {item.icon ? (
-                <img className={`${classPrefix}-icon`} src={item.icon} />
-              ) : item.children}
-              {isShowMore && (
-                <div className={`${classPrefix}-item-title`}>{ item.title ?? 'pop' }</div>
-              )}
+              {renderItemContent(item)}
             </div>
           )
         })}
@@ -127,12 +134,7 @@ const MobileFolder = (comProps: MobileFolderProps) => {
                 }}
                 onClick={() => onClickItem(item, moreNum + i)}
               >
-                {item.icon ? (
-                  <img className={`${classPrefix}-icon`} src={item.icon} />
-                ) : item.children}
-                {isShowMore && Boolean(item.title) && (
-                  <div className={`${classPrefix}-item-title`}>{ item.title }</div>
-                )}
+                {renderItemContent(item)}
               </div>
             )
           })}
@@ -148,8 +150,7 @@ const MobileFolder = (comProps: MobileFolderProps) => {
               onClick={(e) => {
                 e.stopPropagation()
               }}
-            >
-            </div>
+            ></div>
           )))}
         </div>
       </div>
