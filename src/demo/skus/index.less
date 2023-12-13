@@ -1,0 +1,45 @@
+.demo-skus {
+  .skus-info {
+    .radio-wrap {
+      display: flex;
+      gap: 10px;
+      font-size: 14px;
+      align-items: center;
+      margin-bottom: 10px;
+      .radio {
+        width: 20px;
+        height: 20px;
+        text-align: center;
+        line-height: 20px;
+        font-size: 12px;
+        border: 1px solid #ccc;
+        border-radius: 50%;
+        cursor: pointer;
+        &-active {
+          color: #fff;
+          background-color: #3d74ff;
+        }
+      }    
+    }
+  }
+  .bottom {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    .list {
+      padding: 5px 10px;
+      border: 1px solid #ccc;
+      max-height: 200px;
+      overflow-y: scroll;
+      &::-webkit-scrollbar {
+        display: none !important;
+      }
+      .item {
+        font-size: 12px;
+        width: 150px;
+        padding: 5px 0;
+        white-space: nowrap;
+      }
+    }
+  }
+}
