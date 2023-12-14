@@ -1,5 +1,33 @@
 @import '../style/index.less';
 @class-prefix: ~'lhhui-skus';
 .@{class-prefix} {
-
+  &-params-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 10px 0;
+  }
+  &-params-area {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  &-sku {
+    box-sizing: border-box;
+    display: inline-block;
+    padding: 6px 12px;
+    margin-right: 10px;
+    border: 1px solid #000;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    user-select: none;
+    &-active {
+      color: #87ceeb;
+      background-color: #000;
+    }
+    &-disabled {
+      color: #aaabab;
+      border-color: #aaabab;
+    }
+  }
 }

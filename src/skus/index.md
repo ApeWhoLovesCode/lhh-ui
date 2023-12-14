@@ -19,6 +19,10 @@ group:
 
 <code src="../demo/skus/demo1.tsx"></code>
 
+### 自定义渲染内容
+
+<!-- <code src="../demo/skus/demo2.tsx"></code> -->
+
 ## API
 
 ### SkusProps

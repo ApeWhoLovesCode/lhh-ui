@@ -1,24 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import './index.less';
 import { Skus, SkusItem } from 'lhh-ui';
-
-const skuData: Record<string, string[]> = {
-  '颜色': ['红','绿','蓝','黑','白','黄'],
-  '大小': ['S','M','L','XL','XXL','MAX'],
-  '款式': ['圆领','V领','条纹','渐变','轻薄','休闲'],
-  '面料': ['纯棉','涤纶','丝绸','蚕丝','麻','鹅绒'],
-  '群体': ['男','女','中性','童装','老年','青少年'],
-  '价位': ['<30','<50','<100','<300','<800','<1500'],
-}
-const skuNames = Object.keys(skuData)
-
-const radioArr = [0,1,2,3,4,5,6]
+import { skuData, skuNames } from './utils';
 
 export default () => {
-  const [checkValArr, setCheckValArr] = useState<number[]>([3, 3, 0, 3, 2, 0]);
+  const [checkValArr, setCheckValArr] = useState<number[]>([4, 5, 2, 3, 0, 0]);
   const [skusList, setSkusList] = useState<SkusItem[]>([]);
   // 库存为零对应的sku数组
   const [noStockSkus, setNoStockSkus] = useState<string[][]>([])
+  const [stock, setStock] = useState<number>();
 
   const getSkus = () => {
     const checkValTrueArr = checkValArr.filter(Boolean)
@@ -64,6 +54,7 @@ export default () => {
       }
     }
     setSkusList(skus)
+    console.log('skus: ', skus);
     setNoStockSkus([..._noStockSkus])
   }
   
@@ -84,7 +75,7 @@ export default () => {
         {checkValArr.map((checkVal, i) => (
           <div className='radio-wrap' key={i}>
             <span>{skuNames[i]}:</span>
-            {radioArr.map((value) => (
+            {[0,1,2,3,4,5,6].map((value) => (
               <span 
                 key={`${i}-${value}`} 
                 className={`radio ${checkVal === value ? 'radio-active' : ''}`} 
@@ -94,8 +85,14 @@ export default () => {
           </div>
         ))}
       </div>
-      <Skus data={skusList} />
-      <h5>还剩库存：{'-'}</h5>
+      <Skus 
+        data={skusList} 
+        onChange={(checkSkus, curSku) => {
+          console.log('onChange: ', checkSkus, curSku);
+          setStock(curSku?.stock)
+        }} 
+      />
+      <h5>还剩库存：{stock ?? '-'}</h5>
       <h5> ------------- 库存为零的sku: ------------- </h5>
       <div className="bottom">
         {noStockSkus.map((skus, i) => (

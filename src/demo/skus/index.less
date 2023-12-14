@@ -43,3 +43,32 @@
     }
   }
 }
+
+.demo2-skus {
+  h5 {
+    margin: 10px 0;   
+  }
+  .sku-wrap {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    .sku {
+      box-sizing: border-box;
+      display: inline-block;
+      padding: 4px 8px;
+      margin-right: 5px;
+      border: 1px solid #c193f1;
+      font-size: 12px;
+      cursor: pointer;
+      user-select: none;
+      &-active {
+        color: #b8f3cc;
+        background-color: #c193f1;
+      }
+      &-disabled {
+        color: #c6c6c6;
+        border-color: #c6c6c6;
+      }
+    }
+  }
+}
