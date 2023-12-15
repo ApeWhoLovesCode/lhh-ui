@@ -9,7 +9,7 @@ group:
   order: 1
 ---
 
-## 手机文件夹组件
+## Sku组件
 
 用于商品等的sku选择，支持库存为零时，禁用选中项
 
@@ -21,7 +21,7 @@ group:
 
 ### 自定义渲染内容
 
-<!-- <code src="../demo/skus/demo2.tsx"></code> -->
+<code src="../demo/skus/demo2.tsx"></code>
 
 ## API
 

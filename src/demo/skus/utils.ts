@@ -11,7 +11,7 @@ export const skuData: Record<string, string[]> = {
 
 export const skuNames = Object.keys(skuData)
 
-export function getSkusData(skuCategorys: number[]) {
+export function getSkusData(skuCategorys: number[], noStockSkus?: string[][]) {
   const skusList: SkusItem[] = []
   // 对应 skuState 中各 sku ，主要用于下面遍历时，对 product 中 skus 的索引操作
   const indexArr = Array.from({length: skuCategorys.length}, () => 0);
@@ -42,6 +42,15 @@ export function getSkusData(skuCategorys: number[]) {
       if(indexArr[j] >= skuCategorys[j] && j !== 0) {
         indexArr[j - 1]++
         indexArr[j] = 0
+      }
+    }
+
+    if(noStockSkus) {
+      if(!sku.stock) {
+        noStockSkus.at(-1)?.push(sku.params.map(p => p.value).join(' / '))
+      }
+      if(indexArr[0] === noStockSkus.length && noStockSkus.length < skuCategorys[0]) {
+        noStockSkus.push([])
       }
     }
   }

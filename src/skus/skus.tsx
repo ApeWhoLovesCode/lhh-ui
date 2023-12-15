@@ -1,14 +1,14 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { withNativeProps } from '../utils/native-props';
 import useMergeProps from '../hooks/useMergeProps';
-import { RenderSkuItem, RenderSkuItemValue, SkusItem, SkusProps } from './type'
+import { RenderSkuItem, RenderSkuItemValue, SkusItem, SkusItemParam, SkusProps } from './type'
 import { classBem } from '../utils';
 
 type SkuStateItem = {
   value: string;
   /** 与该sku搭配时，该禁用的sku组合 */
   disabledSkus: string[][];
-}[];;
+}[];
 
 const classPrefix = `lhhui-skus`;
 
@@ -20,6 +20,7 @@ type RequireType = keyof typeof defaultProps
 const Skus = (comProps: SkusProps) => {
   const props = useMergeProps<SkusProps, RequireType>(comProps, defaultProps)
   const { data, customRender, onChange, skuItemKey: propsSkuItemKey, stockLimitValue, isStockGreaterThan, ...ret } = props
+
   const skuItemKey = {
     stock: 'stock',
     params: 'params',
@@ -27,48 +28,85 @@ const Skus = (comProps: SkusProps) => {
     paramValue: 'value',
     ...propsSkuItemKey
   }
+  const getSkuStock = (item: SkusItem) => item[skuItemKey.stock as (keyof SkusItem)] as number
+  const getSkuParams = (item: SkusItem) => item[skuItemKey.params as (keyof SkusItem)] as SkusItem['params']
+  const getSkuParamName = (item: SkusItemParam) => item[skuItemKey.paramName as (keyof SkusItemParam)] as SkusItemParam['name']
+  const getSkuParamValue = (item: SkusItemParam) => item[skuItemKey.paramValue as (keyof SkusItemParam)] as SkusItemParam['value']
+
   // 转化成遍历判断用的数据类型
   const [skuState, setSkuState] = useState<Record<string, SkuStateItem>>({});
   // 当前选中的sku值
   const [checkSkus, setCheckSkus] = useState<Record<string, string>>({});
-  /** sku 的排列是按顺序的，整齐的 */
+  /** 如果 sku 的排列是按顺序的，整齐的，那么当勾选完 sku 时，回调获取到 item 的算法会有很大的优化 */
   const isInOrder = useRef(true)
 
   useEffect(() => {
     if(!data?.length) return
     const _checkSkus: Record<string, string> = {}
-    const _skuState = data[0].params.reduce((pre, cur) => {
-      pre[cur.name] = [{value: cur.value, disabledSkus: []}]
-      _checkSkus[cur.name] = ''
+    // 用于判断当前sku到哪个分类下了
+    const skuNameIndexArr: number[] = [] 
+    const skuNameArr: string[][] = []
+    const _skuState = getSkuParams(data[0]).reduce((pre, cur) => {
+      pre[getSkuParamName(cur)] = [{value: getSkuParamValue(cur), disabledSkus: []}]
+      _checkSkus[getSkuParamName(cur)] = ''
+      skuNameIndexArr.push(0)
+      skuNameArr.push([cur.value])
       return pre
     }, {} as Record<string, SkuStateItem>)
     setCheckSkus(_checkSkus)
 
-    let skuNameIndex = 0; // 用于判断当前sku到哪个分类下了
     data.slice(1).forEach(item => {
-      item.params.forEach((p, i) => {
+      const skuParams = getSkuParams(item)
+      skuParams.forEach((p, i) => {
+        const pName = getSkuParamName(p)
+        const pValue = getSkuParamValue(p)
         // 当前 params 不在 _skuState 中
-        if(!_skuState[p.name]?.find(params => params.value === p.value)) {
-          _skuState[p.name].push({value: p.value, disabledSkus: []})
+        if(!_skuState[pName]?.find(params => params.value === pValue)) {
+          _skuState[pName].push({value: pValue, disabledSkus: []})
         }
-        if(isInOrder.current && p.name !== data[0].params[i].name) {
-          isInOrder.current = false
+        if(isInOrder.current) {
+          if(pName !== getSkuParamName(getSkuParams(data[0])[i])) {
+            isInOrder.current = false
+          } else {
+            if(!skuNameArr[i].includes(pValue)) {
+              skuNameArr[i].push(pValue)
+            }
+          }
         }
       })
     })
 
-    // 遍历获取库存需要禁用的sku
     data.forEach(sku => {
-      const stock = sku[skuItemKey.stock as (keyof SkusItem)] as number
+      const skuParams = getSkuParams(sku)
+      // 计算sku是否是按顺序排列的
+      if(isInOrder.current) {
+        const isSame = skuParams.every((p, i) => (
+          skuNameArr[i][skuNameIndexArr[i]] === getSkuParamValue(p)
+        ))
+        if(isSame) {
+          skuNameIndexArr[skuNameIndexArr.length - 1]++;
+          for(let j = skuNameIndexArr.length - 1; j >= 0; j--) {
+            if(j !== 0 && skuNameIndexArr[j] >= skuNameArr[j].length) {
+              skuNameIndexArr[j - 1]++
+              skuNameIndexArr[j] = 0
+            }
+          }
+        } else {
+          isInOrder.current = false
+        }
+      }
+
+      // 遍历获取库存需要禁用的sku
+      const stock = getSkuStock(sku) 
       if(
         typeof stock === 'number' && 
         isStockGreaterThan ? stock >= stockLimitValue : stock <= stockLimitValue
       ) {
-        const curSkuArr = sku.params.map(p => p.value)
+        const curSkuArr = skuParams.map(p => p.value)
         for(const name in _skuState) {
           const curSkuItem = _skuState[name].find(v => curSkuArr.includes(v.value))
           curSkuItem?.disabledSkus?.push(
-            sku.params.reduce((pre, p) => {
+            skuParams.reduce((pre, p) => {
               if(p.name !== name) {
                 pre.push(p.value)
               }
@@ -78,6 +116,7 @@ const Skus = (comProps: SkusProps) => {
         }
       }
     })
+
     setSkuState(_skuState)
   }, [data])
 
@@ -123,18 +162,20 @@ const Skus = (comProps: SkusProps) => {
     const getCurSkuItem = (_checkSkus: Record<string, string>) => {
       const length = Object.keys(skuState).length
       if(!length || Object.values(_checkSkus).filter(Boolean).length < length) return void 0
-      let skuI = 0;
-      // 由于sku是按顺序排列的，所以索引可以通过计算得出
-      Object.keys(_checkSkus).forEach((name, i) => {
-        const index = skuState[name].findIndex(v => v.value === _checkSkus[name])
-        const othTotal = Object.values(skuState).slice(i + 1).reduce((pre, cur) => (pre *= cur.length), 1)
-        skuI += index * othTotal;
-      })
-      return data?.[skuI]
+      if(isInOrder.current) {
+        let skuI = 0;
+        // 由于sku是按顺序排列的，所以索引可以通过计算得出
+        Object.keys(_checkSkus).forEach((name, i) => {
+          const index = skuState[name].findIndex(v => v.value === _checkSkus[name])
+          const othTotal = Object.values(skuState).slice(i + 1).reduce((pre, cur) => (pre *= cur.length), 1)
+          skuI += index * othTotal;
+        })
+        return data?.[skuI]
+      }
       // 这样需要遍历太多次
-      // return product?.skus.find(s => (
-      //   s.params?.every((p, i) => checkSkus[i] === p.value)
-      // ))?.stock
+      return data.find(s => (
+        getSkuParams(s).every(p => _checkSkus[getSkuParamName(p)] === getSkuParamValue(p))
+      ))
     }
 
     const selectSkus = (skuName: string, {value, disabled, isChecked}: RenderSkuItemValue) => {

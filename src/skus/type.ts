@@ -2,17 +2,13 @@ import { ReactNode } from "react";
 import { NativeProps } from "../utils/native-props";
 
 export type SkusProps = { 
+  /** 传入的skus数据列表 */
   data: SkusItem[]
   /** 
    * 用于替换 data 中 item 的 key 值 
    * （即 SkusItem 类型中对应的 key ） 
    */
-  skuItemKey?: {
-    stock?: string
-    params?: string
-    paramName?: string
-    paramValue?: string
-  }
+  skuItemKey?: SkuItemKey
   /**
    * sku 库存的限制值，当小于等于该值时会禁用该sku的选择
    * @default 0
@@ -37,13 +33,15 @@ export type SkusProps = {
 export type SkusItem = {
   /** 库存 */
   stock?: number;
-  params: {
-    name: string;
-    value: string;
-    // ... 
-  }[];
+  /** sku参数 */
+  params: SkusItemParam[];
   // ... 其他省略
 };
+
+export type SkusItemParam = {
+  name: string;
+  value: string;
+}
 
 export type RenderSkuItem = {
   name: string;
@@ -57,6 +55,13 @@ export type RenderSkuItemValue = {
   isChecked: boolean
   /** 禁用状态 */
   disabled: boolean;
+}
+
+export type SkuItemKey = {
+  stock?: string
+  params?: string
+  paramName?: string
+  paramValue?: string
 }
 
 export type OnChangeParams = {
