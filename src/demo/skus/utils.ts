@@ -11,7 +11,12 @@ export const skuData: Record<string, string[]> = {
 
 export const skuNames = Object.keys(skuData)
 
-export function getSkusData(skuCategorys: number[], noStockSkus?: string[][]) {
+export function getSkusData(
+  skuCategorys: number[], 
+  noStockSkus?: string[][],
+  /** 是否采用新的key */
+  isNewKey?: boolean
+) {
   const skusList: SkusItem[] = []
   // 对应 skuState 中各 sku ，主要用于下面遍历时，对 product 中 skus 的索引操作
   const indexArr = Array.from({length: skuCategorys.length}, () => 0);
@@ -20,7 +25,7 @@ export function getSkusData(skuCategorys: number[], noStockSkus?: string[][]) {
   for(let i = 1; i <= total; i++) {
     const sku: SkusItem = {
       // 库存：60%的几率为0-50，40%几率为0
-      stock: Math.floor(Math.random() * 10) >= 4 ? Math.floor(Math.random() * 50) : 0,
+      [!isNewKey ? 'stock' : 'newStock']: Math.floor(Math.random() * 10) >= 4 ? Math.floor(Math.random() * 50) : 0,
       params: [],
     }
     // 生成每个 sku 对应的 params 
@@ -46,7 +51,7 @@ export function getSkusData(skuCategorys: number[], noStockSkus?: string[][]) {
     }
 
     if(noStockSkus) {
-      if(!sku.stock) {
+      if(!sku[!isNewKey ? 'stock' : ('newStock' as keyof SkusItem)]) {
         noStockSkus.at(-1)?.push(sku.params.map(p => p.value).join(' / '))
       }
       if(indexArr[0] === noStockSkus.length && noStockSkus.length < skuCategorys[0]) {

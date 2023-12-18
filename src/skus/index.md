@@ -11,7 +11,7 @@ group:
 
 ## Sku组件
 
-用于商品等的sku选择，支持库存为零时，禁用选中项
+主要用于处理商品的 sku 在受到库存的影响下，sku项的选中和禁用问题；
 
 ## 演示
 
@@ -22,6 +22,10 @@ group:
 ### 自定义渲染内容
 
 <code src="../demo/skus/demo2.tsx"></code>
+
+### 自定义不同 data 结构
+
+<code src="../demo/skus/demo3.tsx"></code>
 
 ## API
 

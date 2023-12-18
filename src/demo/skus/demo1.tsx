@@ -19,6 +19,7 @@ export default () => {
     // [item[0], item[1]] = [item[1], item[0]];
     setSkusList(list)
     setNoStockSkus([..._noStockSkus])
+    setStock(void 0)
   }, [checkValArr])
 
   const onChangeRadio = (i: number, value: number) => {
