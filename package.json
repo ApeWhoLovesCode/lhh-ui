@@ -1,6 +1,6 @@
 {
   "name": "lhh-ui",
-  "version": "1.1.8",
+  "version": "1.1.9",
   "description": "LHH's react Component Library",
   "license": "MIT",
   "author": "林桓恒 <970519495@qq.com>",
@@ -30,7 +30,7 @@
     "@types/react-is": "^18.2.1",
     "@umijs/lint": "^4.0.0",
     "cross-env": "^7.0.3",
-    "dumi": "^2.2.0",
+    "dumi": "^2.2.16",
     "eslint": "^8.23.0",
     "father": "^4.1.0",
     "react": "^18.0.0",

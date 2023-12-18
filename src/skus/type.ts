@@ -20,7 +20,7 @@ export type SkusProps = {
    */
   isStockGreaterThan?: boolean
   /** 点击sku的改变回调 */
-  onChange?: (checkSkus: Record<string, string>, cur?: OnChangeParams) => void
+  onChange?: (checkSkus: Record<string, string>, cur?: SkusChangeParams) => void
   /** 自定义渲染的sku */
   customRender?: (
     /** 用于渲染的列表 */
@@ -64,7 +64,7 @@ export type SkuItemKey = {
   paramValue?: string
 }
 
-export type OnChangeParams = {
+export type SkusChangeParams = {
   /** 当前点击的sku分类名称 */
   skuName: string
   /** 当前点击的 sku */
