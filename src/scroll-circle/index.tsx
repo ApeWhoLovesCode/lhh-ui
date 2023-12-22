@@ -1,7 +1,7 @@
 import { attachPropertiesToComponent } from '../utils/attach-properties-to-component';
 import './index.less';
-import { ScrollCircle as _ScrollCircle } from './scrollCircle';
-import { ScrollCircleItem } from './scrollCircleItem';
+import _ScrollCircle from './scrollCircle';
+import ScrollCircleItem from './scrollCircleItem';
 
 const ScrollCircle = attachPropertiesToComponent(_ScrollCircle, {
   Item: ScrollCircleItem,

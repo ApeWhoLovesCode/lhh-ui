@@ -82,6 +82,16 @@ export type ScrollCircleItemType = {
   onClick?: (i: number) => void;
 } & NativeProps
 
+/** 传递给 item 的 props 属性 */
+export type ScrollCircleItemCtxProps = {
+  circleR: number;
+  cardDeg: number;
+  isVertical: boolean;
+  isFlipDirection: boolean;
+  isClick: boolean;
+  centerPoint: CenterPointType;
+}
+
 export type ScrollCircleInstance = {
   /** 旋转到指定角度或者指定索引 */
   scrollTo: (params: ScrollCircleScrollToParams) => void

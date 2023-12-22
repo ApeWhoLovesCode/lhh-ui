@@ -8,7 +8,8 @@ export type HuarongRoadProps = {
   width?: string | number
   /** 
    * 英雄的位置
-   * @default [
+   * @default 
+   * [
    *  [21, 1,  1,  22],
    *  [21, 1,  1,  22],
    *  [23, 24, 24, 25],

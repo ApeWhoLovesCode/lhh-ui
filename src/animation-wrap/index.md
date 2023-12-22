@@ -21,6 +21,4 @@ group:
 
 ## API
 
-### AnimationWrap
-
 <API id="AnimationWrap"></API>

@@ -1,8 +1,8 @@
 import AnimationWrap from "./animationWrap";
-import './index.less'
+import './index.less';
 
-export default AnimationWrap
-export { AnimationWrap }
+export { AnimationWrap };
+export default AnimationWrap;
 export type { 
   AnimationWrapProps, 
   AnimationWrapInstance, 

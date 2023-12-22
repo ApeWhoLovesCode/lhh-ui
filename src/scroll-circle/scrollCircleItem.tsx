@@ -1,12 +1,12 @@
-import React, { useContext, useMemo } from "react";
-import { ScrollCircleItemType } from "./type";
-import { ScrollCircleCtx } from "./context";
+import React, { useMemo } from "react";
+import { ScrollCircleItemCtxProps, ScrollCircleItemType } from "./type";
 import { getCardDegXY } from "./utils";
+import { withNativeProps } from "../utils";
 
 const classPrefix = 'lhhui-scroll-circle';
 
-export const ScrollCircleItem: React.FC<ScrollCircleItemType> = ({ index, onClick, children }) => {
-  const { circleR, cardDeg, isVertical, centerPoint, isFlipDirection, isClick } = useContext(ScrollCircleCtx);
+const ScrollCircleItem = ({ index, onClick, children, ...props }: ScrollCircleItemType) => {
+  const {circleR, cardDeg, isVertical, centerPoint, isFlipDirection, isClick, ...ret} = props as ScrollCircleItemCtxProps
 
   const cardStyle = useMemo(() => {
     const {initDeg, nx, ny, isAddDeg} = getCardDegXY({centerPoint, isFlipDirection, isVertical})
@@ -21,7 +21,7 @@ export const ScrollCircleItem: React.FC<ScrollCircleItemType> = ({ index, onClic
     };
   }, [circleR, cardDeg, isVertical, centerPoint, isFlipDirection]);
 
-  return (
+  return withNativeProps(ret,
     <div
       className={`${classPrefix}-cardWrap`}
       style={cardStyle}
@@ -33,3 +33,5 @@ export const ScrollCircleItem: React.FC<ScrollCircleItemType> = ({ index, onClic
     </div>
   );
 };
+
+export default React.memo(ScrollCircleItem)

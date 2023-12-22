@@ -19,7 +19,7 @@ export const Tab: FC<TabProps> = () => {
   return null;
 };
 
-export const Tabs = forwardRef<TabsInstance, TabsProps>(
+export const Tabs = React.memo(forwardRef<TabsInstance, TabsProps>(
   (
     {
       list,
@@ -160,4 +160,4 @@ export const Tabs = forwardRef<TabsInstance, TabsProps>(
       </div>,
     );
   },
-);
+));

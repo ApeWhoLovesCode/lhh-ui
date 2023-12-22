@@ -4,12 +4,11 @@ import { randomStr } from '../utils/random';
 import { classBem, isMobile } from '../utils/handleDom';
 import useTouchEvent from '../hooks/useTouchEvent';
 import { ScrollCirclePageType, ScrollCircleInstance, ScrollCircleProps, ScrollCircleScrollToParams } from './type';
-import { ScrollCircleCtx } from './context';
 import { withNativeProps } from '../utils';
 
 const classPrefix = 'lhhui-scroll-circle';
 
-export const ScrollCircle = forwardRef<ScrollCircleInstance, ScrollCircleProps>(({
+const ScrollCircle = forwardRef<ScrollCircleInstance, ScrollCircleProps>(({
   listLength = 0,
   cardAddDeg = 1,
   width = '100%',
@@ -54,11 +53,11 @@ export const ScrollCircle = forwardRef<ScrollCircleInstance, ScrollCircleProps>(
     startDeg: 0,
     /** 记录之前滚动的旋转度数 */
     preDeg: 0,
-    /** 当前是否是点击 */
-    isClick: false,
     /** 前一圈的角度 */
     preRoundDeg: 0
   });
+  /** 当前是否是点击 */
+  const [isClick, setIsClick] = useState(false);
   /** 旋转的度数 */
   const [rotateDeg, setRotateDeg] = useState<number>(-1);
   /** 当前的方向是否是竖着的 */
@@ -71,7 +70,7 @@ export const ScrollCircle = forwardRef<ScrollCircleInstance, ScrollCircleProps>(
   });
   const [duration, setDuration] = useState(600);
 
-  const init = async (isInit = true) => {
+  const init = (isInit = false) => {
     const circleWrap = document.querySelector(`.${idRef.current}`)
     const cInfo = document.querySelector(`.${idRef.current} .${classPrefix}-cardWrap`)
     const cw = circleWrap?.clientWidth ?? 0;
@@ -107,12 +106,12 @@ export const ScrollCircle = forwardRef<ScrollCircleInstance, ScrollCircleProps>(
   };
 
   const resizeFn = () => {
-    init(false)
+    init()
   }
 
   useEffect(() => {
     if (listLength) {
-      init()
+      init(true)
     }
     if (!isMobile) window.addEventListener('resize', resizeFn);
     return () => {
@@ -173,7 +172,7 @@ export const ScrollCircle = forwardRef<ScrollCircleInstance, ScrollCircleProps>(
       }
       const _deg = roundingAngle({changeDeg, deg, cardDeg: info.cardDeg})
       // 触摸小于1度且触摸时间小于120ms才算点击
-      touchInfo.current.isClick = Math.abs(changeDeg) < 1 && tInfo.time < 120;
+      setIsClick(Math.abs(changeDeg) < 1 && tInfo.time < 120)
       setDuration(_duration);
       setRotateDeg(_deg);
       props.onTouchEnd?.();
@@ -286,32 +285,39 @@ export const ScrollCircle = forwardRef<ScrollCircleInstance, ScrollCircleProps>(
     };
   }, [rotateDeg, duration, info, centerPoint]);
 
-  return (
-    <ScrollCircleCtx.Provider
-      value={{
+  const renderChildren = () => {
+    return React.Children.map(children, (child) => {
+      if (!React.isValidElement(child)) {
+        return null;
+      }
+      const childProps = {
+        ...child.props,
         circleR: info.circleR,
         cardDeg: info.cardDeg,
         isVertical: isVertical.current,
         isFlipDirection,
-        isClick: touchInfo.current.isClick,
+        isClick,
         centerPoint,
+      };
+      return React.cloneElement(child, childProps);
+    })
+  }
+
+  return withNativeProps(props, (
+    <div
+      className={`${classPrefix} ${idRef.current}`}
+      style={{
+        width: width,
+        height: height,
       }}
+      {...onTouchFn}
     >
-      {withNativeProps(props, (
-        <div
-          className={`${classPrefix} ${idRef.current}`}
-          style={{
-            width: width,
-            height: height,
-          }}
-          {...onTouchFn}
-        >
-          <div className={`${classPrefix}-area`} style={circleStyle}>
-            {children}
-          </div>
-          {renderPagination()}
-        </div>
-      ))}
-    </ScrollCircleCtx.Provider>
-  );
+      <div className={`${classPrefix}-area`} style={circleStyle}>
+        {renderChildren()}
+      </div>
+      {renderPagination()}
+    </div>
+  ));
 });
+
+export default React.memo(ScrollCircle)
