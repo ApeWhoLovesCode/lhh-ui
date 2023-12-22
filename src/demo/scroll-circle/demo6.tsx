@@ -6,12 +6,19 @@ const list = Array.from({length: isMobile ? 10 : 16}, (_, i) => ({ id: 'id' + i,
 export default () => {
   const scrollCircleRef = useRef<ScrollCircleInstance>(null)
   const scrollCircleListRef = useRef<(CircleItemInstance | null)[]>([])
-  const [curIndex, setCurIndex] = useState(0);
+  const [curIndex, setCurIndex] = useState(2);
   const [curIndex2, setCurIndex2] = useState(0);
   const isGo = useRef(false)
 
   const onScrollCircle = () => {
-    scrollCircleRef.current?.scrollTo({index: Math.floor(Math.random() * list.length), duration: 1500})
+    isGo.current = true;
+    scrollCircleRef.current?.scrollTo({
+      index: Math.floor(Math.random() * list.length), 
+      duration: 1500,
+      onEnd(index) {
+        setIndexs(index)
+      }
+    })
     scrollCircleListRef.current.forEach((ref, index) => {
       ref?.scrollTo?.({index: Math.floor(Math.random() * list.length), duration: 3000})
     })
@@ -22,6 +29,7 @@ export default () => {
     if(isGo.current) {
       setTimeout(() => {
         setCurIndex2(scrollCircleListRef.current[index]!.getIndex())
+        isGo.current = false;
       }, 1600);
     } else {
       setCurIndex2(scrollCircleListRef.current[index]!.getIndex())

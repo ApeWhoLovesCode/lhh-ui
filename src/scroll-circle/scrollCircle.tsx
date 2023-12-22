@@ -3,7 +3,7 @@ import { calcAngle, getCircleTransformXy, getRotateDegAbs, roundingAngle } from 
 import { randomStr } from '../utils/random';
 import { classBem, isMobile } from '../utils/handleDom';
 import useTouchEvent from '../hooks/useTouchEvent';
-import { ScrollCirclePageType, ScrollCircleInstance, ScrollCircleProps } from './type';
+import { ScrollCirclePageType, ScrollCircleInstance, ScrollCircleProps, ScrollCircleScrollToParams } from './type';
 import { ScrollCircleCtx } from './context';
 import { withNativeProps } from '../utils';
 
@@ -101,7 +101,7 @@ export const ScrollCircle = forwardRef<ScrollCircleInstance, ScrollCircleProps>(
     }
     setInfo({...info})
     onPageChange?.({ pageNum, pageSize });
-    if(isInit) {
+    if(isInit && initCartNum) {
       scrollTo({index: initCartNum})
     }
   };
@@ -189,8 +189,8 @@ export const ScrollCircle = forwardRef<ScrollCircleInstance, ScrollCircleProps>(
   useEffect(() => {
     return () => {clearTimeout(scrollEndTimerRef.current)}
   }, [])
-  const _onScrollEnd = (deg: number, _duration: number) => {
-    if(props.onScrollEnd) {
+  const _onScrollEnd = (deg: number, _duration: number, onEnd?: (deg: number, duration: number) => void) => {
+    if(props.onScrollEnd || onEnd) {
       scrollEndTimerRef.current = setTimeout(() => {
         const absV = getRotateDegAbs(centerPoint, isVertical.current, isFlipDirection)
         let index = Math.floor(deg / info.cardDeg) % listLength * absV
@@ -198,21 +198,12 @@ export const ScrollCircle = forwardRef<ScrollCircleInstance, ScrollCircleProps>(
           index += listLength 
         }
         props.onScrollEnd?.(index, deg)
-      }, _duration ?? duration);
+        onEnd?.(index, deg)
+      }, _duration);
     }
   }
 
-  const circleStyle = useMemo(() => {
-    const {x, y} = getCircleTransformXy(centerPoint, isVertical.current, info.circleR)
-    return {
-      width: `${info.circleR * 2}px`,
-      height: `${info.circleR * 2}px`,
-      transitionDuration: duration + 'ms',
-      transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) rotate(${rotateDeg}deg)`,
-    };
-  }, [rotateDeg, duration, info, centerPoint]);
-
-  const scrollTo = ({deg, index, duration: _duration}: {deg?: number, index?: number, duration?: number}) => {
+  const scrollTo = ({deg, index, duration: _duration, onEnd}: ScrollCircleScrollToParams) => {
     if(typeof index === 'number' || typeof deg === 'number') {
       const _deg = typeof index === 'number' ? info.cardDeg * index : deg!
       const absV = getRotateDegAbs(centerPoint, isVertical.current, isFlipDirection)
@@ -220,7 +211,7 @@ export const ScrollCircle = forwardRef<ScrollCircleInstance, ScrollCircleProps>(
       if(typeof _duration === 'number') {
         setDuration(_duration)
       }
-      _onScrollEnd(_deg * absV, _duration ?? duration)
+      _onScrollEnd(_deg * absV, _duration ?? duration, onEnd)
     }
   }
 
@@ -284,6 +275,16 @@ export const ScrollCircle = forwardRef<ScrollCircleInstance, ScrollCircleProps>(
       </>
     )
   }, [isPagination, leftArrow, rightArrow, pageState])
+
+  const circleStyle = useMemo(() => {
+    const {x, y} = getCircleTransformXy(centerPoint, isVertical.current, info.circleR)
+    return {
+      width: `${info.circleR * 2}px`,
+      height: `${info.circleR * 2}px`,
+      transitionDuration: duration + 'ms',
+      transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) rotate(${rotateDeg}deg)`,
+    };
+  }, [rotateDeg, duration, info, centerPoint]);
 
   return (
     <ScrollCircleCtx.Provider

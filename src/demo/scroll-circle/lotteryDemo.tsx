@@ -38,14 +38,15 @@ export default () => {
   const onScrollCicle = () => {
     const itemDeg = 360 / list.length
     const index = Math.floor(Math.random() * 10)
-    const deg = index * itemDeg + 360 * (3 + Math.ceil(Math.random() * 3))
+    const deg = index * itemDeg + 360 * 4;
     scrollCircleRef.current?.scrollTo({
       deg: deg,
-      duration: 5000
+      duration: 4000,
+      onEnd() {
+        setSelectIndex(index)
+        scrollCircleRef.current?.scrollTo({deg: deg % 360, duration: 0})
+      },
     })
-    setTimeout(() => {
-      setSelectIndex(index)
-    }, 5000);
   }
 
   useEffect(() => {

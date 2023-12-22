@@ -84,9 +84,16 @@ export type ScrollCircleItemType = {
 
 export type ScrollCircleInstance = {
   /** 旋转到指定角度或者指定索引 */
-  scrollTo: (e: {deg?: number, index?: number, duration?: number}) => void
+  scrollTo: (params: ScrollCircleScrollToParams) => void
   /** 触发分页改变页码 */
   onPageChange: (page: Partial<ScrollCirclePageType>) => void;
+}
+
+export type ScrollCircleScrollToParams = {
+  deg?: number
+  index?: number
+  duration?: number
+  onEnd?: (curIndex: number, deg: number) => void
 }
 
 export type ScrollCirclePageType = { pageNum: number; pageSize: number }
