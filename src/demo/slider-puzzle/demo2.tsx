@@ -1,12 +1,12 @@
 import { SliderPuzzle, isMobile } from 'lhh-ui';
 import React from 'react';
 
+const list = Array.from({ length: 15 }, (_, i) => ({ id: `${i}` }));
 export default () => {
-  const arr = Array.from({ length: 15 }, (_, i) => ({ id: `${i}` }));
   return (
     <SliderPuzzle
       // 数组的长度需要设置
-      listLength={arr.length}
+      listLength={list.length}
       // 宽高必须设置
       style={{ width: '300px', height: '300px' }}
       size={4}
@@ -18,7 +18,7 @@ export default () => {
         }, 400);
       }}
     >
-      {arr.map((item, index) => (
+      {list.map((item, index) => (
         <SliderPuzzle.Item
           key={item.id}
           index={index}

@@ -1,16 +1,16 @@
 import { isMobile, SliderPuzzle, SliderPuzzleInstance } from 'lhh-ui';
 import React, { useRef, useState } from 'react';
 
+const list = Array.from({ length: 8 }, (_, i) => ({ id: `id-${i}` }));
 export default () => {
   const puzzleRef = useRef<SliderPuzzleInstance>(null);
   const [isGameMode, setIsGameMode] = useState(false);
-  const arr = Array.from({ length: 8 }, (_, i) => ({ id: `id-${i}` }));
   return (
     <div>
       <SliderPuzzle
         ref={puzzleRef}
         // 数组的长度需要设置
-        listLength={arr.length}
+        listLength={list.length}
         // 宽高必须设置
         style={{ width: '300px', height: '300px' }}
         isGameMode={isGameMode}
@@ -20,7 +20,7 @@ export default () => {
           }, 400);
         }}
       >
-        {arr.map((item, index) => (
+        {list.map((item, index) => (
           <SliderPuzzle.Item key={item.id} index={index} style={{ background: '#222' }}>
             <h4 style={{ color: '#fff' }}>{item.id}</h4>
             <SliderPuzzle.Canvas index={index} />
