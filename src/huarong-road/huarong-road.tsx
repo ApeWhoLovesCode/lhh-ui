@@ -14,11 +14,6 @@ const classPrefix = `lhhui-huarongRoad`;
 
 const defaultProps = {
   locationArr: [
-    // [0, 0, 0, 0],
-    // [0, 1, 1, 0],
-    // [0, 1, 1, 0],
-    // [0, 31, 0, 0],
-    // [0, 0, 0, 0],
     [21, 1, 1, 22],
     [21, 1, 1, 22],
     [23, 24, 24, 25],

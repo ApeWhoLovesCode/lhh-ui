@@ -32,8 +32,10 @@ function useSearchSetState<S extends Record<string, unknown>>(
     if (keys) {
       forEachObject({ ...state, ...newState }, (itemObj, key, allKey, i) => {
         if (keys.includes(allKey)) {
-          // @ts-ignore
-          const val = !i ? newState[key] : (newState[allKey.split('.')[0]] ? itemObj[key] : '')
+          const val = !i ? newState[key] : (
+            // @ts-ignore
+            newState[allKey.split('.')[0]] ? itemObj[key] : ''
+          )
           setParam(allKey, val ? String(val) : '');
         }
       });

@@ -15,9 +15,8 @@ function useSearchParamsFilter<T extends string>() {
   };
 
   const getParam = (name: T) => {
-    return searchParams.get(name)
-      ? decodeURIComponent(searchParams.get(name) ?? '')
-      : void 0;
+    const value = searchParams.get(name);
+    return value ? decodeURIComponent(value ?? '') : void 0;
   };
 
   return {

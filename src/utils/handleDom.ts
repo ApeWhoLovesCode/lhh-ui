@@ -1,10 +1,5 @@
 import classNames from 'classnames';
 
-/** 处理style的px */
-export const handleStylePx = (v: number | string) => {
-  return typeof v === 'number' ? v + 'px' : v;
-};
-
 /** 处理类名与需要判断的类名 */
 export const classBem = (
   classnames: string,

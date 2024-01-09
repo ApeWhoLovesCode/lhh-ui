@@ -34,11 +34,11 @@ export function getUrlParamsToObject(
 
 /** 遍历一个多层嵌套的对象 */
 export function forEachObject(
-  obj: Object,
-  fn: (itemObj: Object, key: string, allKey: string, i: number) => void,
+  obj: object,
+  fn: (itemObj: object, key: string, allKey: string, i: number) => void,
 ) {
   if (!obj) return;
-  function forEachObjectFn(itemObj: Object, prefixKey?: string, i = 0) {
+  function forEachObjectFn(itemObj: object, prefixKey?: string, i = 0) {
     Object.keys(itemObj).forEach((key) => {
       const allKey = !prefixKey ? key : `${prefixKey}.${key}`;
       // @ts-ignore
