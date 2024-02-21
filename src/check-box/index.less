@@ -3,10 +3,24 @@
 .@{class-prefix} {
   display: flex;
   align-items: center;
-  gap: 8px;
   &-input {
     width: 16px;
     height: 16px;
     cursor: pointer;
+    margin: 4px;
+    &-indeterminate {
+      position: relative;
+      &::after {
+        content: '';
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #3772ff;
+      }
+    }
   }
 }

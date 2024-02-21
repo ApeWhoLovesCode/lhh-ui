@@ -2,10 +2,10 @@ import React, { useState } from "react"
 import { CheckBox } from "lhh-ui";
 
 export default () => {
-  const [check, setCheck] = useState(true);
+  const [check, setCheck] = useState(false);
   return (
     <div>
-      <CheckBox checked={check} onChange={setCheck}>
+      <CheckBox indeterminate checked={check} onChange={setCheck}>
         hello
       </CheckBox>
     </div>

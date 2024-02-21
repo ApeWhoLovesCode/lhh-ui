@@ -1,5 +1,49 @@
 @class-prefix: ~'lhhui-tree';
 
 .@{class-prefix} {
-  
+  &-node {
+    &-content {
+      display: flex;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    &-expand {
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 4px;
+      &:hover {
+        background-color: #f0f0f0;
+      }
+      &-icon {
+        font-size: 12px;
+        line-height: 12px;
+        width: 12px;
+        height: 12px;
+        transition: transform 0.3s;
+        transform: rotate(-90deg);
+        &-show {
+          transform: rotate(0deg);
+        }
+      }
+      &-placeholder {
+        width: 24px;
+        height: 24px;
+      }
+    }
+    &-text {
+      margin-left: 10px;
+      font-size: 14px;
+      line-height: 16px;
+    }
+    &-children {
+      padding-left: 24px;
+      overflow-y: hidden;
+      max-height: 0;
+      transition: max-height 0.3s ease;
+    }
+  }
 }

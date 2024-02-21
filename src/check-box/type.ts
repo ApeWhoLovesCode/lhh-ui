@@ -16,6 +16,11 @@ export type CheckBoxProps = {
    * @default false
    */
   disabled?: boolean
+  /**
+   * 半选状态，只负责样式的控制
+   * @default false
+   */
+  indeterminate?: boolean
   /** 
    * 选择的回调
    * @default -
