@@ -25,33 +25,14 @@ type RequireType = keyof typeof defaultProps
 
 const Tree = (comProps: TreeProps) => {
   const props = useMergeProps<TreeProps, RequireType>(comProps, defaultProps)
-  const { treeData, defaultExpandAll, onCheck, onRightClick, ...ret } = props
+  const { treeData, checkedKeys, defaultExpandAll, onCheck, onRightClick, ...ret } = props
 
   const [checkTree, setCheckTree] = useState<CheckTree>();
   console.log('checkTree: ', checkTree);
 
-  useEffect(() => {
-    const getTreeKeys = (list?: TreeDataItem[], parentKey?: string) => {
-      return list?.reduce((pre, cur) => {
-        pre[cur.key] = {show: !!defaultExpandAll, checked: false, parentKey}
-        if(cur.children?.length) {
-          pre[cur.key].childKeys = cur.children.map(c => c.key)
-          const treeChild = getTreeKeys(cur.children, cur.key)
-          pre = {...pre, ...treeChild}
-        }
-        return pre
-      }, {} as CheckTree)
-    }
-    const state = getTreeKeys(treeData)
-    setCheckTree(state)
-  }, [treeData])
-
-  /** 点击选中节点 */
-  const onNodeCheck = (key: string) => {
-    const cTree = checkTree!
-    const checkItem = cTree[key]
-    const curChecked = !checkItem.checked
-    checkItem.checked = curChecked;
+  /** 判断父子节点的选中状态 */
+  const onCheckChildAndParent = (key: string, curChecked: boolean, cTree = checkTree!) => {
+    const checkItem = cTree[key];
 
     // 全选/不选所有子节点
     (function checkAllChild(childKeys?: string[]) {
@@ -75,8 +56,62 @@ const Tree = (comProps: TreeProps) => {
         }
       }
     })(checkItem.parentKey);
+  }
 
+  // 初始化选择树形结构
+  useEffect(() => {
+    const generateCheckTree = (list?: TreeDataItem[], parentKey?: string) => {
+      return list?.reduce((pre, cur) => {
+        const curChecked = Boolean(checkedKeys?.includes(cur.key));
+        pre[cur.key] = {
+          show: !!defaultExpandAll, 
+          checked: curChecked, 
+          parentKey
+        }
+        if(cur.children?.length) {
+          pre[cur.key].childKeys = cur.children.map(c => c.key)
+          const treeChild = generateCheckTree(cur.children, cur.key)
+          pre = {...pre, ...treeChild}
+        }
+        return pre
+      }, {} as CheckTree)
+    }
+    const state = generateCheckTree(treeData)
+    checkedKeys?.forEach(key => {
+      onCheckChildAndParent(key, true, state)
+    })
+    setCheckTree(state)
+  }, [treeData])
+
+  useEffect(() => {
+    if(!checkTree) return
+    checkedKeys?.forEach(key => {
+      onCheckChildAndParent(key, true)
+    })
+    if(checkedKeys?.length) {
+      setCheckTree({...checkTree})
+    }
+  }, [checkedKeys])
+
+  /** 点击选中节点 */
+  const onNodeCheck = (key: string) => {
+    const cTree = checkTree!
+    const checkItem = cTree[key]
+    const curChecked = !checkItem.checked
+    checkItem.checked = curChecked;
+
+    onCheckChildAndParent(key, curChecked)
     setCheckTree({...checkTree})
+
+    if(onCheck instanceof Function) {
+      const checkKeys = Object.keys(cTree).reduce((pre, key) => {
+        if(cTree[key].checked) {
+          pre.push(key)
+        }
+        return pre
+      }, [] as string[])
+      onCheck(checkKeys, {checked: curChecked, key})
+    }
   }
 
   /** 获取孩子节点的数量 */
