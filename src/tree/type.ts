@@ -23,6 +23,11 @@ export type TreeProps = {
    */
   multiple?: boolean
   /** 
+   * 每一层级是否只能单选
+   * @default false
+   */
+  singleSelected?: boolean
+  /** 
    * 是否可选中
    * @default true
    */
@@ -33,21 +38,30 @@ export type TreeProps = {
    */
   selectedKeys?: string[]
   /** 树形结构的数据 */
-  treeData?: TreeDataItem[]
+  treeData?: TreeNode[]
   /** 点击复选框触发 */
-  onCheck?: (checkedKeys: string[], params: OnCheckParams) => void
+  onCheck?: (checkedKeys: string[], params?: OnCheckParams) => void
   /** 点击树节点触发 */
   onSelect?: (selectKeys: string[], params: OnSelectParams) => void
   /** 点击右键触发 */
   onRightClick?: (e: Event) => void
 } & NativeProps
 
-export type TreeDataItem = {
+export type TreeNode = {
+  /** 
+   * 当树为 checkable 时，设置独立节点是否展示 Checkbox
+   * @default true
+   */
+  checkable?: boolean
+  /** 标题 */
   title: ReactNode
   /** 整个树型结构中 key 值请保持唯一 */
   key: string
+  /** 禁掉 checkbox */
+  disableCheckbox?: boolean
+  /** 禁用该节点的点击和选择，不包括子节点 */
   disabled?: boolean
-  children?: TreeDataItem[]
+  children?: TreeNode[]
 }
 
 export type OnCheckParams = {
@@ -56,6 +70,6 @@ export type OnCheckParams = {
 }
 
 export type OnSelectParams = {
-  select: boolean
+  selected: boolean
   key: string
 }

@@ -34,10 +34,29 @@
         height: 24px;
       }
     }
-    &-text {
-      margin-left: 10px;
+    &-title {
+      margin-left: 2px;
       font-size: 14px;
       line-height: 16px;
+      padding: 3px 6px;
+      border-radius: 4px;
+      cursor: pointer;
+      &:hover {
+        background-color: #f0f0f0;
+      }
+      &-selected {
+        background-color: rgba(158, 205, 244, 0.3);
+        &:hover {
+          background-color: rgba(158, 205, 244, 0.4);
+        }
+      }
+      &-disabled {
+        color: rgba(0, 0, 0, 0.28);
+        cursor: not-allowed;
+        &:hover {
+          background-color: transparent;
+        }
+      }
     }
     &-children {
       padding-left: 24px;

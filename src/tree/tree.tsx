@@ -1,33 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import { withNativeProps } from '../utils/native-props';
-import useMergeProps from '../hooks/useMergeProps';
-import { TreeDataItem, TreeProps } from './type'
+import { TreeNode, TreeProps } from './type'
 import CheckBox from '../check-box';
 import { classBem } from '../utils';
 
 const classPrefix = `lhhui-tree`;
 
-export type CheckTree = Record<string, {
+type CheckTree = Record<string, {
   /** 父节点的 key 值 */
   parentKey?: string
   /** 子节点的 key 数组 */
   childKeys?: string[]
   /** 是否展开 */
   show: boolean
-  /** 是否选择 */
+  /** 是否选中 */
   checked: boolean
+  checkable?: boolean
+  disableCheckbox?: boolean
+  disabled?: boolean
 }>
 
-const defaultProps = {
-  
-}
-type RequireType = keyof typeof defaultProps
-
-const Tree = (comProps: TreeProps) => {
-  const props = useMergeProps<TreeProps, RequireType>(comProps, defaultProps)
-  const { treeData, checkedKeys, defaultExpandAll, onCheck, onRightClick, ...ret } = props
+const Tree = (props: TreeProps) => {
+  const { checkable, treeData, checkedKeys, defaultExpandAll, multiple, onCheck, onSelect, onRightClick, ...ret } = props
 
   const [checkTree, setCheckTree] = useState<CheckTree>();
+  const [selectdKeys, setSelectdKeys] = useState<string[]>([]);
   console.log('checkTree: ', checkTree);
 
   /** 判断父子节点的选中状态 */
@@ -58,16 +55,28 @@ const Tree = (comProps: TreeProps) => {
     })(checkItem.parentKey);
   }
 
+  const getCheckKeys = (tree: CheckTree = checkTree!) => (
+    Object.keys(tree).reduce((pre, key) => {
+      if(tree[key].checked) {
+        pre.push(key)
+      }
+      return pre
+    }, [] as string[])
+  )
+
   // 初始化选择树形结构
   useEffect(() => {
-    const generateCheckTree = (list?: TreeDataItem[], parentKey?: string) => {
+    const generateCheckTree = (list?: TreeNode[], parentKey?: string) => {
       return list?.reduce((pre, cur) => {
         const curChecked = Boolean(checkedKeys?.includes(cur.key));
         pre[cur.key] = {
           show: !!defaultExpandAll, 
           checked: curChecked, 
-          parentKey
+          parentKey,
         }
+        if(cur.checkable) pre[cur.key].checkable = true
+        if(cur.disableCheckbox) pre[cur.key].disableCheckbox = true
+        if(cur.disabled) pre[cur.key].disabled = true
         if(cur.children?.length) {
           pre[cur.key].childKeys = cur.children.map(c => c.key)
           const treeChild = generateCheckTree(cur.children, cur.key)
@@ -80,6 +89,7 @@ const Tree = (comProps: TreeProps) => {
     checkedKeys?.forEach(key => {
       onCheckChildAndParent(key, true, state)
     })
+    onCheck?.(getCheckKeys(state))
     setCheckTree(state)
   }, [treeData])
 
@@ -95,27 +105,32 @@ const Tree = (comProps: TreeProps) => {
 
   /** 点击选中节点 */
   const onNodeCheck = (key: string) => {
-    const cTree = checkTree!
-    const checkItem = cTree[key]
+    const checkItem = checkTree![key]
     const curChecked = !checkItem.checked
     checkItem.checked = curChecked;
 
     onCheckChildAndParent(key, curChecked)
     setCheckTree({...checkTree})
 
-    if(onCheck instanceof Function) {
-      const checkKeys = Object.keys(cTree).reduce((pre, key) => {
-        if(cTree[key].checked) {
-          pre.push(key)
-        }
-        return pre
-      }, [] as string[])
-      onCheck(checkKeys, {checked: curChecked, key})
+    onCheck?.(getCheckKeys(), {checked: curChecked, key})
+  }
+
+  /** 点击标题选中 */
+  const onTitleClick = (key: string) => {
+    let keys = selectdKeys;
+    const index = keys.indexOf(key)
+    if(index === -1) {
+      if(multiple) keys.push(key)
+      else keys = [key]
+    } else {
+      keys.splice(index, 1)
     }
+    setSelectdKeys([...keys])
+    onSelect?.([...keys], {key, selected: index === -1})
   }
 
   /** 获取孩子节点的数量 */
-  const getTreeChildLength = (list: TreeDataItem[]) => {
+  const getTreeChildLength = (list: TreeNode[]) => {
     return list?.reduce((pre, cur) => {
       if(checkTree![cur.key].show && cur.children?.length) {
         pre += getTreeChildLength(cur.children)
@@ -124,7 +139,7 @@ const Tree = (comProps: TreeProps) => {
     }, list.length) ?? 0
   }
 
-  const renderTreeList = (list?: TreeDataItem[]) => {
+  const renderTreeList = (list?: TreeNode[]) => {
     if(!checkTree) return null
     return list?.map(item => {
       const checkItem = checkTree![item.key]
@@ -145,12 +160,26 @@ const Tree = (comProps: TreeProps) => {
                 </span>
               </div>
             ) : <span className={`${classPrefix}-node-expand-placeholder`}></span>}
-            <CheckBox 
-              checked={checkItem.checked} 
-              indeterminate={!checkItem.checked && checkItem.childKeys?.some(cKey => checkTree?.[cKey].checked)}
-              onChange={() => onNodeCheck(item.key)} 
-            />
-            <div className={`${classPrefix}-node-text`}>{item.title}</div>
+            {(checkable && item.checkable !== false) && (
+              <CheckBox 
+                checked={checkItem.checked} 
+                disabled={item.disabled || item.disableCheckbox}
+                indeterminate={!checkItem.checked && checkItem.childKeys?.some(cKey => checkTree?.[cKey].checked)}
+                onChange={() => {
+                  if(item.disabled || item.disableCheckbox) return
+                  onNodeCheck(item.key)
+                }} 
+              />
+            )}
+            <div 
+              className={classBem(`${classPrefix}-node-title`, {
+                selected: selectdKeys.includes(item.key),
+                disabled: item.disabled,
+              })} 
+              onClick={() => {
+                if(!item.disabled) onTitleClick(item.key)
+              }}
+            >{item.title}</div>
           </div>
           <div 
             className={`${classPrefix}-node-children`} 

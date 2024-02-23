@@ -19,6 +19,10 @@ group:
 
 <code src="../demo/tree/demo1.tsx"></code>
 
+### 每一层级只能单选
+
+<code src="../demo/tree/demo2.tsx"></code>
+
 ## API
 
 <API id="Tree"></API>
