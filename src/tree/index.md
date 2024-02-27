@@ -17,7 +17,7 @@ group:
 
 ### 常规使用
 
-<code src="../demo/tree/demo1.tsx"></code>
+<!-- <code src="../demo/tree/demo1.tsx"></code> -->
 
 ### 每一层级只能单选
 

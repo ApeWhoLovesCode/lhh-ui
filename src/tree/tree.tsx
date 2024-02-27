@@ -6,7 +6,9 @@ import { classBem } from '../utils';
 
 const classPrefix = `lhhui-tree`;
 
-type CheckTree = Record<string, {
+// const firstNode = 'first-node'
+
+type CheckTreeItem = {
   /** 父节点的 key 值 */
   parentKey?: string
   /** 子节点的 key 数组 */
@@ -18,14 +20,35 @@ type CheckTree = Record<string, {
   checkable?: boolean
   disableCheckbox?: boolean
   disabled?: boolean
-}>
+}
+
+type CheckTree = Record<string, CheckTreeItem>
 
 const Tree = (props: TreeProps) => {
-  const { checkable, treeData, checkedKeys, defaultExpandAll, multiple, onCheck, onSelect, onRightClick, ...ret } = props
+  const { checkable, treeData, checkedKeys, defaultExpandAll, multiple, singleSelected, onCheck, onSelect, onRightClick, ...ret } = props
 
+  /** 首层节点的key值 */
+  const [firstNodeKeys, setFirstNodeKeys] = useState<string[]>([]);
+  /** 用于渲染和交互的树形结构 */
   const [checkTree, setCheckTree] = useState<CheckTree>();
   const [selectdKeys, setSelectdKeys] = useState<string[]>([]);
   console.log('checkTree: ', checkTree);
+
+  // 单选节点
+  const onSingleCheck = (key: string, curChecked: boolean, cTree = checkTree!) => {
+    Object.keys(cTree).forEach(k => {
+      cTree[k].checked = false
+    });
+    if(!curChecked) return;
+    // 找到最底层的子节点并选中
+    (function findChildToCheck(curKey: string, childKeys?: string[]) {
+      if(childKeys?.length) {
+        findChildToCheck(childKeys[0], cTree[childKeys[0]].childKeys)
+      } else {
+        cTree[curKey].checked = true
+      }
+    })(key, cTree[key].childKeys);
+  }
 
   /** 判断父子节点的选中状态 */
   const onCheckChildAndParent = (key: string, curChecked: boolean, cTree = checkTree!) => {
@@ -53,6 +76,17 @@ const Tree = (props: TreeProps) => {
         }
       }
     })(checkItem.parentKey);
+
+    // 同层单选时，使兄弟节点取消选中
+    if(singleSelected && curChecked) {
+      const keys = cTree[key].parentKey ? cTree[cTree[key].parentKey!].childKeys : firstNodeKeys
+      keys?.forEach(siblingKey => {
+        if(siblingKey !== key) {
+          cTree[siblingKey].checked = false
+        }
+      })
+    }
+
   }
 
   const getCheckKeys = (tree: CheckTree = checkTree!) => (
@@ -66,7 +100,8 @@ const Tree = (props: TreeProps) => {
 
   // 初始化选择树形结构
   useEffect(() => {
-    const generateCheckTree = (list?: TreeNode[], parentKey?: string) => {
+    if(!treeData?.length) return
+    const generateCheckTree = (list: TreeNode[], parentKey?: string) => {
       return list?.reduce((pre, cur) => {
         const curChecked = Boolean(checkedKeys?.includes(cur.key));
         pre[cur.key] = {
@@ -86,18 +121,23 @@ const Tree = (props: TreeProps) => {
       }, {} as CheckTree)
     }
     const state = generateCheckTree(treeData)
-    checkedKeys?.forEach(key => {
-      onCheckChildAndParent(key, true, state)
-    })
+    if(!singleSelected) {
+      checkedKeys?.forEach(key => onCheckChildAndParent(key, true, state))
+    } else {
+      if(checkedKeys?.[0]) onSingleCheck(checkedKeys[0], true, state)
+    }
     onCheck?.(getCheckKeys(state))
+    setFirstNodeKeys(treeData.map(item => item.key))
     setCheckTree(state)
   }, [treeData])
 
   useEffect(() => {
     if(!checkTree) return
-    checkedKeys?.forEach(key => {
-      onCheckChildAndParent(key, true)
-    })
+    if(!singleSelected) {
+      checkedKeys?.forEach(key => onCheckChildAndParent(key, true))
+    } else {
+      if(checkedKeys?.[0]) onSingleCheck(checkedKeys[0], true)
+    }
     if(checkedKeys?.length) {
       setCheckTree({...checkTree})
     }
@@ -109,7 +149,8 @@ const Tree = (props: TreeProps) => {
     const curChecked = !checkItem.checked
     checkItem.checked = curChecked;
 
-    onCheckChildAndParent(key, curChecked)
+    if(singleSelected) onSingleCheck(key, curChecked)
+    else onCheckChildAndParent(key, curChecked)
     setCheckTree({...checkTree})
 
     onCheck?.(getCheckKeys(), {checked: curChecked, key})
@@ -139,6 +180,21 @@ const Tree = (props: TreeProps) => {
     }, list.length) ?? 0
   }
 
+  const getIsEveryChildCheck = (checkItem: CheckTreeItem): boolean => {
+    if(!checkItem.childKeys?.length) return true
+    const isAllCheck = checkItem.childKeys.every(cKey => (
+      checkTree![cKey].checked && getIsEveryChildCheck(checkTree![cKey])
+    ))
+    return Boolean(isAllCheck)
+  }
+
+  const getIsSomeChildCheck = (checkItem: CheckTreeItem): boolean => {
+    const isSomeCheck = checkItem.childKeys?.some(cKey => (
+      checkTree![cKey].checked || getIsSomeChildCheck(checkTree![cKey])
+    ))
+    return Boolean(isSomeCheck)
+  }
+
   const renderTreeList = (list?: TreeNode[]) => {
     if(!checkTree) return null
     return list?.map(item => {
@@ -161,15 +217,22 @@ const Tree = (props: TreeProps) => {
               </div>
             ) : <span className={`${classPrefix}-node-expand-placeholder`}></span>}
             {(checkable && item.checkable !== false) && (
-              <CheckBox 
-                checked={checkItem.checked} 
-                disabled={item.disabled || item.disableCheckbox}
-                indeterminate={!checkItem.checked && checkItem.childKeys?.some(cKey => checkTree?.[cKey].checked)}
-                onChange={() => {
-                  if(item.disabled || item.disableCheckbox) return
-                  onNodeCheck(item.key)
-                }} 
-              />
+              (() => {
+                // 单选的时候才需该逻辑
+                // const isAllChildCheck = singleSelected ? getIsEveryChildCheck(checkItem) : true
+                return (
+                  <CheckBox 
+                    // checked={checkItem.checked && isAllChildCheck} 
+                    checked={checkItem.checked} 
+                    disabled={item.disabled || item.disableCheckbox}
+                    indeterminate={getIsSomeChildCheck(checkItem)}
+                    onChange={() => {
+                      if(item.disabled || item.disableCheckbox) return
+                      onNodeCheck(item.key)
+                    }} 
+                  />   
+                )
+              })()
             )}
             <div 
               className={classBem(`${classPrefix}-node-title`, {

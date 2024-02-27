@@ -11,6 +11,7 @@ export default () => {
         treeData={treeData} 
         defaultExpandAll 
         checkable
+        singleSelected
         onCheck={(keys) => {
           setCheckedKeys(keys)
         }}

@@ -23,7 +23,7 @@ export type TreeProps = {
    */
   multiple?: boolean
   /** 
-   * 每一层级是否只能单选
+   * 是否只能单选一个节点
    * @default false
    */
   singleSelected?: boolean
@@ -66,10 +66,14 @@ export type TreeNode = {
 
 export type OnCheckParams = {
   checked: boolean
-  key: string
-}
+} & OnCheckCommonParams
 
 export type OnSelectParams = {
   selected: boolean
+} & OnCheckCommonParams
+
+export type OnCheckCommonParams = {
   key: string
+  /** 父节点的key数组，从子节点的最亲关系开始排列 */
+  parentKeys: string[]
 }
