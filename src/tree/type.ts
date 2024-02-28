@@ -61,19 +61,23 @@ export type TreeNode = {
   disableCheckbox?: boolean
   /** 禁用该节点的点击和选择，不包括子节点 */
   disabled?: boolean
+  /** 内容 */
   children?: TreeNode[]
 }
 
 export type OnCheckParams = {
+  /** 当前的状态 */
   checked: boolean
 } & OnCheckCommonParams
 
 export type OnSelectParams = {
+  /** 当前的状态 */
   selected: boolean
 } & OnCheckCommonParams
 
 export type OnCheckCommonParams = {
+  /** 当前的选中的 key */
   key: string
   /** 父节点的key数组，从子节点的最亲关系开始排列 */
-  parentKeys: string[]
+  parentKeys?: string[]
 }

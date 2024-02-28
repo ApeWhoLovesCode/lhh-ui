@@ -1,5 +1,5 @@
 ---
-title: Tree
+title: Tree 树形控件
 nav:
   title: 组件
   path: /components
@@ -9,15 +9,15 @@ group:
   order: 1
 ---
 
-## 树形组件
+## 树形控件
 
-树形组件
+支持多层级的树形结构列表。
 
 ## 演示
 
 ### 常规使用
 
-<!-- <code src="../demo/tree/demo1.tsx"></code> -->
+<code src="../demo/tree/demo1.tsx"></code>
 
 ### 每一层级只能单选
 

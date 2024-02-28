@@ -3,12 +3,11 @@ import { withNativeProps } from '../utils/native-props';
 import { TreeNode, TreeProps } from './type'
 import CheckBox from '../check-box';
 import { classBem } from '../utils';
+import { getCheckKeys, getIsSomeChildCheck, getParentKeys, getTreeChildLength } from './utils';
 
 const classPrefix = `lhhui-tree`;
 
-// const firstNode = 'first-node'
-
-type CheckTreeItem = {
+export type CheckTreeItem = {
   /** 父节点的 key 值 */
   parentKey?: string
   /** 子节点的 key 数组 */
@@ -22,7 +21,7 @@ type CheckTreeItem = {
   disabled?: boolean
 }
 
-type CheckTree = Record<string, CheckTreeItem>
+export type CheckTree = Record<string, CheckTreeItem>
 
 const Tree = (props: TreeProps) => {
   const { checkable, treeData, checkedKeys, defaultExpandAll, multiple, singleSelected, onCheck, onSelect, onRightClick, ...ret } = props
@@ -31,10 +30,9 @@ const Tree = (props: TreeProps) => {
   const [firstNodeKeys, setFirstNodeKeys] = useState<string[]>([]);
   /** 用于渲染和交互的树形结构 */
   const [checkTree, setCheckTree] = useState<CheckTree>();
-  const [selectdKeys, setSelectdKeys] = useState<string[]>([]);
-  console.log('checkTree: ', checkTree);
+  const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
 
-  // 单选节点
+  /** 单选节点 */
   const onSingleCheck = (key: string, curChecked: boolean, cTree = checkTree!) => {
     Object.keys(cTree).forEach(k => {
       cTree[k].checked = false
@@ -50,7 +48,7 @@ const Tree = (props: TreeProps) => {
     })(key, cTree[key].childKeys);
   }
 
-  /** 判断父子节点的选中状态 */
+  /** 处理父子节点的选中状态 */
   const onCheckChildAndParent = (key: string, curChecked: boolean, cTree = checkTree!) => {
     const checkItem = cTree[key];
 
@@ -86,17 +84,7 @@ const Tree = (props: TreeProps) => {
         }
       })
     }
-
   }
-
-  const getCheckKeys = (tree: CheckTree = checkTree!) => (
-    Object.keys(tree).reduce((pre, key) => {
-      if(tree[key].checked) {
-        pre.push(key)
-      }
-      return pre
-    }, [] as string[])
-  )
 
   // 初始化选择树形结构
   useEffect(() => {
@@ -153,12 +141,16 @@ const Tree = (props: TreeProps) => {
     else onCheckChildAndParent(key, curChecked)
     setCheckTree({...checkTree})
 
-    onCheck?.(getCheckKeys(), {checked: curChecked, key})
+    onCheck?.(getCheckKeys(checkTree!), {
+      key, 
+      checked: curChecked, 
+      parentKeys: getParentKeys(key, checkTree!),
+    })
   }
 
   /** 点击标题选中 */
   const onTitleClick = (key: string) => {
-    let keys = selectdKeys;
+    let keys = selectedKeys;
     const index = keys.indexOf(key)
     if(index === -1) {
       if(multiple) keys.push(key)
@@ -166,33 +158,8 @@ const Tree = (props: TreeProps) => {
     } else {
       keys.splice(index, 1)
     }
-    setSelectdKeys([...keys])
+    setSelectedKeys([...keys])
     onSelect?.([...keys], {key, selected: index === -1})
-  }
-
-  /** 获取孩子节点的数量 */
-  const getTreeChildLength = (list: TreeNode[]) => {
-    return list?.reduce((pre, cur) => {
-      if(checkTree![cur.key].show && cur.children?.length) {
-        pre += getTreeChildLength(cur.children)
-      }
-      return pre
-    }, list.length) ?? 0
-  }
-
-  const getIsEveryChildCheck = (checkItem: CheckTreeItem): boolean => {
-    if(!checkItem.childKeys?.length) return true
-    const isAllCheck = checkItem.childKeys.every(cKey => (
-      checkTree![cKey].checked && getIsEveryChildCheck(checkTree![cKey])
-    ))
-    return Boolean(isAllCheck)
-  }
-
-  const getIsSomeChildCheck = (checkItem: CheckTreeItem): boolean => {
-    const isSomeCheck = checkItem.childKeys?.some(cKey => (
-      checkTree![cKey].checked || getIsSomeChildCheck(checkTree![cKey])
-    ))
-    return Boolean(isSomeCheck)
   }
 
   const renderTreeList = (list?: TreeNode[]) => {
@@ -225,7 +192,7 @@ const Tree = (props: TreeProps) => {
                     // checked={checkItem.checked && isAllChildCheck} 
                     checked={checkItem.checked} 
                     disabled={item.disabled || item.disableCheckbox}
-                    indeterminate={getIsSomeChildCheck(checkItem)}
+                    indeterminate={getIsSomeChildCheck(checkItem, checkTree)}
                     onChange={() => {
                       if(item.disabled || item.disableCheckbox) return
                       onNodeCheck(item.key)
@@ -236,7 +203,7 @@ const Tree = (props: TreeProps) => {
             )}
             <div 
               className={classBem(`${classPrefix}-node-title`, {
-                selected: selectdKeys.includes(item.key),
+                selected: selectedKeys.includes(item.key),
                 disabled: item.disabled,
               })} 
               onClick={() => {
@@ -248,7 +215,7 @@ const Tree = (props: TreeProps) => {
             className={`${classPrefix}-node-children`} 
             // height: fit-content; 无法触发过渡效果，需要准确的值
             // 也可通过 maxHeight 设置一个很大的值来解决，但值过大又会使过度效果难看，所以这里需要获取一个准确的高度
-            style={{maxHeight: checkItem.show ? `${getTreeChildLength(item.children!) * 30}px` : 0}}
+            style={{maxHeight: checkItem.show ? `${getTreeChildLength(item.children!, checkTree) * 30}px` : 0}}
           >
             {renderTreeList(item.children)}
           </div>

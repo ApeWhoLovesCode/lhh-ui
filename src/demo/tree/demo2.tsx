@@ -12,7 +12,8 @@ export default () => {
         defaultExpandAll 
         checkable
         singleSelected
-        onCheck={(keys) => {
+        onCheck={(keys, p) => {
+          console.log('p: ', p);
           setCheckedKeys(keys)
         }}
       />
