@@ -44,7 +44,7 @@ export type TreeProps = {
   /** 点击树节点触发 */
   onSelect?: (selectKeys: string[], params: OnSelectParams) => void
   /** 点击右键触发 */
-  onRightClick?: (e: Event) => void
+  onRightClick?: (params: onRightClickParams) => void
 } & NativeProps
 
 export type TreeNode = {
@@ -65,6 +65,35 @@ export type TreeNode = {
   children?: TreeNode[]
 }
 
+export type TreeInstance = {
+  /** 获取当前选中的树形结构 */
+  getCheckTree: () => CheckTree | undefined
+  /** 根据 key 值获取其父节点，从 key 节点的最亲关系开始排列 */
+  getParentKeys: (key: string) => string[] | undefined
+  /** 根据 key 值获取其兄弟节点，会包括自身节点 */
+  getSiblingKeys: (key: string) => string[] | undefined
+  /** 根据 key 值获取其子节点 */
+  getChildKeys: (key: string) => string[] | undefined
+  /** 获取当前 check 中的所有 key */
+  getCheckKeys: () => string[]
+}
+
+export type CheckTreeItem = {
+  /** 父节点的 key 值 */
+  parentKey?: string
+  /** 子节点的 key 数组 */
+  childKeys?: string[]
+  /** 是否展开 */
+  show: boolean
+  /** 是否选中 */
+  checked: boolean
+  checkable?: boolean
+  disableCheckbox?: boolean
+  disabled?: boolean
+}
+
+export type CheckTree = Record<string, CheckTreeItem>
+
 export type OnCheckParams = {
   /** 当前的状态 */
   checked: boolean
@@ -75,8 +104,12 @@ export type OnSelectParams = {
   selected: boolean
 } & OnCheckCommonParams
 
+export type onRightClickParams = {
+  event: React.MouseEvent<HTMLDivElement, MouseEvent>
+} & OnCheckCommonParams
+
 export type OnCheckCommonParams = {
-  /** 当前的选中的 key */
+  /** 当前点击的 key */
   key: string
   /** 父节点的key数组，从子节点的最亲关系开始排列 */
   parentKeys?: string[]

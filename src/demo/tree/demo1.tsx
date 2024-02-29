@@ -57,7 +57,6 @@ const treeData: TreeNode[] = [
 
 export default () => {
   const [checkedKeys, setCheckedKeys] = useState(['0-1', '0-0-2']);
-  console.log('checkedKeys: ', checkedKeys);
   return (
     <div>
       <Tree 

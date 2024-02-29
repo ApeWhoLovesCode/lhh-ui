@@ -19,9 +19,13 @@ group:
 
 <code src="../demo/tree/demo1.tsx"></code>
 
-### 每一层级只能单选
+### 单选节点
 
 <code src="../demo/tree/demo2.tsx"></code>
+
+### 通过 ref 获取节点信息
+
+<code src="../demo/tree/demo3.tsx"></code>
 
 ## API
 

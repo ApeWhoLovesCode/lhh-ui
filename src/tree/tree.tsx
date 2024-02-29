@@ -1,36 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 import { withNativeProps } from '../utils/native-props';
-import { TreeNode, TreeProps } from './type'
+import { CheckTree, TreeInstance, TreeNode, TreeProps } from './type'
 import CheckBox from '../check-box';
 import { classBem } from '../utils';
 import { getCheckKeys, getIsSomeChildCheck, getParentKeys, getTreeChildLength } from './utils';
+import { usePropsState } from '../hooks';
 
 const classPrefix = `lhhui-tree`;
 
-export type CheckTreeItem = {
-  /** 父节点的 key 值 */
-  parentKey?: string
-  /** 子节点的 key 数组 */
-  childKeys?: string[]
-  /** 是否展开 */
-  show: boolean
-  /** 是否选中 */
-  checked: boolean
-  checkable?: boolean
-  disableCheckbox?: boolean
-  disabled?: boolean
-}
-
-export type CheckTree = Record<string, CheckTreeItem>
-
-const Tree = (props: TreeProps) => {
-  const { checkable, treeData, checkedKeys, defaultExpandAll, multiple, singleSelected, onCheck, onSelect, onRightClick, ...ret } = props
+const Tree = forwardRef<TreeInstance, TreeProps>((props, ref) => {
+  const { checkable, treeData, checkedKeys, defaultExpandAll, multiple, singleSelected, selectable, selectedKeys: propsSelectedKeys, onCheck, onSelect, onRightClick, ...ret } = props
 
   /** 首层节点的key值 */
   const [firstNodeKeys, setFirstNodeKeys] = useState<string[]>([]);
   /** 用于渲染和交互的树形结构 */
   const [checkTree, setCheckTree] = useState<CheckTree>();
-  const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
+  const [selectedKeys, setSelectedKeys] = usePropsState<string[] | undefined>(propsSelectedKeys);
 
   /** 单选节点 */
   const onSingleCheck = (key: string, curChecked: boolean, cTree = checkTree!) => {
@@ -131,6 +116,29 @@ const Tree = (props: TreeProps) => {
     }
   }, [checkedKeys])
 
+  useImperativeHandle(ref, () => ({
+    getCheckTree: () => JSON.parse(JSON.stringify(checkTree)),
+    getParentKeys(key) {
+      return getParentKeys(key, checkTree)
+    },
+    getSiblingKeys(key) {
+      if(!checkTree?.[key]) return void 0
+      if(!checkTree[key]?.parentKey) {
+        return Object.keys(checkTree).reduce((pre, k) => {
+          if(!checkTree[k].parentKey) {
+            pre.push(k)
+          }
+          return pre
+        }, [] as string[])
+      }
+      return checkTree[checkTree[key].parentKey!].childKeys
+    },
+    getChildKeys(key) {
+      return checkTree?.[key].childKeys
+    },
+    getCheckKeys: () => getCheckKeys(checkTree)
+  }))
+
   /** 点击选中节点 */
   const onNodeCheck = (key: string) => {
     const checkItem = checkTree![key]
@@ -141,16 +149,20 @@ const Tree = (props: TreeProps) => {
     else onCheckChildAndParent(key, curChecked)
     setCheckTree({...checkTree})
 
-    onCheck?.(getCheckKeys(checkTree!), {
+    const keys = getCheckKeys(checkTree!)
+
+    onCheck?.(keys, {
       key, 
-      checked: curChecked, 
+      // 这步判断主要是单选时，选择父节点时只会选中其子节点
+      checked: keys.includes(key) ? curChecked : false,  
       parentKeys: getParentKeys(key, checkTree!),
     })
   }
 
   /** 点击标题选中 */
   const onTitleClick = (key: string) => {
-    let keys = selectedKeys;
+    if(!selectable) return
+    let keys = selectedKeys ?? [];
     const index = keys.indexOf(key)
     if(index === -1) {
       if(multiple) keys.push(key)
@@ -184,30 +196,28 @@ const Tree = (props: TreeProps) => {
               </div>
             ) : <span className={`${classPrefix}-node-expand-placeholder`}></span>}
             {(checkable && item.checkable !== false) && (
-              (() => {
-                // 单选的时候才需该逻辑
-                // const isAllChildCheck = singleSelected ? getIsEveryChildCheck(checkItem) : true
-                return (
-                  <CheckBox 
-                    // checked={checkItem.checked && isAllChildCheck} 
-                    checked={checkItem.checked} 
-                    disabled={item.disabled || item.disableCheckbox}
-                    indeterminate={getIsSomeChildCheck(checkItem, checkTree)}
-                    onChange={() => {
-                      if(item.disabled || item.disableCheckbox) return
-                      onNodeCheck(item.key)
-                    }} 
-                  />   
-                )
-              })()
+              <CheckBox 
+                checked={checkItem.checked} 
+                disabled={item.disabled || item.disableCheckbox}
+                indeterminate={getIsSomeChildCheck(checkItem, checkTree)}
+                onChange={() => {
+                  if(item.disabled || item.disableCheckbox) return
+                  onNodeCheck(item.key)
+                }} 
+              />   
             )}
             <div 
               className={classBem(`${classPrefix}-node-title`, {
-                selected: selectedKeys.includes(item.key),
+                selected: selectedKeys?.includes(item.key),
                 disabled: item.disabled,
               })} 
               onClick={() => {
                 if(!item.disabled) onTitleClick(item.key)
+              }}
+              onContextMenu={(event) => {
+                event.stopPropagation()
+                event.preventDefault()
+                onRightClick?.({event, key: item.key, parentKeys: getParentKeys(item.key, checkTree!)})
               }}
             >{item.title}</div>
           </div>
@@ -230,6 +240,6 @@ const Tree = (props: TreeProps) => {
       {renderTreeList(treeData)}
     </div>
   )
-}
+})
 
 export default Tree

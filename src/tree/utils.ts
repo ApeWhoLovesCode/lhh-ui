@@ -1,24 +1,26 @@
-import { CheckTree, CheckTreeItem } from "./tree";
+import { CheckTree, CheckTreeItem } from "./type";
 import { TreeNode } from "./type";
 
 /** 获取父节点的所有 key */
-export const getParentKeys = (key: string, checkTree: CheckTree, list: string[] = []): string[] => {
-  if(!checkTree![key].parentKey) return list
-  list.push(checkTree![key].parentKey!)
-  return getParentKeys(checkTree![key].parentKey!, checkTree, list)
+export const getParentKeys = (key: string, checkTree?: CheckTree, list: string[] = []): string[] | undefined => {
+  if(!checkTree?.[key]) return void 0
+  if(!checkTree[key].parentKey) return list
+  list.push(checkTree[key].parentKey!)
+  return getParentKeys(checkTree[key].parentKey!, checkTree, list)
 }
 
 /** 获取当前 check 的所有 key */
-export const getCheckKeys = (tree: CheckTree) => (
-  Object.keys(tree).reduce((pre, key) => {
+export const getCheckKeys = (tree?: CheckTree) => {
+  if(!tree) return [];
+  return Object.keys(tree).reduce((pre, key) => {
     if(tree[key].checked) {
       pre.push(key)
     }
     return pre
   }, [] as string[])
-)
+}
 
-  /** 获取孩子节点的数量 */
+/** 获取孩子节点的数量 */
 export const getTreeChildLength = (list: TreeNode[], checkTree: CheckTree) => {
   return list?.reduce((pre, cur) => {
     if(checkTree![cur.key].show && cur.children?.length) {

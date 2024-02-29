@@ -13,7 +13,7 @@ export default () => {
         checkable
         singleSelected
         onCheck={(keys, p) => {
-          console.log('p: ', p);
+          console.log(keys, p);
           setCheckedKeys(keys)
         }}
       />
