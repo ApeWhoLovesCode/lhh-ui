@@ -1,21 +1,31 @@
-import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
+import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { withNativeProps } from '../utils/native-props';
 import { CheckTree, TreeInstance, TreeNode, TreeProps } from './type'
 import CheckBox from '../check-box';
 import { classBem } from '../utils';
-import { getCheckKeys, getIsSomeChildCheck, getParentKeys, getTreeChildLength } from './utils';
+import { getCheckKeys, getIsSomeChildCheck, getParentKeys, getTreeDataItem } from './utils';
 import { usePropsState } from '../hooks';
 
 const classPrefix = `lhhui-tree`;
 
+type TitleNodeInfo = Record<string, {height: number}>
+
+/** 标题的最小高度 */
+const TITLE_MIN_HEIGHT = 24;
+/** 每个标题的下边距 */
+const TITLE_MB = 6;
+
 const Tree = forwardRef<TreeInstance, TreeProps>((props, ref) => {
-  const { checkable, treeData, checkedKeys, defaultExpandAll, multiple, singleSelected, selectable, selectedKeys: propsSelectedKeys, onCheck, onSelect, onRightClick, ...ret } = props
+  const { checkable, treeData, checkedKeys, defaultExpandAll, multiple, singleSelected, selectable = true, selectedKeys: propsSelectedKeys, onCheck, onSelect, onRightClick, ...ret } = props
 
   /** 首层节点的key值 */
   const [firstNodeKeys, setFirstNodeKeys] = useState<string[]>([]);
   /** 用于渲染和交互的树形结构 */
   const [checkTree, setCheckTree] = useState<CheckTree>();
   const [selectedKeys, setSelectedKeys] = usePropsState<string[] | undefined>(propsSelectedKeys);
+  /** 标题节点的高度等信息 */
+  const [titleNodeInfo, setTitleNodeInfo] = useState<TitleNodeInfo>({});
+  const isTreeRender = useRef(false)
 
   /** 单选节点 */
   const onSingleCheck = (key: string, curChecked: boolean, cTree = checkTree!) => {
@@ -102,7 +112,22 @@ const Tree = forwardRef<TreeInstance, TreeProps>((props, ref) => {
     onCheck?.(getCheckKeys(state))
     setFirstNodeKeys(treeData.map(item => item.key))
     setCheckTree(state)
+    isTreeRender.current = true
   }, [treeData])
+  
+  // 等待树形结构渲染完毕，获取 title 的高度
+  useEffect(() => {
+    if(!checkTree || !isTreeRender.current) return
+    const info: TitleNodeInfo = {};
+    for(let key in checkTree) {
+      const titleNode = document.querySelector(`.${classPrefix}-node-title-${key}`)
+      if(titleNode) {
+        info[key] = {height: Math.max(titleNode.clientHeight, TITLE_MIN_HEIGHT) + TITLE_MB} 
+      }
+    }
+    setTitleNodeInfo(info)
+    isTreeRender.current = false
+  }, [checkTree])
 
   useEffect(() => {
     if(!checkTree) return
@@ -124,19 +149,15 @@ const Tree = forwardRef<TreeInstance, TreeProps>((props, ref) => {
     getSiblingKeys(key) {
       if(!checkTree?.[key]) return void 0
       if(!checkTree[key]?.parentKey) {
-        return Object.keys(checkTree).reduce((pre, k) => {
-          if(!checkTree[k].parentKey) {
-            pre.push(k)
-          }
-          return pre
-        }, [] as string[])
+        return firstNodeKeys
       }
       return checkTree[checkTree[key].parentKey!].childKeys
     },
     getChildKeys(key) {
       return checkTree?.[key].childKeys
     },
-    getCheckKeys: () => getCheckKeys(checkTree)
+    getCheckKeys: () => getCheckKeys(checkTree),
+    getTreeDataItem,
   }))
 
   /** 点击选中节点 */
@@ -156,6 +177,7 @@ const Tree = forwardRef<TreeInstance, TreeProps>((props, ref) => {
       // 这步判断主要是单选时，选择父节点时只会选中其子节点
       checked: keys.includes(key) ? curChecked : false,  
       parentKeys: getParentKeys(key, checkTree!),
+      treeDataItem: getTreeDataItem(key, treeData),
     })
   }
 
@@ -171,7 +193,22 @@ const Tree = forwardRef<TreeInstance, TreeProps>((props, ref) => {
       keys.splice(index, 1)
     }
     setSelectedKeys([...keys])
-    onSelect?.([...keys], {key, selected: index === -1})
+    onSelect?.([...keys], {
+      key, 
+      selected: index === -1,
+      parentKeys: getParentKeys(key, checkTree!),
+      treeDataItem: getTreeDataItem(key, treeData),
+    })
+  }
+
+  const getTreeChildHeight = (list: TreeNode[]) => {
+    return list?.reduce((pre, cur) => {
+      pre += (titleNodeInfo[cur.key]?.height ?? (TITLE_MIN_HEIGHT + TITLE_MB))
+      if(checkTree![cur.key].show && cur.children?.length) {
+        pre += getTreeChildHeight(cur.children)
+      }
+      return pre
+    }, 0) ?? 0
   }
 
   const renderTreeList = (list?: TreeNode[]) => {
@@ -210,6 +247,7 @@ const Tree = forwardRef<TreeInstance, TreeProps>((props, ref) => {
               className={classBem(`${classPrefix}-node-title`, {
                 selected: selectedKeys?.includes(item.key),
                 disabled: item.disabled,
+                [item.key]: true,
               })} 
               onClick={() => {
                 if(!item.disabled) onTitleClick(item.key)
@@ -225,7 +263,7 @@ const Tree = forwardRef<TreeInstance, TreeProps>((props, ref) => {
             className={`${classPrefix}-node-children`} 
             // height: fit-content; 无法触发过渡效果，需要准确的值
             // 也可通过 maxHeight 设置一个很大的值来解决，但值过大又会使过度效果难看，所以这里需要获取一个准确的高度
-            style={{maxHeight: checkItem.show ? `${getTreeChildLength(item.children!, checkTree) * 30}px` : 0}}
+            style={{maxHeight: checkItem.show ? `${getTreeChildHeight(item.children!)}px` : 0}}
           >
             {renderTreeList(item.children)}
           </div>

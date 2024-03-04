@@ -2,13 +2,13 @@ import classNames from 'classnames';
 
 /** 处理类名与需要判断的类名 */
 export const classBem = (
-  classnames: string,
+  className: string,
   obj?: { [key in string]?: boolean },
 ) => {
-  let str = classnames;
+  let str = className;
   if (obj) {
     Object.keys(obj).forEach((key) => {
-      str += ' ' + (obj[key] ? classnames + '-' + key : '');
+      str += ' ' + (obj[key] ? className + '-' + key : '');
     });
   }
   return str;
@@ -16,15 +16,15 @@ export const classBem = (
 
 /** 处理style的需要判断的类名 */
 export const classBemStyle = (
-  classname: string,
+  className: string,
   styles: any,
   obj?: { [key in string]?: boolean },
 ) => {
-  const arr: string[] = [styles[classname]];
+  const arr: string[] = [styles[className]];
   if (obj) {
     Object.keys(obj).forEach((key) => {
       if (obj[key]) {
-        arr.push(styles[classname + '-' + key]);
+        arr.push(styles[className + '-' + key]);
       }
     });
   }
@@ -41,6 +41,8 @@ export const classMergeBem = (classnames: string, arr?: string[]) => {
 };
 
 /** 判断是移动端还是pc端 */
-export const isMobile = !!navigator.userAgent.match(
-  /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i,
-);
+export const isMobile = () => (
+  !!navigator.userAgent.match(
+    /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i,
+  )
+)

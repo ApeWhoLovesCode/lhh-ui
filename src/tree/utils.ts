@@ -1,5 +1,4 @@
-import { CheckTree, CheckTreeItem } from "./type";
-import { TreeNode } from "./type";
+import { CheckTree, CheckTreeItem, TreeNode } from "./type";
 
 /** 获取父节点的所有 key */
 export const getParentKeys = (key: string, checkTree?: CheckTree, list: string[] = []): string[] | undefined => {
@@ -20,15 +19,18 @@ export const getCheckKeys = (tree?: CheckTree) => {
   }, [] as string[])
 }
 
-/** 获取孩子节点的数量 */
-export const getTreeChildLength = (list: TreeNode[], checkTree: CheckTree) => {
-  return list?.reduce((pre, cur) => {
-    if(checkTree![cur.key].show && cur.children?.length) {
-      pre += getTreeChildLength(cur.children, checkTree)
-    }
-    return pre
-  }, list.length) ?? 0
+/** 从 treeData 中找到对应的数据 */
+export const getTreeDataItem = (key: string, treeData?: TreeNode[]): TreeNode | undefined => {
+  if(!treeData) return void 0
+  const item = treeData.find(t => t.key === key) 
+  if(item) return item
+  for(let t of treeData) {
+    const newItem = getTreeDataItem(key, t.children)
+    if(newItem) return newItem
+  }
+  return void 0
 }
+
 
 /** 获取是否有子节点 check 了 */
 export const getIsSomeChildCheck = (checkItem: CheckTreeItem, checkTree: CheckTree): boolean => {
@@ -45,4 +47,14 @@ export const getIsEveryChildCheck = (checkItem: CheckTreeItem, checkTree: CheckT
     checkTree![cKey].checked && getIsEveryChildCheck(checkTree![cKey], checkTree)
   ))
   return Boolean(isAllCheck)
+}
+
+/** 获取孩子节点的数量 */
+export const getTreeChildLength = (list: TreeNode[], checkTree: CheckTree) => {
+  return list?.reduce((pre, cur) => {
+    if(checkTree![cur.key].show && cur.children?.length) {
+      pre += getTreeChildLength(cur.children, checkTree)
+    }
+    return pre
+  }, list.length) ?? 0
 }

@@ -18,8 +18,8 @@ export const treeData: TreeNode[] = [
         title: '0-0-1',
         key: '0-0-1',
         children: [
-          { 
-            title: '0-0-1-0', 
+          {
+            title: '0-0-1-0',
             key: '0-0-1-0',
             children: [
               { title: '0-0-1-0-0', key: '0-0-1-0-0' },

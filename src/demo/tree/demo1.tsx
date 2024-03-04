@@ -23,10 +23,9 @@ const treeData: TreeNode[] = [
           { 
             title: '0-0-1-0', 
             key: '0-0-1-0',
-            disabled: true,
             children: [
-              { title: '0-0-1-0-0', key: '0-0-1-0-0', disableCheckbox: true },
-              { title: '0-0-1-0-1', key: '0-0-1-0-1' },
+              { title: '0-0-1-0-0', key: '0-0-1-0-0', disabled: true },
+              { title: '0-0-1-0-1', key: '0-0-1-0-1', disableCheckbox: true },
               { title: '0-0-1-0-2', key: '0-0-1-0-2' },
             ],
           },
@@ -66,6 +65,9 @@ export default () => {
         checkable
         onCheck={(keys) => {
           setCheckedKeys(keys)
+        }}
+        onSelect={(keys, p) => {
+          console.log('keys, p: ', keys, p.treeDataItem);
         }}
       />
     </div>

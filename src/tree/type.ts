@@ -19,7 +19,7 @@ export type TreeProps = {
   defaultExpandAll?: boolean
   /** 
    * 支持点选多个节点（节点本身）
-   * @default true
+   * @default false
    */
   multiple?: boolean
   /** 
@@ -76,6 +76,8 @@ export type TreeInstance = {
   getChildKeys: (key: string) => string[] | undefined
   /** 获取当前 check 中的所有 key */
   getCheckKeys: () => string[]
+  /** 获取当前 treeData 中的节点数据 */
+  getTreeDataItem: (key: string) => TreeNode | undefined
 }
 
 export type CheckTreeItem = {
@@ -113,4 +115,6 @@ export type OnCheckCommonParams = {
   key: string
   /** 父节点的key数组，从子节点的最亲关系开始排列 */
   parentKeys?: string[]
+  /** treeData 中对应该节点的数据 */
+  treeDataItem?: TreeNode
 }
