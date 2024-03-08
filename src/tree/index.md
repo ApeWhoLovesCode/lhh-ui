@@ -30,3 +30,14 @@ group:
 ## API
 
 <API id="Tree"></API>
+
+### ref 方法
+
+| 属性名              | 描述           | 类型      |
+| -- | -- | -- |
+| getCheckTree | 获取当前选中的树形结构 | `() => CheckTree \| undefined` |
+| getParentKeys | 根据 key 值获取其父节点，从 key 节点的最亲关系开始排列 | `(key: string) => string[] \| undefined` |
+| getSiblingKeys | 根据 key 值获取其兄弟节点，会包括自身节点 | `(key: string) => string[] \| undefined` |
+| getChildKeys | 根据 key 值获取其子节点 | `(key: string) => string[] \| undefined` |
+| getCheckKeys | 获取当前 check 中的所有 key | `() => string[]` |
+| getTreeDataItem | 获取当前 treeData 中的节点数据 | `(key: string) => TreeNode \| undefined` |
