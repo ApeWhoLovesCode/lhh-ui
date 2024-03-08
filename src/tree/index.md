@@ -1,5 +1,5 @@
 ---
-title: Tree 树形控件
+title: Tree
 nav:
   title: 组件
   path: /components
