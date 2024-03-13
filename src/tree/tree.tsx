@@ -205,7 +205,7 @@ const Tree = forwardRef<TreeInstance, TreeProps>((props, ref) => {
   const getTreeChildHeight = (list: TreeNode[]) => {
     return list?.reduce((pre, cur) => {
       pre += (titleNodeInfo[cur.key]?.height ?? (TITLE_MIN_HEIGHT + TITLE_MB))
-      if(checkTree![cur.key].show && cur.children?.length) {
+      if(checkTree?.[cur.key]?.show && cur.children?.length) {
         pre += getTreeChildHeight(cur.children)
       }
       return pre
@@ -215,7 +215,8 @@ const Tree = forwardRef<TreeInstance, TreeProps>((props, ref) => {
   const renderTreeList = (list?: TreeNode[]) => {
     if(!checkTree) return null
     return list?.map(item => {
-      const checkItem = checkTree![item.key]
+      const checkItem = checkTree[item.key]
+      if(!checkItem) return null
       return (
         <div key={item.key} className={`${classPrefix}-node`}>
           <div className={`${classPrefix}-node-content`}>
