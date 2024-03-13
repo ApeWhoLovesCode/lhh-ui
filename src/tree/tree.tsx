@@ -29,6 +29,7 @@ const Tree = forwardRef<TreeInstance, TreeProps>((props, ref) => {
 
   /** 单选节点 */
   const onSingleCheck = (key: string, curChecked: boolean, cTree = checkTree!) => {
+    if(!cTree[key]) return
     Object.keys(cTree).forEach(k => {
       cTree[k].checked = false
     });
@@ -40,7 +41,7 @@ const Tree = forwardRef<TreeInstance, TreeProps>((props, ref) => {
       } else {
         cTree[curKey].checked = true
       }
-    })(key, cTree[key].childKeys);
+    })(key, cTree[key]?.childKeys);
   }
 
   /** 处理父子节点的选中状态 */
