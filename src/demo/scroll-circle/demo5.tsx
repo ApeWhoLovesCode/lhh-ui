@@ -7,7 +7,7 @@ export default () => {
 
   return (
     <>
-      <div style={{width: isMobile ? 300 : 400, height: 200}}>
+      <div style={{width: isMobile() ? 300 : 400, height: 200}}>
         <ScrollCircle
           ref={scrollCircleRef}
           listLength={list.length}
@@ -26,7 +26,7 @@ export default () => {
           ))}
         </ScrollCircle>
       </div>
-      <div className="demo5-btnWrap" style={{width: isMobile ? 300 : 400}}>
+      <div className="demo5-btnWrap" style={{width: isMobile() ? 300 : 400}}>
         <button className='btn' onClick={() => {scrollCircleRef.current?.scrollTo({index: 9})}}>旋转到索引为9的卡片</button>
         <button className='btn' onClick={() => {scrollCircleRef.current?.scrollTo({deg: 120})}}>旋转到120度</button>
         <button className='btn' onClick={() => {scrollCircleRef.current?.scrollTo({deg: 360 * 3, duration: 10_000})}}>转个10秒钟</button>

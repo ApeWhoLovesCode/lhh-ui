@@ -8,7 +8,7 @@ export default () => {
   return (
     <div className="demo1-huarongRoadWrap">
       <HuarongRoad 
-        width={isMobile ? 300 : 400} 
+        width={isMobile() ? 300 : 400} 
         locationArr={[
           [31, 21, 21, 32],
           [22, 1, 1, 23],

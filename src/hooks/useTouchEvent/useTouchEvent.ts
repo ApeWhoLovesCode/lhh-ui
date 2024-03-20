@@ -19,13 +19,13 @@ export default function useTouchEvent(options: UseTouchEventParams = {}) {
 
   const onTouchStart = (e: MouseTouchEvent) => {
     /** 鼠标左击才触发 */
-    if(!isMobile && !options.isAllMouseClick && (e as MouseEvent).button !== 0) {
+    if(!isMobile() && !options.isAllMouseClick && (e as MouseEvent).button !== 0) {
       return
     }
     if(options.isDisable?.all || options.isDisable?.onTouchStart) return
     onStopEvent(e);
     touch.start(e);
-    if (!isMobile) {
+    if (!isMobile()) {
       document.addEventListener('mousemove', onTouchMove, true);
       document.addEventListener('mouseup', onTouchEnd, true);
     }
@@ -41,7 +41,7 @@ export default function useTouchEvent(options: UseTouchEventParams = {}) {
     if(options.isDisable?.all || options.isDisable?.onTouchEnd) return
     onStopEvent(e);
     touch.move(e);
-    if (!isMobile) {
+    if (!isMobile()) {
       document.removeEventListener('mousemove', onTouchMove, true);
       document.removeEventListener('mouseup', onTouchEnd, true);
     }
@@ -68,7 +68,7 @@ export const onTouchMouse = ({
   isOnMouseUp,
   isOnTouchCancel,
 }: UseTouchesOptions & IsTouchEvent) => {
-  if (!isMobile) {
+  if (!isMobile()) {
     return {
       onMouseDown: onTouchStart,
       ...(isOnMouseUp ? { onMouseUp: onTouchEnd } : null),

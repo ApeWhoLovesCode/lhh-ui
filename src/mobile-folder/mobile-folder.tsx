@@ -36,9 +36,9 @@ const MobileFolder = (comProps: MobileFolderProps) => {
 
   useEffect(() => {
     init()
-    if(!isMobile) window.addEventListener('resize', getInfo)
+    if(!isMobile()) window.addEventListener('resize', getInfo)
     return () => {
-      if(!isMobile) window.removeEventListener('resize', getInfo)
+      if(!isMobile()) window.removeEventListener('resize', getInfo)
     }
   }, [list])
 

@@ -68,9 +68,9 @@ const HuarongRoad = forwardRef<HuarongRoadInstance, HuarongRoadProps>((comProps,
 
   useEffect(() => {
     init()
-    if(!isMobile) window.addEventListener('resize', getCardInfo)
+    if(!isMobile()) window.addEventListener('resize', getCardInfo)
     return () => {
-      if(!isMobile) window.removeEventListener('resize', getCardInfo)
+      if(!isMobile()) window.removeEventListener('resize', getCardInfo)
     }
   }, [gap])
 

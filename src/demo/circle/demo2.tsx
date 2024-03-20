@@ -6,7 +6,7 @@ export default () => {
   const [value, setValue] = useState(50);
   return (
     <div>
-      <div className={classBem('demo-circle-wrap', { mobile: isMobile })}>
+      <div className={classBem('demo-circle-wrap', { mobile: isMobile() })}>
         <Circle value={value} strokeWidth={10} text="加粗" />
         <Circle
           value={value}

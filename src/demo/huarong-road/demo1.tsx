@@ -12,7 +12,7 @@ export default () => {
       <div className="demo1-huarongRoadWrap">
         <HuarongRoad 
           ref={huarongRoadRef}
-          width={isMobile ? 300 : 400} 
+          width={isMobile() ? 300 : 400} 
           onComplete={() => {
             setTimeout(() => {
               alert('曹操跑了')

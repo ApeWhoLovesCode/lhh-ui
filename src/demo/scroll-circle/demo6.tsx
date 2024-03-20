@@ -2,7 +2,7 @@ import React, { forwardRef, useImperativeHandle, useMemo, useRef, useState } fro
 import { ScrollCircle, ScrollCircleInstance, isMobile } from 'lhh-ui';
 import './demo6.less';
 
-const list = Array.from({length: isMobile ? 10 : 16}, (_, i) => ({ id: 'id' + i, title: i + '' }))
+const list = Array.from({length: isMobile() ? 10 : 16}, (_, i) => ({ id: 'id' + i, title: i + '' }))
 export default () => {
   const scrollCircleRef = useRef<ScrollCircleInstance>(null)
   const scrollCircleListRef = useRef<(CircleItemInstance | null)[]>([])
@@ -56,7 +56,7 @@ export default () => {
 
   return (
     <>
-      <div style={{width: isMobile ? 300 : 650, height: 500, border: '1px solid #ccc'}}>
+      <div style={{width: isMobile() ? 300 : 650, height: 500, border: '1px solid #ccc'}}>
         <ScrollCircle
           ref={scrollCircleRef}
           listLength={list.length}

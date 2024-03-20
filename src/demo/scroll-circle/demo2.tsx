@@ -45,7 +45,7 @@ export default () => {
 
   return (
     <>
-      <div style={{width: isMobile ? 300 : 400, height: 200}}>
+      <div style={{width: isMobile() ? 300 : 400, height: 200}}>
         <ScrollCircle
           ref={scrollCircleRef}
           listLength={list.length}

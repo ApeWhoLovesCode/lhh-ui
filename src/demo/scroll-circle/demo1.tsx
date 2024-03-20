@@ -5,7 +5,7 @@ const list = Array.from({length: 12}).map((_, i) => ({ id: 'id' + i, title: 'Hel
 export default () => {
 
   return (
-    <div style={{width: isMobile ? 300 : 400, height: 200}}>
+    <div style={{width: isMobile() ? 300 : 400, height: 200}}>
       <ScrollCircle
         listLength={list.length}
         isPagination={false}

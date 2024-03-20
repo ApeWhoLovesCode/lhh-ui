@@ -113,9 +113,9 @@ const ScrollCircle = forwardRef<ScrollCircleInstance, ScrollCircleProps>(({
     if (listLength) {
       init(true)
     }
-    if (!isMobile) window.addEventListener('resize', resizeFn);
+    if (!isMobile()) window.addEventListener('resize', resizeFn);
     return () => {
-      if (!isMobile) window.removeEventListener('resize', resizeFn);
+      if (!isMobile()) window.removeEventListener('resize', resizeFn);
     };
   }, [listLength, cardAddDeg, centerPoint, radius, circlePadding, initCartNum, isAverage, isFlipDirection]);
 

@@ -32,7 +32,7 @@ export default () => {
   )
 
   return (
-    <div className={classBem('demo-scrollcircle', {isMobile})}>
+    <div className={classBem('demo-scrollcircle', {isMobile: isMobile()})}>
       <div className='wrap'>
         {arrCenter.map((v, i) => (
           <div key={i}>

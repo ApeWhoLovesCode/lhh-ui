@@ -21,7 +21,7 @@ export default function CountDown() {
 
   return (
     <div className='demoUseKeepIntervalMap'>
-      <div className={classBem('content', { mobile: isMobile })}>
+      <div className={classBem('content', { mobile: isMobile() })}>
         {arr.map((item, index) => (
           <div className="item" key={item}>
             <Item ref={f => refMap.current[item] = f} keepInterval={keepInterval} interval={index + 1} />

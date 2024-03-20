@@ -22,8 +22,8 @@ export default () => {
       <SliderPuzzle.Canvas
         style={{
           position: 'absolute',
-          top: isMobile ? -100 : 0,
-          left: isMobile ? 0 : 320,
+          top: isMobile() ? -100 : 0,
+          left: isMobile() ? 0 : 320,
         }}
       />
     </SliderPuzzle>

@@ -11,7 +11,7 @@ export default () => {
   return (
     <div className="demo1-huarongRoadWrap">
       <HuarongRoad 
-        width={isMobile ? 300 : 400} 
+        width={isMobile() ? 300 : 400} 
         onComplete={() => {
           setTimeout(() => {
             alert(`${list[0]}跑了`)

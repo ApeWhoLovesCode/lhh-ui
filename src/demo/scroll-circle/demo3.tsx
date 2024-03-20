@@ -5,7 +5,7 @@ const list = Array.from({length: 10}, (_, i) => ({ id: 'id' + i, title: 'Hello' 
 export default () => {
 
   return (
-    <div style={{width: isMobile ? 300 : 400, height: 200}}>
+    <div style={{width: isMobile() ? 300 : 400, height: 200}}>
       <ScrollCircle
         listLength={list.length}
         isAverage={false}
