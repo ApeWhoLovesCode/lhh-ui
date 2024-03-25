@@ -23,19 +23,12 @@ npm i lhh-ui
 import { SliderPuzzle } from 'lhh-ui';
 import React from 'react';
 
+// 拼图滑块
 export default () => {
   return (
     <SliderPuzzle
-      // 数组的长度需要设置
       listLength={0}
-      // 宽高必须设置
       style={{ width: '300px', height: '300px' }}
-      puzzleImg="http://lhh.codeape.site/img/tom.jpeg"
-      onComplete={() => {
-        setTimeout(() => {
-          alert('恭喜你完成了拼图');
-        }, 400);
-      }}
     ></SliderPuzzle>
   );
 };
