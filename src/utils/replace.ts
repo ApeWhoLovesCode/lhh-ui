@@ -3,6 +3,11 @@ export function replaceLineToSpace(str: string) {
   return str.replace(/\-/, ' ')
 }
 
+/** 替换掉类名中的特殊字符 */
+export function replaceClassName(title: string) {
+  return title.replace(/[.#]/g, '')
+}
+
 /** 转化颜色 例:将 #fff 转化为 rgb(255, 255, 255) */
 export const replaceHexToRgb = (hex: string) => {
   if(!hex.includes('#')) return hex

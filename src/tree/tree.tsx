@@ -2,7 +2,7 @@ import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } f
 import { withNativeProps } from '../utils/native-props';
 import { CheckTree, TreeInstance, TreeNode, TreeProps } from './type'
 import CheckBox from '../check-box';
-import { classBem } from '../utils';
+import { classBem, replaceClassName } from '../utils';
 import { getCheckKeys, getIsSomeChildCheck, getParentKeys, getTreeDataItem } from './utils';
 import { usePropsState } from '../hooks';
 
@@ -121,7 +121,7 @@ const Tree = forwardRef<TreeInstance, TreeProps>((props, ref) => {
     if(!checkTree || !isTreeRender.current) return
     const info: TitleNodeInfo = {};
     for(let key in checkTree) {
-      const titleNode = document.querySelector(`.${classPrefix}-node-title-${key}`)
+      const titleNode = document.querySelector(`.${classPrefix}-node-title-${replaceClassName(key)}`)
       if(titleNode) {
         info[key] = {height: Math.max(titleNode.clientHeight, TITLE_MIN_HEIGHT) + TITLE_MB} 
       }
