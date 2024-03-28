@@ -41,3 +41,4 @@ group:
 | getChildKeys | 根据 key 值获取其子节点 | `(key: string) => string[] \| undefined` |
 | getCheckKeys | 获取当前 check 中的所有 key | `() => string[]` |
 | getTreeDataItem | 获取当前 treeData 中的节点数据 | `(key: string) => TreeNode \| undefined` |
+| onAllCheck | 全选/全不选 | `(checked?: boolean) => void` |
