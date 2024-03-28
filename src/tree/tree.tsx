@@ -137,9 +137,13 @@ const Tree = forwardRef<TreeInstance, TreeProps>((props, ref) => {
     } else {
       if(checkedKeys?.[0]) onSingleCheck(checkedKeys[0], true)
     }
-    if(checkedKeys?.length) {
-      setCheckTree({...checkTree})
+    // 根据 checkedKeys 回显，取消选中 
+    if(!checkedKeys?.length) {
+      Object.keys(checkTree).forEach(item => {
+        checkTree[item].checked = false
+      })
     }
+    setCheckTree({...checkTree})
   }, [checkedKeys])
 
   useImperativeHandle(ref, () => ({
@@ -159,6 +163,15 @@ const Tree = forwardRef<TreeInstance, TreeProps>((props, ref) => {
     },
     getCheckKeys: () => getCheckKeys(checkTree),
     getTreeDataItem,
+    onAllCheck: (checked = true) => {
+      if(checkTree) {
+        Object.keys(checkTree).forEach(item => {
+          checkTree[item].checked = checked
+        })
+        setCheckTree({...checkTree})
+        onCheck?.(getCheckKeys(checkTree))
+      }
+    }
   }))
 
   /** 点击选中节点 */

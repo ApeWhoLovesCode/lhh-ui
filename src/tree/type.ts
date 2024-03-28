@@ -78,6 +78,8 @@ export type TreeInstance = {
   getCheckKeys: () => string[]
   /** 获取当前 treeData 中的节点数据 */
   getTreeDataItem: (key: string) => TreeNode | undefined
+  /** 全选/全不选 */
+  onAllCheck: (checked?: boolean) => void
 }
 
 export type CheckTreeItem = {
