@@ -23,6 +23,8 @@ export default () => {
         <button onClick={() => setKeyList(treeRef.current?.getCheckKeys())}>
           获取当前 check 到的所有节点
         </button>
+        <button onClick={() => {treeRef.current?.onAllCheck()}}>全选节点</button>
+        <button onClick={() => {treeRef.current?.onAllCheck(false)}}>全不选节点</button>
       </div>
       <h4>
         获取到的节点信息：{JSON.stringify(keyList)}

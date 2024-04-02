@@ -5,6 +5,7 @@ import { classBem, isMobile } from '../utils/handleDom';
 import useTouchEvent from '../hooks/useTouchEvent';
 import { ScrollCirclePageType, ScrollCircleInstance, ScrollCircleProps, ScrollCircleScrollToParams } from './type';
 import { withNativeProps } from '../utils';
+import { useDebounceFn } from 'ahooks';
 
 const classPrefix = 'lhhui-scroll-circle';
 
@@ -105,9 +106,9 @@ const ScrollCircle = forwardRef<ScrollCircleInstance, ScrollCircleProps>(({
     }
   };
 
-  const resizeFn = () => {
+  const {run: resizeFn} = useDebounceFn(() => {
     init()
-  }
+  }, { wait: 100 })
 
   useEffect(() => {
     if (listLength) {
