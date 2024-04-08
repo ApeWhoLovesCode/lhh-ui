@@ -1,6 +1,6 @@
-@class-prefix: ~'lhhui-check-box';
+$class-prefix: 'lhhui-check-box';
 
-.@{class-prefix} {
+.#{$class-prefix} {
   display: flex;
   align-items: center;
   &-input {

@@ -1,5 +1,5 @@
-@class-prefix: ~'lhhui-scroll-circle';
-.@{class-prefix} {
+$class-prefix: 'lhhui-scroll-circle';
+.#{$class-prefix} {
   position: relative;
   overflow: hidden;
   touch-action: none;

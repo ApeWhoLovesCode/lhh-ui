@@ -1,5 +1,5 @@
 import { attachPropertiesToComponent } from '../utils/attach-properties-to-component';
-import './index.less';
+import './index.scss';
 import _ScrollCircle from './scrollCircle';
 import ScrollCircleItem from './scrollCircleItem';
 

@@ -1,4 +1,4 @@
-import './index.less';
+import './index.scss';
 import CheckBox from './check-box';
 
 export { CheckBox };

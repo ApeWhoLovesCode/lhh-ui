@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ScrollCircle, ScrollCircleInstance, shuffleArray } from 'lhh-ui';
-import './lotteryDemo.less';
+import './lotteryDemo.scss';
 
 type Item = {
   level: number

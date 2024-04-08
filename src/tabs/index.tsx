@@ -1,5 +1,5 @@
 import { Tabs as _Tabs, Tab } from './tabs';
-import './index.less';
+import './index.scss';
 import { attachPropertiesToComponent } from '../utils/attach-properties-to-component';
 
 const Tabs = attachPropertiesToComponent(_Tabs, {

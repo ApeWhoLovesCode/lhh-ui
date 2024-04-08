@@ -1,6 +1,5 @@
-@import '../style/index.less';
-@class-prefix: ~'lhhui-skus';
-.@{class-prefix} {
+$class-prefix: 'lhhui-skus';
+.#{$class-prefix} {
   &-params-title {
     font-size: 16px;
     font-weight: bold;

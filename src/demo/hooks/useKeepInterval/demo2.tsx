@@ -1,5 +1,5 @@
 import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react';
-import './index.less';
+import './index.scss';
 import { useKeepInterval } from 'lhh-ui';
 
 const arr = [{id:1},{id:2},{id:3},{id:4}]

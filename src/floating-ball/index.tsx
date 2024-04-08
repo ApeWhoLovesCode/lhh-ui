@@ -1,4 +1,4 @@
-import './floating-ball.less';
+import './index.scss';
 import FloatingBall from './floating-ball';
 
 export { FloatingBall };

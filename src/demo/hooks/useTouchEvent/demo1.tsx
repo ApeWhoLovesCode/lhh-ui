@@ -1,6 +1,6 @@
 import { useTouchEvent } from "lhh-ui";
 import React, { useRef, useState } from "react";
-import './index.less';
+import './index.scss';
 
 export default () => {
   const domInfo = useRef({

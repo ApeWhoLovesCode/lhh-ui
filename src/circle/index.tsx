@@ -1,5 +1,5 @@
 import Circle from './circle';
-import './index.less';
+import './index.scss';
 
 export type { CirclePropsType } from './type';
 export { Circle };

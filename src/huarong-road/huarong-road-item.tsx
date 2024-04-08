@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useContext, useRef } from 'react';
-import './index.less';
 import { withNativeProps } from '../utils/native-props';
 import useMergeProps from '../hooks/useMergeProps';
 import { HuarongRoadItemProps } from './type';

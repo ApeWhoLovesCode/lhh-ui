@@ -1,6 +1,6 @@
 import { HuarongRoad, getRandomHexColor, isMobile } from "lhh-ui"
 import React from "react"
-import './index.less';
+import './index.scss';
 
 const list: string[] = []
 for(let i = 0; i < 10; i++) {

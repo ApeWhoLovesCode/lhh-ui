@@ -1,6 +1,6 @@
 import React, { forwardRef, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { ScrollCircle, ScrollCircleInstance, isMobile } from 'lhh-ui';
-import './demo6.less';
+import './demo6.scss';
 
 const list = Array.from({length: isMobile() ? 10 : 16}, (_, i) => ({ id: 'id' + i, title: i + '' }))
 export default () => {

@@ -1,5 +1,4 @@
 import React, { useState, useEffect, forwardRef, useImperativeHandle, useRef } from 'react';
-import './index.less';
 import { withNativeProps } from '../utils/native-props';
 import { AnimationWrapInstance, AnimationWrapName, AnimationWrapPosition, AnimationWrapProps } from './type';
 import { classBem, replaceLineToSpace } from '../utils';

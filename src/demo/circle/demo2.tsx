@@ -1,6 +1,6 @@
 import { Circle, classBem, isMobile } from 'lhh-ui';
 import React, { useState } from 'react';
-import './index.less';
+import './index.scss';
 
 export default () => {
   const [value, setValue] = useState(50);

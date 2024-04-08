@@ -1,4 +1,4 @@
-import './index.less';
+import './index.scss';
 import Tree from './tree';
 
 export { Tree };

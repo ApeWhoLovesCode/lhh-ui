@@ -1,6 +1,6 @@
 import { HuarongRoad, HuarongRoadInstance, isMobile } from "lhh-ui"
 import React, { useRef } from "react"
-import './index.less';
+import './index.scss';
 
 const list = ['曹操','张飞','赵云','马超','关羽','黄忠','卒','卒','卒','卒']
 

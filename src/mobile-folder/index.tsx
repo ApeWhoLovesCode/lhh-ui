@@ -1,4 +1,4 @@
-import './index.less';
+import './index.scss';
 import MobileFolder from './mobile-folder';
 
 export type { MobileFolderProps, MobileFolderItem } from './type'

@@ -1,5 +1,4 @@
 import React, { useState, useEffect, forwardRef, useImperativeHandle, useRef } from 'react';
-import './index.less';
 import { withNativeProps } from '../utils/native-props';
 import useMergeProps from '../hooks/useMergeProps';
 import { HeroesIndex, HuarongRoadInstance, HuarongRoadProps } from './type';

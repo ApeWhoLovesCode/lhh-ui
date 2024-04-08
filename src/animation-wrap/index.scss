@@ -1,5 +1,5 @@
-@class-prefix: ~'lhhui-animation-wrap';
-.@{class-prefix} {
+$class-prefix: 'lhhui-animation-wrap';
+.#{$class-prefix} {
   position: relative;
   display: inline-block;
   overflow: hidden;

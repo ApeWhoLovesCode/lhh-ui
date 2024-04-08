@@ -1,3 +1,5 @@
+import './style/index.scss';
+
 export * from './animation-wrap';
 export * from './check-box';
 export * from './circle';

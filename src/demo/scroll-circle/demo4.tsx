@@ -1,6 +1,6 @@
 import React from 'react';
 import { ScrollCircle, classBem, isMobile } from 'lhh-ui';
-import './index.less';
+import './index.scss';
 import { CenterPointType } from 'lhh-ui/scroll-circle/type';
 
 const arrCenter: CenterPointType[] = ['center', 'center']

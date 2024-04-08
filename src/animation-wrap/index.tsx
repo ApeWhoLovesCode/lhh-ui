@@ -1,5 +1,5 @@
 import AnimationWrap from "./animationWrap";
-import './index.less';
+import './index.scss';
 
 export { AnimationWrap };
 export default AnimationWrap;

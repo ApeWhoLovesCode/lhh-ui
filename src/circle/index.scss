@@ -1,5 +1,5 @@
-@class-prefix: ~'lhhui-circle';
-.@{class-prefix} {
+$class-prefix: 'lhhui-circle';
+.#{$class-prefix} {
   position: relative;
   display: flex;
   align-items: center;

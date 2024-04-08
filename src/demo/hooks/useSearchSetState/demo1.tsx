@@ -1,5 +1,5 @@
 import React from 'react';
-import './index.less';
+import './index.scss';
 import { useSearchSetState } from 'lhh-ui';
 
 type StateType = {

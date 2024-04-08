@@ -1,6 +1,6 @@
 import { AnimationWrap, AnimationWrapInstance, AnimationWrapPosition } from "lhh-ui";
 import React, { useRef } from "react";
-import './index.less';
+import './index.scss';
 
 const positionList: AnimationWrapPosition[] = [
   'right', 'bottom', 'left', 'top'

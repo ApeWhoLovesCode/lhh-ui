@@ -1,6 +1,6 @@
 import React, { forwardRef, useId, useImperativeHandle, useRef, useState } from 'react';
 import { useKeepIntervalMap, classBem, isMobile, KeepIntervalMap } from 'lhh-ui';
-import './index.less';
+import './index.scss';
 
 const arr = [1,2,3,4]
 export default function CountDown() {

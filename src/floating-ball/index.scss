@@ -1,6 +1,6 @@
-@class-prefix: ~'lhhui-floating-ball';
+$class-prefix: 'lhhui-floating-ball';
 
-.@{class-prefix} {
+.#{$class-prefix} {
   display: inline-block;
   &-button {
     display: inline-block;

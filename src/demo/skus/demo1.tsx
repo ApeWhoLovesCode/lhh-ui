@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import './index.less';
+import './index.scss';
 import { Skus, SkusItem } from 'lhh-ui';
 import { getSkusData, skuNames } from './utils';
 

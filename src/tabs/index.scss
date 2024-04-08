@@ -1,6 +1,5 @@
-@import '../style/index.less';
-@class-prefix: ~'lhhui-tabs';
-.@{class-prefix} {
+$class-prefix: 'lhhui-tabs';
+.#{$class-prefix} {
   position: relative;
   display: flex;
   width: 100%;
@@ -58,7 +57,7 @@
     &-line {
       width: 30px;
       height: 6px;
-      background-color: @blue;
+      background-color: var(--lhhui-blue);
       border-radius: 3px;
     }
   }

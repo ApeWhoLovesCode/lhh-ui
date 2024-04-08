@@ -1,7 +1,8 @@
-@class-prefix: ~'lhhui-sliderPuzzle';
-@class-prefix-item: ~'lhhui-sliderPuzzleItem';
-@class-prefix-canvas: ~'lhhui-sliderPuzzle-canvas';
-.@{class-prefix} {
+$class-prefix: 'lhhui-sliderPuzzle';
+$class-prefix-item: 'lhhui-sliderPuzzleItem';
+$class-prefix-canvas: 'lhhui-sliderPuzzle-canvas';
+
+.#{$class-prefix} {
   box-sizing: border-box;
   background-color: #262626;
   width: 100%;
@@ -13,7 +14,7 @@
   }
 }
 
-.@{class-prefix-item} {
+.#{$class-prefix-item} {
   position: absolute;
   transition: transform ease .4s;
   -webkit-tap-highlight-color: transparent;
@@ -31,7 +32,7 @@
   }
 }
 
-.@{class-prefix-canvas} {
+.#{$class-prefix-canvas} {
   position: absolute;
   left: 0;
   top: 0;

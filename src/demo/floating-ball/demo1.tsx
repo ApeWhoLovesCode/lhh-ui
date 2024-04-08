@@ -1,6 +1,6 @@
 import React from "react";
 import { FloatingBall } from 'lhh-ui';
-import './index.less';
+import './index.scss';
 
 export default () => {
   return (

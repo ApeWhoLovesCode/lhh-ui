@@ -1,5 +1,5 @@
+import './index.scss';
 import { attachPropertiesToComponent } from '../utils/attach-properties-to-component';
-import './index.less';
 import SliderPuzzle_ from './slider-puzzle';
 import SliderPuzzleCanvas from './slider-puzzle-canvas';
 import SliderPuzzleItem from './slider-puzzle-item';

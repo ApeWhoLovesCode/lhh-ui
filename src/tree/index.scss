@@ -1,6 +1,6 @@
-@class-prefix: ~'lhhui-tree';
+$class-prefix: 'lhhui-tree';
 
-.@{class-prefix} {
+.#{$class-prefix} {
   &-node {
     &-content {
       display: flex;

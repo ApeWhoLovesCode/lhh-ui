@@ -1,5 +1,5 @@
 import { attachPropertiesToComponent } from '../utils/attach-properties-to-component';
-import './index.less';
+import './index.scss';
 import HuarongRoad_ from './huarong-road';
 import HuarongRoadItem from './huarong-road-item';
 
