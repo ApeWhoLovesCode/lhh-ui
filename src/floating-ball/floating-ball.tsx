@@ -3,7 +3,6 @@ import useTouchEvent from '../hooks/useTouchEvent';
 import { FloatingBallProps } from './type';
 
 const classPrefix = `lhhui-floating-ball`;
-const screenW = window.innerWidth, screenH = window.innerHeight;
 
 const FloatingBall: FC<FloatingBallProps> = ({ axis = 'xy', magnetic, ...props }) => {
   /** 悬浮球的宽，高，上下左右距离 */
@@ -32,6 +31,7 @@ const FloatingBall: FC<FloatingBallProps> = ({ axis = 'xy', magnetic, ...props }
       props.onOffsetChange?.({ x, y });
     },
     onTouchEnd: () => {
+      const screenW = window.innerWidth, screenH = window.innerHeight;
       let x = axis === 'y' ? 0 : _info.deltaX + touchRef.current.startX;
       let y = axis === 'x' ? 0 : _info.deltaY + touchRef.current.startY;
       const { w, h, l, r, t, b } = ball.current;
