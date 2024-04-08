@@ -8,8 +8,6 @@ import { withNativeProps } from "../utils/native-props";
 import { classBem } from "../utils/handleDom";
 import React from "react";
 
-const ratio = window.devicePixelRatio ?? 1
-
 const defaultProps = {
   globalAlpha: 0.5,
   puzzleColor: '#ddeafb',
@@ -28,11 +26,12 @@ export default (comProps: SliderPuzzleCanvasProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [canvasInfo, setCanvasInfo] = useSetState({
     ctx: null as CanvasRenderingContext2D | null | undefined,
+    ratio: 1,
   })
   
   useEffect(() => {
     const ctx = canvasRef.current?.getContext('2d')!
-    setCanvasInfo({ctx})
+    setCanvasInfo({ctx, ratio: window.devicePixelRatio ?? 1})
   }, [])
 
   useEffect(() => {
@@ -40,7 +39,7 @@ export default (comProps: SliderPuzzleCanvasProps) => {
   }, [canvasInfo, isReset, grid, puzzleGridArr, isGameMode, globalAlpha, puzzleColor, gameModeBackground, puzzleImg])
 
   function startDraw() {
-    const {ctx} = canvasInfo
+    const {ctx, ratio} = canvasInfo
     if(!ctx || !puzzleGridArr?.length) return
     const cw = grid.w * ratio, ch = grid.h * ratio
     ctx.clearRect(0, 0, cw, ch)
@@ -91,7 +90,7 @@ export default (comProps: SliderPuzzleCanvasProps) => {
   }
 
   function drawPuzzleImg() {
-    const {ctx} = canvasInfo
+    const {ctx, ratio} = canvasInfo
     if(!ctx || !puzzleGridArr?.length) return
     const cw = grid.w * ratio, ch = grid.h * ratio
     const w = cw * size, h = ch * size
@@ -120,8 +119,8 @@ export default (comProps: SliderPuzzleCanvasProps) => {
     >
       <canvas
         ref={canvasRef}
-        width={grid.w * ratio}
-        height={grid.h * ratio}
+        width={grid.w * canvasInfo.ratio}
+        height={grid.h * canvasInfo.ratio}
         style={{
           display: 'block',
           width: grid.w + 'px',

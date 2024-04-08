@@ -62,7 +62,7 @@ const ScrollCircle = forwardRef<ScrollCircleInstance, ScrollCircleProps>(({
   /** 旋转的度数 */
   const [rotateDeg, setRotateDeg] = useState<number>(-1);
   /** 当前的方向是否是竖着的 */
-  const isVertical = useRef((document.querySelector(`.${idRef.current}`)?.clientHeight ?? 0) > (document.querySelector(`.${idRef.current}`)?.clientWidth ?? 0));
+  const isVertical = useRef(false);
   const [pageState, setPageState] = useState({
     /** 当前的页码 */
     pageNum: 1,
