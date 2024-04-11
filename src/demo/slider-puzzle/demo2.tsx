@@ -22,7 +22,7 @@ export default () => {
         <SliderPuzzle.Item
           key={item.id}
           index={index}
-          style={{ background: '#fff' }}
+          style={{ background: '#eee' }}
         >
           <h6>{item.id}</h6>
           <SliderPuzzle.Canvas index={index} />
