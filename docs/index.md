@@ -6,7 +6,7 @@ hero:
     - text: 开始
       link: /components/slider-puzzle
     - text: Blog
-      link: http://blog.codeape.site
+      link: https://codeape.site
 # features:
 #   - title: Hello
 #     emoji: 💎
