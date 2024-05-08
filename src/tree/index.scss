@@ -16,6 +16,7 @@ $class-prefix: 'lhhui-tree';
       align-items: center;
       border-radius: 4px;
       &:hover {
+        color: #09090b;
         background-color: #f0f0f0;
       }
       &-icon {
@@ -42,6 +43,7 @@ $class-prefix: 'lhhui-tree';
       border-radius: 4px;
       cursor: pointer;
       &:hover {
+        color: #09090b;
         background-color: #f0f0f0;
       }
       &-selected {
