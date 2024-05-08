@@ -8,6 +8,7 @@ export * from './hooks';
 export * from './huarong-road';
 export * from './mobile-folder';
 export * from './scroll-circle';
+export * from './scroll-view';
 export * from './skus';
 export * from './slider-puzzle';
 export * from './tabs';
