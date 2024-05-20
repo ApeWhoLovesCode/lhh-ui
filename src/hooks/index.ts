@@ -4,6 +4,7 @@ export * from './useLatest';
 export * from './useMergeProps';
 export * from './usePropsState';
 export * from './useRender';
+export * from './useRTDraw';
 export * from './useSearchParamsFilter';
 export * from './useSearchSetState';
 export * from './useSearchState';
