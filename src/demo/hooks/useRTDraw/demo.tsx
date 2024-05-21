@@ -2,10 +2,6 @@ import React, { useEffect, useState } from "react"
 import { useRTDraw } from "lhh-ui";
 
 export default () => {
-  const [canvasInfo, setCanvasInfo] = useState({
-    w: 200,
-    h: 200,
-  })
   const [addTime, setAddTime] = useState(0);
 
   function drawTime() {
@@ -13,23 +9,20 @@ export default () => {
     const ratio = drawState.ratio;
     ctx.font = `${12 * ratio}px 宋体`
     const now = Date.now()
-    ctx.fillText(now, 30 * ratio, 30 * ratio);
+    ctx.fillText(now + "", 30 * ratio, 30 * ratio);
     ctx.fillText(`+${addTime}`, 30 * ratio, 50 * ratio);
     ctx.fillText(`=${now + addTime}`, 30 * ratio, 70 * ratio);
   }
 
-  const {drawState, canvasRef, startAnimation} = useRTDraw({
-    onStartDraw() {
-      if(!drawState.ctx) return
+  const {drawState, canvasRef, canvasInfo, startAnimation} = useRTDraw({
+    canvasInfo: {w: 200, h: 200},
+    onDraw() {
       drawState.ctx.clearRect(0, 0, canvasInfo.w * drawState.ratio, canvasInfo.h * drawState.ratio);
       drawTime()
     },
   })
 
   useEffect(() => {
-    const ctx = canvasRef.current?.getContext('2d')
-    if(!ctx) return
-    drawState.ctx = ctx
     startAnimation()
   }, [])
 
