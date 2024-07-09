@@ -4,19 +4,19 @@ function useSearchParamsFilter<T extends string>() {
   const setParam = (name: T, value?: string | number) => {
     if (value) {
       searchParams.set(name, encodeURIComponent(String(value)));
-      // 更新地址栏
-      window.history.replaceState({}, '', '?' + searchParams.toString());
     } else {
       if (!searchParams.get(name)) {
         return;
       }
       searchParams.delete(name);
     }
+    // 更新地址栏
+    window.history.replaceState({}, "", "?" + searchParams.toString());
   };
 
   const getParam = (name: T) => {
     const value = searchParams.get(name);
-    return value ? decodeURIComponent(value ?? '') : void 0;
+    return value ? decodeURIComponent(value ?? "") : void 0;
   };
 
   return {
@@ -26,5 +26,5 @@ function useSearchParamsFilter<T extends string>() {
   } as const;
 }
 
-export default useSearchParamsFilter
-export { useSearchParamsFilter }
+export default useSearchParamsFilter;
+export { useSearchParamsFilter };
