@@ -1,11 +1,11 @@
-$class-prefix: 'lhhui-animation-wrap';
+$class-prefix: "lhhui-animation-wrap";
 .#{$class-prefix} {
   position: relative;
   display: inline-block;
   overflow: hidden;
   width: fit-content;
   height: fit-content;
-  &-curtaion {
+  &-curtain {
     position: absolute;
     width: 200%;
     height: 200%;

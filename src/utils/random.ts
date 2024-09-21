@@ -1,6 +1,8 @@
 /** 生成随机字符串 */
-export const randomStr = (v?: string) =>
-  `${v ? v + '-' : ''}${Math.ceil(Math.random() * 10e5).toString(36)}-${Date.now().toString(36)}`;
+export const randomStr = (v?: string | number) =>
+  `${v !== void 0 ? v + "-" : ""}${Math.ceil(Math.random() * 10e5).toString(
+    36
+  )}-${Date.now().toString(36)}`;
 
 /** 打乱数组 Fisher Yates shuffle 算法 */
 export function shuffleArray(array: any[]) {
@@ -12,7 +14,9 @@ export function shuffleArray(array: any[]) {
 
 /** 生成随机字母 isUppercase 是否大写 */
 export function randomLetter(isUppercase = true) {
-  return String.fromCharCode(Math.floor(Math.random() * 26) + (isUppercase ? 65 : 97));
+  return String.fromCharCode(
+    Math.floor(Math.random() * 26) + (isUppercase ? 65 : 97)
+  );
 }
 
 /** 随机生成十六进制颜色 */
