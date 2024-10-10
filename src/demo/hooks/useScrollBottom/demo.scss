@@ -1,0 +1,15 @@
+.use-scroll-bottom-list {
+  border: 1px solid #ccc;
+  padding: 10px;
+  max-height: 500px;
+  overflow: scroll;
+}
+
+.use-scroll-bottom-list-item {
+  height: 50px;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 6px 12px;
+  background-color: skyblue;
+  margin-bottom: 10px;
+}
