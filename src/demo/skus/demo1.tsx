@@ -15,8 +15,6 @@ export default () => {
     const checkValTrueArr = checkValArr.filter(Boolean)
     const _noStockSkus: string[][] = [[]]
     const list = getSkusData(checkValTrueArr, _noStockSkus)
-    // const item = list[30].params;
-    // [item[0], item[1]] = [item[1], item[0]];
     setSkusList(list)
     setNoStockSkus([..._noStockSkus])
     setStock(void 0)
@@ -36,21 +34,21 @@ export default () => {
           <div className='radio-wrap' key={i}>
             <span>{skuNames[i]}:</span>
             {[0,1,2,3,4,5,6].map((value) => (
-              <span 
-                key={`${i}-${value}`} 
-                className={`radio ${checkVal === value ? 'radio-active' : ''}`} 
+              <span
+                key={`${i}-${value}`}
+                className={`radio ${checkVal === value ? 'radio-active' : ''}`}
                 onClick={() => onChangeRadio(i, value)}
               >{value}</span>
             ))}
           </div>
         ))}
       </div>
-      <Skus 
-        data={skusList} 
+      <Skus
+        data={skusList}
         onChange={(checkSkus, curSku) => {
           console.log('onChange: ', checkSkus, curSku);
           setStock(curSku?.stock)
-        }} 
+        }}
       />
       <h5>还剩库存：{stock ?? '-'}</h5>
       <h5> ------------- 库存为零的sku: ------------- </h5>

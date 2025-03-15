@@ -15,14 +15,14 @@ export default () => {
 
   return (
     <div className='demo3-skus'>
-      <Skus 
-        data={skusList} 
+      <Skus
+        data={skusList}
         skuItemKey={{
           stock: 'newStock'
         }}
         onChange={(_, curSku) => {
           console.log('onChange: ', curSku?.dataItem);
-        }} 
+        }}
       />
     </div>
   )
